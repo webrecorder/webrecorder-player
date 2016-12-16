@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>webarchiveplayer</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+
+  <div id="control-bar">
+      <button id="warc" class="button">open a warc</button>
+      <input id="url" type="text" class="input_text" size="100">
+      <input id="date" type="text" class="input_text" size="30">
+  </div>
+
+  <webview id="replay" src="about:_blank" autosize="on"></webview>
+
+</body>
+
+<script>
+    require('./renderer.js')
+</script>
+
+</html>

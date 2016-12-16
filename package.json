@@ -1,0 +1,31 @@
+{
+  "name": "webarchiveplayer-electron",
+  "version": "0.0.1",
+  "description": "webarchiveplayer - standalone warc viewer",
+  "main": "main.js",
+  "scripts": {
+    "start": "node_modules/.bin/electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rhizomedotorg/webarchiveplayer-electron.git"
+  },
+  "keywords": [
+    "warc",
+    "webarchives",
+    "electron",
+    "pywb"
+  ],
+  "author": "webrecorder/rhizome",
+  "license": "Apache",
+  "bugs": {
+    "url": "https://github.com/rhizomedotorg/webarchiveplayer-electron/issues"
+  },
+  "homepage": "https://github.com/rhizomedotorg/webarchiveplayer-electron#readme",
+  "dependencies": {
+    "portfinder": "^1.0.10",
+    "request": "^2.79.0",
+    "request-promise": "^4.1.1",
+    "electron": "^1.4.12"
+  }
+}
