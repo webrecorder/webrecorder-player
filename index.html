@@ -1,26 +1,26 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
 
 <head>
-  <meta charset="UTF-8">
-  <title>webarchiveplayer</title>
+  <meta charset="utf-8">
+  <title>webrecorder player</title>
   <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
-<body>
-
-  <div id="control-bar">
-      <button id="warc" class="button">open a warc</button>
-      <input id="url" type="text" class="input_text" size="100">
-      <input id="date" type="text" class="input_text" size="30">
+<body lang="en">
+  <div class="side">
+    <br/>
+    <img src="images/webrecorder-logo.jpeg">
+    <br/><br/><br/>
+    <button id="open" class="button">
+        <img src="images/open.png">
+      </button>
   </div>
 
-  <webview id="replay" src="about:_blank" autosize="on"></webview>
+
+  <webview id="replay" src="about:_blank" autosize="on" preload="./hide.js" webpreferences="allowDisplayingInsecureContent,allowRunningInsecureContent"></webview>
+
+  <script>
+    require('./renderer.js')
+  </script>
 
 </body>
-
-<script>
-    require('./renderer.js')
-</script>
-
-</html>

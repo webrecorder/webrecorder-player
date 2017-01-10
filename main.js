@@ -7,11 +7,14 @@ const path = require('path')
 const url = require('url')
 const rq = require('request-promise');
 
+
 const portfinder = require('portfinder');
-portfinder.basePort = 8090;
+portfinder.basePort = 8095;
+
+require('electron-debug')({ showDevTools: false });
 
 let mainWindow
-let pywb_process
+let webrecorder_process
 
 let pluginName
 let pluginDir = "plugins"
@@ -26,28 +29,46 @@ switch (process.platform) {
     pluginName = 'libpepflashplayer.so'
     break
 }
-app.commandLine.appendSwitch('ppapi-flash-path', path.join(__dirname, pluginDir ,pluginName))
+app.commandLine.appendSwitch('ppapi-flash-path', path.join(__dirname, pluginDir, pluginName))
+
 
 var openWarc = function () {
   ipcMain.on('open-warc', (event, argument) => {
     const warc = argument;
     console.log(`warc file: ${warc}`);
-    const pywb = path.join(__dirname, 'python-binaries', 'webarchiveplayer');
+    const webrecorder = path.join(__dirname, 'python-binaries', 'webrecorder');
+ 
+    // load spinner.html into webview
+    mainWindow.webContents.send('loadWebview', url.format({
+      pathname: path.join(__dirname, 'loader.html'),
+      protocol: 'file:',
+      slashes: true
+    }));
 
-    if (pywb_process){
-          pywb_process.kill('SIGINT');
+    // if a previous webrecorder player is running, kill it 
+    if (webrecorder_process) {
+      webrecorder_process.kill('SIGINT');
     }
 
     portfinder.getPort(function (err, port) {
-      pywb_process = require('child_process').spawn(pywb, ["--port", port, warc]);
-      console.log(`pywb is listening on: http://localhost:${port} (pid ${pywb_process.pid}) `);
+
+      webrecorder_process = require('child_process').spawn(
+        webrecorder, ["--no-browser", "--port", port, warc],
+        {
+          detached: true,
+          stdio: 'ignore'
+        }
+      );
+      webrecorder_process.unref();
+
+      console.log(`webrecorder is listening on: http://localhost:${port} (pid ${webrecorder_process.pid}) `);
       loadWebview(port);
     });
 
     var loadWebview = function (port) {
-        rq(`http://localhost:${port}`).then(function() {
+      rq(`http://localhost:${port}`).then(function () {
         mainWindow.webContents.send('loadWebview', `http://localhost:${port}/`);
-      }).catch(function(err) {
+      }).catch(function (err) {
         loadWebview(port);
       });
     }
@@ -75,7 +96,9 @@ var createWindow = function () {
 
   mainWindow.on('closed', function () {
     mainWindow = null;
-    pywb_process.kill('SIGINT');
+    if (webrecorder_process) {
+      webrecorder_process.kill('SIGINT');
+    }
   });
 }
 
