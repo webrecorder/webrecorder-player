@@ -1,13 +1,28 @@
-# webarchiveplayer electron
+# webrecorder player
 
 1. install electron and required npm modules
 
-    	npm install
+    	~ npm install
 
-2. copy a standalone binary version of pywb in `python-binaries`
+2. compile webrecorder standalone
 
-3. copy the Pepperflashplayer plugin of a local Chrome/Chromium in `plugins`
+ * macos/linux
 
-4. start
+			~ build-macos.sh 
+	
+ * windows
 
-    	npm start
+ 			~ build-windows.sh (TODO)
+
+ the binary is copied in `./python-binaries`
+
+3. enable Flash: copy the [Pepperflashplayer](plugins/README.md) of a local Chrome/Chromium in `plugins`
+
+4. start (debug)
+
+    	~ npm start
+    	
+5. package
+
+		~ npm install electron-packager
+		~ electron-packager . --icon=ico/new.icns --overwrite
