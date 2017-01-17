@@ -1,12 +1,18 @@
-copy here the external plugins
-----
+# external plugins
 
-PepperFlash
+copy in this directory the external plugins
+
+## PepperFlash
+
+
+* linux 
+
+	get the tar.gz from [https://get.adobe.com/flashplayer](https://get.adobe.com/flashplayer) and copy here `libpepflashplayer.so`
 
 * windows 
 
-		C:\Users\${USER}\AppData\Local\Google\Chrome\User Data\PepperFlash\23.0.0.207/pepflashplayer.dll
+		C:\Users\${USER}\AppData\Local\Google\Chrome\User Data\PepperFlash\${VERSION}/pepflashplayer.dll
 
-* osx
+* macos
 
-		/Users/${USER}/Library/Application Support/Google/Chrome Canary/PepperFlash/24.0.0.175/PepperFlashPlayer.plugin
+		/Users/${USER}/Library/Application Support/Google/Chrome Canary/PepperFlash/${VERSION}/PepperFlashPlayer.plugin
