@@ -20,6 +20,33 @@ document.getElementById("open").addEventListener("click", _ => {
   );
 });
 
+
+/*
+Go Back
+*/
+document.getElementById("back").addEventListener("click", function() {
+    replay_webview.goBack();
+});
+
+
+/*
+Go Forward
+*/
+document.getElementById("forward").addEventListener("click", function() {
+    replay_webview.goForward();
+});
+
+
+/*
+Go to collection listing?
+*/
+document.getElementById("home").addEventListener("click", function() {
+  //TODO
+});
+
+
+
+
 /*
 renderer ipc "loadWebview"
 called by main after pywb is executed, load a url into webview
@@ -32,8 +59,11 @@ ipcRenderer.on("loadWebview", (event, message) => {
 /*
 hides all .btn on webview dom-ready
 */
+/*
 replay_webview.addEventListener("dom-ready", () => {
   replay_webview.executeJavaScript(
     'for (let el of document.querySelectorAll(".btn")) el.style.visibility = "hidden";'
   );
 });
+*/
+

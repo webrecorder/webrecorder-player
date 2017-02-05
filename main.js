@@ -89,6 +89,7 @@ var createWindow = function() {
     height: 800,
     webPreferences: { plugins: true }
   });
+  mainWindow.maximize();
 
   mainWindow.loadURL(
     url.format({
