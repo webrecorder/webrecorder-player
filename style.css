@@ -16,23 +16,24 @@ webview.show {
 }
 
 webview {
-    width: calc(100% - 80px);
-    height: 100%;
-    margin-left: 80px;
+    width: 100%;
+    height: calc(100% - 60px);
+    margin-top: 60px;
 }
 
 .side {
-    position: absolute;
+    position: fixed;
+    display: table;
     top: 0;
     left: 0;
-    width: 80px;
-    padding: 0em .8em;
-    margin: 0 auto;
+    height: 60px;
+    padding: 0;
+    margin: auto 0;
     background: #FFF;
     color: #e8e8e8;
-    min-height: 100vh;
-    overflow-x: hidden;
-    height: 100%;
+    min-width: 100vh;
+    overflow-y: hidden;
+    width: 100%;
     z-index: 1024;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, .8);
 }
@@ -41,5 +42,5 @@ button {
     background-color: Transparent;
     background-repeat: no-repeat;
     border: none;
-    padding: 0;
+    padding: 0px 8px 0px 8px;
 }
