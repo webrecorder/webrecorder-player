@@ -6,6 +6,7 @@ const ipcMain = electron.ipcMain;
 const path = require("path");
 const url = require("url");
 const rq = require("request-promise");
+const child_process = require("child_process");
 
 const portfinder = require("portfinder");
 portfinder.basePort = 8095;
@@ -17,15 +18,20 @@ let webrecorder_process;
 
 let pluginName;
 let pluginDir = "plugins";
+let spawn_options;
+
 switch (process.platform) {
   case "win32":
     pluginName = "pepflashplayer.dll";
+    spawn_options = { detached: false, stdio: "ignore" };
     break;
   case "darwin":
     pluginName = "PepperFlashPlayer.plugin";
+    spawn_options = { detached: true, stdio: "ignore" };
     break;
   case "linux":
     pluginName = "libpepflashplayer.so";
+    spawn_options = { detached: true, stdio: "ignore" };
     break;
 }
 app.commandLine.appendSwitch(
@@ -49,18 +55,27 @@ var openWarc = function() {
       })
     );
 
-    // if a previous webrecorder player is running, kill it 
+    // if a previous webrecorder player is running, kill it
     if (webrecorder_process) {
-      webrecorder_process.kill("SIGINT");
+      if (process.platform == "win32") {
+        child_process.execSync(
+          `taskkill /F /PID ${webrecorder_process.pid} /T`
+        );
+      } else {
+        webrecorder_process.kill("SIGINT");
+      }
     }
 
     portfinder.getPort(function(err, port) {
-      webrecorder_process = require("child_process").spawn(
+      webrecorder_process = child_process.spawn(
         webrecorder,
-        [ "--no-browser", "--port", port, warc ],
-        { detached: true, stdio: "ignore" }
+        ["--no-browser", "--port", port, warc],
+        spawn_options
       );
-      webrecorder_process.unref();
+
+      if (process.platform != "win32") {
+        webrecorder_process.unref();
+      }
 
       console.log(
         `webrecorder is listening on: http://localhost:${port} (pid ${webrecorder_process.pid}) `
@@ -102,7 +117,13 @@ var createWindow = function() {
   mainWindow.on("closed", function() {
     mainWindow = null;
     if (webrecorder_process) {
-      webrecorder_process.kill("SIGINT");
+      if (process.platform == "win32") {
+        child_process.execSync(
+          `taskkill /F /PID ${webrecorder_process.pid} /T`
+        );
+      } else {
+        webrecorder_process.kill("SIGINT");
+      }
     }
   });
 };
