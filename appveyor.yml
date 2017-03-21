@@ -1,0 +1,13 @@
+environment:
+  nodejs_version: "7"
+
+install:
+  - ps: Install-Product node $env:nodejs_version
+  - npm install
+  - ps: curl -fsS -o python-binaries/webrecorder.exe https://ci.appveyor.com/api/buildjobs/60ep8w7asj5fr1vr/artifacts/webrecorder%2Fwebrecorder%2Fstandalone%2Fdist%2Fwebrecorder.exe
+
+build_script:
+  - npm run dist  
+
+artifacts:
+  - path: "dist\webrecorderplayer-electron Setup 0.0.1.exe"
