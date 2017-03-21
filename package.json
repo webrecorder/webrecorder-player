@@ -1,35 +1,34 @@
 {
-  "name": "webarchiveplayer-electron",
+  "name": "webrecorderplayer-electron",
   "version": "0.0.1",
-  "description": "webarchiveplayer - standalone warc viewer",
+  "description": "webrecorderplayer - standalone warc viewer",
   "main": "main.js",
   "scripts": {
     "start": "node_modules/.bin/electron ."
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rhizomedotorg/webarchiveplayer-electron.git"
+    "url": "git+https://github.com/webrecorder/webrecorderplayer-electron.git"
   },
   "keywords": [
     "warc",
     "webarchives",
     "electron",
-    "pywb"
+    "pywb",
+    "webrecorder"
   ],
   "author": "webrecorder/rhizome",
   "license": "Apache",
   "bugs": {
-    "url": "https://github.com/rhizomedotorg/webarchiveplayer-electron/issues"
+    "url": "https://github.com/webrecorder/webrecorderplayer-electron/issues"
   },
-  "homepage": "https://github.com/rhizomedotorg/webarchiveplayer-electron#readme",
+  "homepage": "https://github.com/webrecorder/webrecorderplayer-electron#readme",
   "dependencies": {
-    "electron": "^1.4.13",
+    "devtron": "^1.4.0",
+    "electron": "^1.6.2",
     "electron-debug": "^1.1.0",
     "portfinder": "^1.0.10",
     "request": "^2.79.0",
     "request-promise": "^4.1.1"
-  },
-  "devDependencies": {
-    "devtron": "^1.4.0"
   }
 }
