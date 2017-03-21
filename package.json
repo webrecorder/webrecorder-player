@@ -4,7 +4,9 @@
   "description": "webrecorderplayer - standalone warc viewer",
   "main": "main.js",
   "scripts": {
-    "start": "node_modules/.bin/electron ."
+    "start": "node_modules/.bin/electron .",
+    "pack": "build --dir",
+    "dist": "build"
   },
   "repository": {
     "type": "git",
@@ -23,12 +25,20 @@
     "url": "https://github.com/webrecorder/webrecorderplayer-electron/issues"
   },
   "homepage": "https://github.com/webrecorder/webrecorderplayer-electron#readme",
+  "build": {
+    "asar": false,
+    "appId": "org.webrecorder.webrecorderplayer",
+    "mac": {
+      "category": "your.app.category.type"
+    }
+  },
   "dependencies": {
-    "devtron": "^1.4.0",
-    "electron": "^1.6.2",
-    "electron-debug": "^1.1.0",
     "portfinder": "^1.0.10",
     "request": "^2.79.0",
     "request-promise": "^4.1.1"
+  },
+  "devDependencies": {
+    "electron": "1.6.2",
+    "electron-builder": "15.6.2"
   }
 }

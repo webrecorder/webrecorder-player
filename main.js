@@ -11,8 +11,6 @@ const child_process = require("child_process");
 const portfinder = require("portfinder");
 portfinder.basePort = 8095;
 
-require("electron-debug")({ showDevTools: false });
-
 let mainWindow;
 let webrecorder_process;
 

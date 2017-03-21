@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-mkdir build
-cd build
+mkdir build.standalone
+cd build.standalone
 
 printf "\e[91m# create virtualenv\e[0m\n"
 virtualenv -p python3.5 venv && source venv/bin/activate
@@ -18,4 +18,5 @@ pip install Jinja2==2.8 # latest Jinja breaks Pyinstaller!
 python setup.py install
 ./webrecorder/standalone/build.sh
 cp webrecorder/standalone/dist/standalone ../../../python-binaries/webrecorder
-rm -fr build
+# cd ../../
+# rm -fr build.standalone
