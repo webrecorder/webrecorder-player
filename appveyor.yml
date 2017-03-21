@@ -10,4 +10,8 @@ build_script:
   - npm run dist  
 
 artifacts:
+<<<<<<< HEAD
   - path: "dist/webrecorderplayer-electron Setup 0.0.1.exe"
+=======
+  - path: "dist\webrecorderplayer-electron Setup 0.0.1.exe"
+>>>>>>> 0393cec1d2bf3bd81f80acf1f88a640fba4566fb
