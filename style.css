@@ -5,42 +5,268 @@
 html, body {
     width: 100%;
     height: 100%;
+    height: 100vh;
     margin: 0;
     padding: 0;
     overflow-x: hidden;
     overflow-y: hidden;
 }
 
-webview.show {
-    display: block;
+/*ANIMATIONS*/
+@-webkit-keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
 }
 
-webview {
-    width: 100%;
-    height: calc(100% - 60px);
-    margin-top: 60px;
+@-webkit-keyframes poofUp {
+  to {transform: translate(0,-50%); opacity: 0;}
+}
+@keyframes poofUp {
+  to {transform: translate(0,-50%); opacity: 0}
+}
+
+@-webkit-keyframes nudgeUp {
+  to {transform: translate(0,-6px)}
+}
+@-keyframes nudgeUp {
+  to {transform: translate(0,-6px)}
+}
+
+.grow { transition: all .2s ease-in-out; }
+.grow:hover { transform: scale(1.1); }
+.grow:active { transform: rotate(-4deg);}
+
+.arrow {transition: all .1s ease-in-out; }
+.arrow:hover { transform: scale(1.1); }
+.arrow:active { transform: scale(1) translate(0, 3px);}
+
+
+/* ----------------------------
+ ON APP LAUNCH
+------------------------------ */
+
+#webviewContainer {
+  display: block;
+  margin-top: 90px;
+  background: #ECECEC;
+  width: 100%;
+  height: 100%;
+  background-image: url('images/Bg.png');
+  background-repeat: repeat;
+  -webkit-animation: fadeIn 0.7s 1 normal;
+  animation: fadeIn 0.7s 1 normal;
+}
+
+webview .show {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .side {
-    position: fixed;
-    display: table;
-    top: 0;
-    left: 0;
-    height: 60px;
-    padding: 0;
-    margin: auto 0;
-    background: #FFF;
-    color: #e8e8e8;
-    min-width: 100vh;
-    overflow-y: hidden;
-    width: 100%;
-    z-index: 1024;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, .8);
+  position: fixed;
+  display: table;
+  top: 0;
+  left: 0;
+  line-height: 90px;
+  margin: 0;
+  background: #FFF;
+  color: #e8e8e8;
+  min-width: 100vh;
+  overflow-y: hidden;
+  width: 100%;
+  z-index: 1024;
+  border-bottom: 4px solid #0232F5;
+  /*box-shadow: 0px 0px 5px rgba(0, 0, 0, .8);*/
+  -webkit-animation: fadeIn 0.2s 1 normal; /* Safari 4.0 - 8.0 */
+  animation: fadeIn 0.2s 1 normal;
+}
+
+.pullRight {
+  float: right;
+  padding: 0 20px 0 0;
 }
 
 button {
-    background-color: Transparent;
-    background-repeat: no-repeat;
-    border: none;
-    padding: 0px 8px 0px 8px;
+  background-color: Transparent;
+  background-repeat: no-repeat;
+  border: none;
+  outline: none;
+  padding: 0px 8px 0px 8px;
+  vertical-align: middle;
+  -webkit-animation: fadeIn 1s 1 normal;
+  animation: fadeIn 1s 1 normal;
+}
+
+.wrLogoImg {
+  width: 60px;
+  float: left;
+}
+.wrLogoPlayerTxt{
+  height: 15px;
+  display: none;
+}
+.wrLogoImgTxt {
+  height: 50px;
+}
+.replayCollection{
+  height: 30px;
+  position: relative;
+  left: -150px;
+  display: none;
+}
+.replayCollection:active{
+  top: 2px;
+}
+.openFile {
+  height: 30px;
+}
+.halp {
+  height: 20px;
+}
+
+#back {
+  display: none;
+}
+
+#forwardArrow {
+  transform: rotate(180deg) translate(0, -1px);
+}
+
+#forward {
+  display: none;
+}
+
+#open {
+}
+
+
+
+/* ----------------------------
+ ON COLLECTION VIEW PAGE
+ Add "viewCollection" class to #topBar and #viewCollection
+------------------------------ */
+.side.viewCollection {
+  line-height: 90px;
+}
+.side.viewCollection #back{
+  display: none;
+}
+.side.viewCollection #forward{
+  display: none;
+}
+.side.viewCollection .wrLogoImg {
+  -webkit-animation: nudgeUp 0.7s 1 normal forwards;
+  animation: nudgeUp 0.7s 1 normal forwards;
+}
+.side.viewCollection .wrLogoPlayerTxt{
+  -webkit-animation: poofUp 0.8s 1 reverse forwards;
+  animation: poofUp 0.8s 1 reverse forwards;
+  display: inline-block;
+  float: left;
+  height: 8px;
+}
+.side.viewCollection .wrLogoImgTxt {
+  -webkit-animation: poofUp 0.4s 0.1s 1 normal forwards;
+  animation: poofUp 0.4s 0.1s 1 normal forwards;
+}
+.replayCollection {
+  display: block;
+  -webkit-animation: fadeIn 1.5s 1 normal forwards;
+  animation: fadeIn 1.5s 1 normal forwards;
+}
+.side.viewCollection .openFile {
+  height: 20px;
+}
+
+#viewCollection.viewCollection {
+  margin-top: 40px;
+}
+
+
+/* ----------------------------
+ DURING REPLAY
+ Add "replay" class to #topBar and #viewCollection
+------------------------------ */
+
+.side.replay {
+  line-height: 40px;
+}
+.side.replay #back{
+  display: inline-block;
+}
+.side.replay #forward{
+  display: inline-block;
+}
+.side.replay .wrLogoPlayerTxt{
+  display: inline-block;
+  float: left;
+  height: 4px;
+  display: none;
+}
+.side.replay .wrLogoImg {
+  width: 30px;
+  float: left;
+  margin: -2px 0 0 0;
+}
+.side.replay .wrLogoImgTxt {
+  display: none;
+}
+.replayCollection {
+  display: none;
+}
+.side.replay .openFile {
+  height: 20px;
+}
+
+#webviewContainer.replay {
+  margin-top: 40px;
+}
+
+
+
+/* ----------------------------
+Loader Page Stuff
+------------------------------ */
+#loaderContainer {
+  width: 100%;
+  height: 100%;
+}
+
+#loaderContainer #loadingGif {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  top: 40%;
+}
+.pageBottom {
+  position: fixed;
+  bottom: 0;
+  margin-bottom: 8%;
+  width: 100%;
+  font-family: sans-serif;
+}
+.projectByRhizome {
+  position:fixed;
+  width: 100%;
+  bottom: 15%;
+}
+.projectByRhizome p{
+  width: 300px;
+  margin: 0 auto;
+  text-align: left;
+  text-transform: uppercase;
+  font-size: 9px;
+  letter-spacing: 1;
+  font-family: sans-serif;
+}
+.rhizomeLogo{
+  display: block;
+  margin: 1rem auto;
+  width: 200px;
 }

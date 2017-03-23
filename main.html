@@ -7,22 +7,46 @@
 </head>
 
 <body lang="en">
-  <div class="side">
+  <div id="topBar" class="side ">
     <button id="home" class="button">
-      <img src="images/webrecorder-logo.jpeg">
+      <img class="wrLogoImg" src="images/WebRecorder_Logo-Only.png"><br>
+      <img class="wrLogoPlayerTxt" src="images/PLAYER_text.png">
     </button>
-    <button id="back" class="button">
-      <img src="images/back.png">
+    <button class="button">
+      <img class="wrLogoImgTxt" src="images/Webrecorder_Player_logo_text.png">
     </button>
-    <button id="forward" class="button">
-      <img src="images/forward.png">
-    </button> 
-    <button id="open" class="button">
-      <img src="images/open.png">
+    <button id="replay" class="button">
+      <img class="replayCollection" src="images/Replay_Collection.png">
     </button>
+    <button id="back" class="button arrow">
+      <object data="images/Back_Arrow.svg" type="image/svg+xml">
+        <img src="images/Back_Arrow.png" />
+      </object>
+    </button>
+    <button id="forward" class="button arrow">
+      <object id="forwardArrow" data="images/Back_Arrow.svg" type="image/svg+xml">
+        <img src="images/Back_Arrow.png" />
+      </object>
+    </button>
+    <div class="pullRight">
+      <button id="open" class="button grow">
+        <img class="openFile" src="images/OpenFileICO.png">
+      </button>
+      <button id="help" class="button grow">
+        <img class="halp" src="images/halp.png">
+      </button>
+    </div>
   </div>
 
-  <webview id="replay" src="about:_blank" autosize="on" plugins></webview>
+  <div id="webviewContainer" class="">
+    <webview id="replay" src="about:_blank" autosize="on" plugins>
+      <div class="projectByRhizome">
+      <p>A project by<br>
+<img src="images/Current-Rhizome-Logo-Trimmed.png" width="300px" style="margin-top:10px">
+      </p>
+    </div>
+    </webview>
+  </div>
 
   <script>
     require('./renderer.js')
