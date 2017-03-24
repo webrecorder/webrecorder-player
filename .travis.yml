@@ -1,0 +1,40 @@
+language: node_js
+node_js:
+  - "7"
+
+matrix:
+  include:
+    - os: linux
+    - os: osx
+
+env:
+  - BUCKET="https://s3.amazonaws.com/webrecorder"
+
+
+# addons:
+#   artifacts:
+#     paths:
+#       - webrecorder/webrecorder/standalone/dist/webrecorder_player
+
+before_install:
+  - |
+    if [[ $TRAVIS_OS_NAME == 'linux' ]]; then
+      apt-get -qq update; 
+      sudo apt-get install -y jq;
+      BUILD_ID="1"      
+    fi
+  - | 
+    if [[ $TRAVIS_OS_NAME == 'osx' ]]; then 
+      brew update; 
+      brew install jq;
+      BUILD_ID="2"
+    fi
+  
+install:
+  - LATEST_BUILD=$(curl -s "https://api.travis-ci.org/repos/atomotic/webrecorder/builds?limit=1" | jq -r ".[0].number")
+  - PLAYER_URL = "$BUCKET/atomotic/webrecorder/$LATEST_BUILD/$LATEST_BUILD.$BUILD_ID/webrecorder/webrecorder/standalone/dist/webrecorder_player"
+  - curl -o python-binaries/webrecorder $PLAYER_URL
+  - npm install
+
+script:
+  - npm run dist
