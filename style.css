@@ -36,6 +36,7 @@ html, body {
   to {transform: translate(0,-6px)}
 }
 
+
 .grow { transition: all .2s ease-in-out; }
 .grow:hover { transform: scale(1.1); }
 .grow:active { transform: rotate(-4deg);}
@@ -68,6 +69,7 @@ webview .show {
 }
 
 .side {
+  transition: line-height 1s ease;
   position: fixed;
   display: table;
   top: 0;
@@ -103,6 +105,7 @@ button {
 }
 
 .wrLogoImg {
+  transition: all 1s ease;
   width: 60px;
   float: left;
 }
@@ -111,6 +114,7 @@ button {
   display: none;
 }
 .wrLogoImgTxt {
+  transition: all 1s ease;
   height: 50px;
 }
 .replayCollection{
@@ -122,7 +126,14 @@ button {
 .replayCollection:active{
   top: 2px;
 }
+.backToColl {
+  height: 12px;
+  margin-right: 5px;
+  transition: all 0.5s ease;
+  opacity: 0;
+}
 .openFile {
+  transition: all 0.5s ease;
   height: 30px;
 }
 .halp {
@@ -151,13 +162,16 @@ button {
  Add "viewCollection" class to #topBar and #viewCollection
 ------------------------------ */
 .side.viewCollection {
+  transition: line-height 1s ease;
   line-height: 90px;
 }
 .side.viewCollection #back{
   display: none;
 }
 .side.viewCollection #forward{
-  display: none;
+  transition: all 1s ease;
+  transform: translate(0,-50%);
+  opacity: 0;
 }
 .side.viewCollection .wrLogoImg {
   -webkit-animation: nudgeUp 0.7s 1 normal forwards;
@@ -169,20 +183,25 @@ button {
   display: inline-block;
   float: left;
   height: 8px;
+  margin: 0 0 0 2px;
 }
 .side.viewCollection .wrLogoImgTxt {
-  -webkit-animation: poofUp 0.4s 0.1s 1 normal forwards;
-  animation: poofUp 0.4s 0.1s 1 normal forwards;
+  transition: all 1s ease;
+  transform: translate(0,-50%);
+  opacity: 0;
 }
-.replayCollection {
+.side.viewCollection .replayCollection {
   display: block;
   -webkit-animation: fadeIn 1.5s 1 normal forwards;
   animation: fadeIn 1.5s 1 normal forwards;
 }
+.side.viewCollection .backToColl {
+  transition: all 0.5s ease;
+  opacity: 0;
+}
 .side.viewCollection .openFile {
   height: 20px;
 }
-
 #viewCollection.viewCollection {
   margin-top: 40px;
 }
@@ -194,12 +213,17 @@ button {
 ------------------------------ */
 
 .side.replay {
+  transition: line-height 1s ease;
   line-height: 40px;
 }
 .side.replay #back{
+  -webkit-animation: fadeIn 0.2s 1 normal; /* Safari 4.0 - 8.0 */
+  animation: fadeIn 0.2s 1 normal;
   display: inline-block;
 }
 .side.replay #forward{
+  -webkit-animation: fadeIn 0.2s 1 normal; /* Safari 4.0 - 8.0 */
+  animation: fadeIn 0.2s 1 normal;
   display: inline-block;
 }
 .side.replay .wrLogoPlayerTxt{
@@ -216,13 +240,17 @@ button {
 .side.replay .wrLogoImgTxt {
   display: none;
 }
-.replayCollection {
+.side.replay .replayCollection {
   display: none;
 }
+.side.replay .backToColl {
+  transition: all 0.5s ease;
+  opacity: 1;
+}
 .side.replay .openFile {
+  transition: all 0.5s ease;
   height: 20px;
 }
-
 #webviewContainer.replay {
   margin-top: 40px;
 }

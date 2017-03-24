@@ -7,7 +7,7 @@
 </head>
 
 <body lang="en">
-  <div id="topBar" class="side ">
+  <div id="topBar" class="side replay">
     <button id="home" class="button">
       <img class="wrLogoImg" src="images/WebRecorder_Logo-Only.png"><br>
       <img class="wrLogoPlayerTxt" src="images/PLAYER_text.png">
@@ -29,6 +29,9 @@
       </object>
     </button>
     <div class="pullRight">
+      <button id="backToCollection" class="button grow">
+        <img class="backToColl" src="images/Back_to_Coll.png">
+      </button>
       <button id="open" class="button grow">
         <img class="openFile" src="images/OpenFileICO.png">
       </button>
@@ -38,7 +41,7 @@
     </div>
   </div>
 
-  <div id="webviewContainer" class="">
+  <div id="webviewContainer" class="replay">
     <webview id="replay" src="about:_blank" autosize="on" plugins>
       <div class="projectByRhizome">
       <p>A project by<br>
