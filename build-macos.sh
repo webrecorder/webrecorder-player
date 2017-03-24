@@ -16,7 +16,7 @@ printf "\e[91m# build\e[0m\n"
 cd webrecorder
 pip install Jinja2==2.8 # latest Jinja breaks Pyinstaller!
 python setup.py install
-./webrecorder/standalone/build.sh
-cp webrecorder/standalone/dist/standalone ../../../python-binaries/webrecorder
+./webrecorder/standalone/build_player.sh
+cp webrecorder/standalone/dist/webrecorder_player ../../../python-binaries/webrecorder
 # cd ../../
 # rm -fr build.standalone
