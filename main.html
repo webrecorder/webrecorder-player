@@ -15,7 +15,7 @@
     <button class="button">
       <img class="wrLogoImgTxt" src="images/Webrecorder_Player_logo_text.png">
     </button>
-    <button id="replay" class="button">
+    <button id="replay-collection" class="button">
       <img class="replayCollection" src="images/Replay_Collection.png">
     </button>
     <button id="back" class="button arrow">
@@ -42,14 +42,7 @@
   </div>
 
   <div id="webviewContainer" class="replay">
-    <webview id="replay" src="about:_blank" autosize="on" plugins>
-      <div class="bigOpen"><button><object id="loadWarc" data="images/Load_WARC.svg" type="image/svg+xml"></object></button></div>
-      <div class="projectByRhizome">
-      <p>A project by<br>
-        <img src="images/Current-Rhizome-Logo-Trimmed.png">
-      </p>
-    </div>
-    </webview>
+    <webview id="replay" src="./landing.html" autosize="on" plugins></webview>
   </div>
 
   <script>
