@@ -1,10 +1,15 @@
 const electron = require("electron");
+
 const ipcRenderer = electron.ipcRenderer;
 const dialog = electron.remote.dialog;
 
 const replay_webview = document.getElementById("replay");
 
 const top_bar = document.getElementById("topBar");
+
+function getHost() {
+  return electron.remote.getGlobal('sharedConfig').host;
+}
 
 /*
 button #open
@@ -53,6 +58,14 @@ Go to collection listing?
 document.getElementById("home").addEventListener("click", _ => {
   //TODO
 });
+
+/*
+Go to collection listing
+*/
+document.getElementById("backToCollection").addEventListener("click", _ => {
+  replay_webview.loadURL(`${getHost()}/local/collection`);
+});
+
 
 /*
 renderer ipc "loadWebview"
