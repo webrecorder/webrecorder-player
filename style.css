@@ -291,7 +291,7 @@ Loader Page Stuff
   box-shadow: inset 0 5px 0 0 #0326B8;
   top: 3px;
 }
-.bigOpen object {
+object {
   pointer-events: none
 }
 
