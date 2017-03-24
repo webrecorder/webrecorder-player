@@ -7,7 +7,7 @@ install:
   - ps: |
           $builds = (Invoke-WebRequest -Uri https://ci.appveyor.com/api/projects/webrecorder/webrecorder/branch/master | ConvertFrom-Json).build.jobs
           $latest_build = ($builds | where { $_.name -like "*Python35-X64*" }).jobId
-          $source = https://ci.appveyor.com/api/buildjobs/$latest/artifacts/webrecorder%2Fwebrecorder%2Fstandalone%2Fdist%2Fwebrecorder_player.exe
+          $source = https://ci.appveyor.com/api/buildjobs/$latest_build/artifacts/webrecorder%2Fwebrecorder%2Fstandalone%2Fdist%2Fwebrecorder_player.exe
           $destination = "C:\projects\webrecorderplayer-electron\python-binaries\webrecorder.exe"
           Invoke-WebRequest -Uri $source -OutFile $destination
 
