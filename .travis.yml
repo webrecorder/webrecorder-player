@@ -10,7 +10,6 @@ matrix:
 env:
   - BUCKET="https://s3.amazonaws.com/webrecorder"
 
-
 # addons:
 #   artifacts:
 #     paths:
