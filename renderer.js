@@ -4,6 +4,8 @@ const dialog = electron.remote.dialog;
 
 const replay_webview = document.getElementById("replay");
 
+const top_bar = document.getElementById("topBar");
+
 /*
 button #open
 display a file selector and call ipc "open-warc" on main
@@ -64,6 +66,23 @@ ipcRenderer.on("loadWebview", (event, message) => {
 replay_webview.addEventListener("ipc-message", (event) => {
   openFile();
 });
+
+replay_webview.addEventListener('did-navigate', (event) => {
+
+  // Initial View
+  if (event.url.startsWith("file://")) {
+     topBar.className = "side";
+  // Collection view: eg http://localhost:8090/local/collection
+  } else if (event.url.split("/").length == 5) {
+     topBar.className = "side viewCollection";
+  // Anything else is replay!
+  } else {
+     topBar.className = "side replay";
+  }
+
+});
+
+
 
 
 /*
