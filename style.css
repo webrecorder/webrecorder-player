@@ -272,6 +272,32 @@ Loader Page Stuff
   position: relative;
   top: 40%;
 }
+
+.bigOpen {
+  width: 100%;
+  min-height: 100vh;
+  text-align: center;
+}
+.bigOpen button {
+  margin-top: 20vh;
+  background-color: #0232F5;
+  position: relative;
+}
+.bigOpen button:hover {
+  transition: top 0 ease;
+  top: 1px;
+}
+.bigOpen button:active {
+  transition: all 0 ease;
+  box-shadow: inset 0 5px 0 0 #0326B8;
+  top: 3px;
+}
+
+#loadWarc{
+  margin: 20px 80px;
+  width: 100px;
+}
+
 .pageBottom {
   position: fixed;
   bottom: 0;
@@ -285,7 +311,7 @@ Loader Page Stuff
   bottom: 15%;
 }
 .projectByRhizome p{
-  width: 300px;
+  width: 220px;
   margin: 0 auto;
   text-align: left;
   text-transform: uppercase;
@@ -293,8 +319,8 @@ Loader Page Stuff
   letter-spacing: 1;
   font-family: sans-serif;
 }
-.rhizomeLogo{
+.projectByRhizome img{
   display: block;
-  margin: 1rem auto;
-  width: 200px;
+  margin: 10px auto;
+  width: 220px;
 }
