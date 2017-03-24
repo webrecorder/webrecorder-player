@@ -8,17 +8,22 @@ const replay_webview = document.getElementById("replay");
 button #open
 display a file selector and call ipc "open-warc" on main
 */
-document.getElementById("open").addEventListener("click", _ => {
+function openFile() {
   dialog.showOpenDialog(
     {
       properties: ["openFile"],
-      filters: [{ name: "Warc", extensions: ["gz"] }]
+      filters: [{ name: "Warc", extensions: ["gz", "warc", "arc", "warcgz"] }]
     },
     function(filename) {
-      ipcRenderer.send("open-warc", filename.toString());
+      if (filename) {
+        ipcRenderer.send("open-warc", filename.toString());
+      }
     }
   );
-});
+}
+
+document.getElementById("open").addEventListener("click", openFile);
+
 
 /*
 Go Back
@@ -54,6 +59,12 @@ called by main after pywb is launched, load a url into webview
 ipcRenderer.on("loadWebview", (event, message) => {
   replay_webview.loadURL(message);
 });
+
+
+replay_webview.addEventListener("ipc-message", (event) => {
+  openFile();
+});
+
 
 /*
 hides all .btn on webview dom-ready

@@ -7,7 +7,7 @@
 </head>
 
 <body lang="en">
-  <div id="topBar" class="side replay">
+  <div id="topBar" class="side">
     <button id="home" class="button">
       <img class="wrLogoImg" src="images/WebRecorder_Logo-Only.png"><br>
       <img class="wrLogoPlayerTxt" src="images/PLAYER_text.png">
@@ -42,7 +42,7 @@
   </div>
 
   <div id="webviewContainer" class="replay">
-    <webview id="replay" src="./landing.html" autosize="on" plugins></webview>
+    <webview id="replay" src="./landing.html" autosize="on" preload="./preload.js" plugins></webview>
   </div>
 
   <script>
