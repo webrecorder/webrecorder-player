@@ -8,7 +8,7 @@ const replay_webview = document.getElementById("replay");
 const top_bar = document.getElementById("topBar");
 
 function getHost() {
-  return electron.remote.getGlobal('sharedConfig').host;
+  return electron.remote.getGlobal("sharedConfig").host;
 }
 
 /*
@@ -19,18 +19,19 @@ function openFile() {
   dialog.showOpenDialog(
     {
       properties: ["openFile"],
-      filters: [{ name: "Warc", extensions: ["gz", "warc", "arc", "warcgz"] }]
+      filters: [{ name: "Warc", extensions: ["gz", "warc", "arc", "warcgz", "har"] }]
     },
     function(filename) {
-      if (filename) {
+      if (filename && filename.toString().match(/\.w?arc(\.gz)?|\.har$/)) {
         ipcRenderer.send("open-warc", filename.toString());
+      } else {
+        window.alert("Sorry, only WARC or ARC files (.warc, .warc.gz, .arc, .arc.gz) or HAR (.har) can be opened");
       }
     }
   );
 }
 
 document.getElementById("open").addEventListener("click", openFile);
-
 
 /*
 Go Back
@@ -66,7 +67,6 @@ document.getElementById("backToCollection").addEventListener("click", _ => {
   replay_webview.loadURL(`${getHost()}/local/collection`);
 });
 
-
 /*
 renderer ipc "loadWebview"
 called by main after pywb is launched, load a url into webview
@@ -75,28 +75,22 @@ ipcRenderer.on("loadWebview", (event, message) => {
   replay_webview.loadURL(message);
 });
 
-
-replay_webview.addEventListener("ipc-message", (event) => {
+replay_webview.addEventListener("ipc-message", event => {
   openFile();
 });
 
-replay_webview.addEventListener('did-navigate', (event) => {
-
+replay_webview.addEventListener("did-navigate", event => {
   // Initial View
   if (event.url.startsWith("file://")) {
-     topBar.className = "side";
-  // Collection view: eg http://localhost:8090/local/collection
+    topBar.className = "side";
+    // Collection view: eg http://localhost:8090/local/collection
   } else if (event.url.split("/").length == 5) {
-     topBar.className = "side viewCollection";
-  // Anything else is replay!
+    topBar.className = "side viewCollection";
+    // Anything else is replay!
   } else {
-     topBar.className = "side replay";
+    topBar.className = "side replay";
   }
-
 });
-
-
-
 
 /*
 hides all .btn on webview dom-ready
