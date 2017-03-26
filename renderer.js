@@ -1,4 +1,5 @@
 const electron = require("electron");
+const path = require("path");
 
 const ipcRenderer = electron.ipcRenderer;
 const dialog = electron.remote.dialog;
@@ -65,6 +66,24 @@ Go to collection listing
 */
 document.getElementById("backToCollection").addEventListener("click", _ => {
   replay_webview.loadURL(`${getHost()}/local/collection`);
+});
+
+/*
+Go to help page
+*/
+document.getElementById("help").addEventListener("click", _ => {
+  if(replay_webview.getURL().indexOf("help.html") !== -1) {
+    replay_webview.goBack();
+  } else {
+    replay_webview.loadURL(`file://${path.join(__dirname, "help.html")}`);
+  }
+});
+
+/*
+Go to landing page
+*/
+document.getElementById("home").addEventListener("click", _ => {
+  replay_webview.loadURL(`file://${path.join(__dirname, "landing.html")}`);
 });
 
 /*

@@ -326,3 +326,18 @@ object {
   margin: 10px auto;
   width: 220px;
 }
+
+/**
+ * help page
+ */
+.help {
+  display: block;
+  position: relative;
+  padding: 25px;
+  width: 75vw;
+  margin: 100px auto;
+  background: #FFF;
+  font-family: Georgia;
+  font-size: 19px;
+  z-index: 90;
+}
