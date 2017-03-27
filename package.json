@@ -29,8 +29,9 @@
     "asar": false,
     "publish": {
       "provider": "s3",
-      "bucket": "webrecorder-tmp",
-      "region": "us-east-1"
+      "bucket": "webrecorder-builds",
+      "region": "us-east-1",
+      "path":"/electron-player"
     },
     "appId": "org.webrecorder.webrecorderplayer",
     "mac": {
