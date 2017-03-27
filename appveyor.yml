@@ -10,7 +10,11 @@ install:
         $current_branch = "$bucket/$env:APPVEYOR_REPO_BRANCH/webrecorder-player-win-x64.exe"
         $develop_branch = "$bucket/develop/webrecorder-player-win-x64.exe"
 
-        if ((invoke-webrequest -Uri $current_branch -Method Head).statuscode -eq "200") { 
+        $status = try { (invoke-webrequest -Uri $current_branch -Method Head).statuscode } catch {
+        $_.Exception.Response.StatusCode.Value__
+        }
+        
+        if ($status -eq "200") { 
             Write-Host "downloading webrecorder artifact: $current_branch"
             Invoke-WebRequest -Uri $current_branch -OutFile $destination
 
