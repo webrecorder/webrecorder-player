@@ -5,15 +5,23 @@ install:
   - ps: Install-Product node $env:nodejs_version
   - npm install
   - ps: |
-          $builds = (Invoke-WebRequest -Uri https://ci.appveyor.com/api/projects/webrecorder/webrecorder/branch/master | ConvertFrom-Json).build.jobs
-          $latest_build = ($builds | where { $_.name -like "*Python35-X64*" }).jobId
-          $source = "https://ci.appveyor.com/api/buildjobs/$latest_build/artifacts/webrecorder%2Fwebrecorder%2Fstandalone%2Fdist%2Fwebrecorder_player.exe"
-          $destination = "C:\projects\webrecorderplayer-electron\python-binaries\webrecorder.exe"
-          Invoke-WebRequest -Uri $source -OutFile $destination
+        $bucket = "https://s3.amazonaws.com/webrecorder-builds"
+        $destination = "C:\projects\webrecorderplayer-electron\python-binaries\webrecorder.exe"
+        $current_branch = "$bucket/$env:APPVEYOR_REPO_BRANCH/webrecorder-player-win-x64.exe"
+        $develop_branch = "$bucket/develop/webrecorder-player-win-x64.exe"
 
+        if ((invoke-webrequest -Uri $current_branch -Method Head).statuscode -eq "200") { 
+            Write-Host "downloading webrecorder artifact: $current_branch"
+            Invoke-WebRequest -Uri $current_branch -OutFile $destination
+
+        }
+        else {
+            Write-Host "downloading webrecorder artifact: $develop_branch"
+            Invoke-WebRequest -Uri $develop_branch -OutFile $destination
+        }
 
 build_script:
   - npm run dist  
 
 artifacts:
-  - path: "dist/webrecorderplayer-electron Setup 0.0.1.exe"
+  - path: "dist/webrecorderplayer-electron*.exe"
