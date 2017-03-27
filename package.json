@@ -31,13 +31,16 @@
       "provider": "s3",
       "bucket": "webrecorder-builds",
       "region": "us-east-1",
-      "path":"electron-player"
+      "path": "electron-player"
     },
     "appId": "org.webrecorder.webrecorderplayer",
     "mac": {
       "category": "public.app-category.utilities"
     },
-    "linux": {}
+    "linux": {},
+    "win": {
+      "target": "portable"
+    }
   },
   "dependencies": {
     "portfinder": "^1.0.10",
