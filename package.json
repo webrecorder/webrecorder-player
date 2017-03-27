@@ -30,6 +30,7 @@
     "publish": {
       "provider": "s3",
       "bucket": "webrecorder-builds",
+      "region": "us-east-1",
       "path":"/electron"
     },
     "appId": "org.webrecorder.webrecorderplayer",
