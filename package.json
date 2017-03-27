@@ -32,14 +32,14 @@
       "category": "public.app-category.utilities",
       "publish": {
         "provider": "s3",
-        "bucket": "webrecorder-builds",
+        "bucket": "webrecorder-builds"
         // "path": "/electron"
       }
     },
     "linux": {
       "publish": {
         "provider": "s3",
-        "bucket": "webrecorder-builds",
+        "bucket": "webrecorder-builds"
         // "path": "/electron"
       }
     }
