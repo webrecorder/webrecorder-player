@@ -87,6 +87,14 @@ document.getElementById("home").addEventListener("click", _ => {
 });
 
 /*
+Refresh page
+*/
+document.getElementById("refresh").addEventListener("click", _ => {
+  replay_webview.reload();
+});
+
+
+/*
 renderer ipc "loadWebview"
 called by main after pywb is launched, load a url into webview
 */
