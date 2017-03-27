@@ -33,14 +33,14 @@
       "publish": {
         "provider": "s3",
         "bucket": "webrecorder-builds",
-        "path": "/electron"
+        // "path": "/electron"
       }
     },
     "linux": {
       "publish": {
         "provider": "s3",
         "bucket": "webrecorder-builds",
-        "path": "/electron"
+        // "path": "/electron"
       }
     }
   },
