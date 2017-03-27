@@ -31,6 +31,7 @@ install:
     else
       curl -o python-binaries/webrecorder $BUCKET/develop/$PLAYER_ARTIFACT;      
     fi
+  - chmod +x python-binaries/webrecorder  
   - npm install
 
 script:
