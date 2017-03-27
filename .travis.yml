@@ -9,30 +9,28 @@ matrix:
       node_js:
         - "7"
 
-# addons:
-#   artifacts:
-#     paths:
-#       - webrecorder/webrecorder/standalone/dist/webrecorder_player
-
 before_install:
   - |
     if [[ $TRAVIS_OS_NAME == 'linux' ]]; then
       apt-get -qq update; 
       sudo apt-get install -y jq icnsutils graphicsmagick;
-      BUILD_ID="1"      
+      PLAYER_ARTIFACT="webrecorder-player-linux"      
     fi
   - | 
     if [[ $TRAVIS_OS_NAME == 'osx' ]]; then 
       brew update; 
       brew install jq;
-      BUILD_ID="2"
+      PLAYER_ARTIFACT="webrecorder-player-osx"      
     fi
   
 install:
-  - BUCKET="https://s3.amazonaws.com/webrecorder"
-  - LATEST_BUILD=$(curl -s "https://api.travis-ci.org/repos/atomotic/webrecorder/builds" | jq -r ".[0].number")
-  - PLAYER_URL="$BUCKET/atomotic/webrecorder_tmp/$LATEST_BUILD/$LATEST_BUILD.$BUILD_ID/webrecorder/webrecorder/standalone/dist/webrecorder_player"
-  - curl -o python-binaries/webrecorder $PLAYER_URL
+  - BUCKET="https://s3.amazonaws.com/webrecorder-builds"
+  - |
+    if [[ $TRAVIS_BRANCH == 'master' ]]; then
+      curl -o python-binaries/webrecorder $BUCKET/master/$PLAYER_ARTIFACT;
+    else
+      curl -o python-binaries/webrecorder $BUCKET/develop/$PLAYER_ARTIFACT;      
+    fi
   - npm install
 
 script:

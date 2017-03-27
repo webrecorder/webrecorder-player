@@ -1,6 +1,6 @@
 {
   "name": "webrecorderplayer-electron",
-  "version": "0.0.1",
+  "version": "0.5.0",
   "description": "webrecorderplayer - standalone warc viewer",
   "main": "main.js",
   "scripts": {
@@ -29,7 +29,19 @@
     "asar": false,
     "appId": "org.webrecorder.webrecorderplayer",
     "mac": {
-      "category": "your.app.category.type"
+      "category": "public.app-category.utilities",
+      "publish": {
+        "provider": "s3",
+        "bucket": "webrecorder-builds",
+        "path": "/electron"
+      }
+    },
+    "linux": {
+      "publish": {
+        "provider": "s3",
+        "bucket": "webrecorder-builds",
+        "path": "/electron"
+      }
     }
   },
   "dependencies": {
