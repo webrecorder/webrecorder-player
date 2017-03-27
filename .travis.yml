@@ -14,24 +14,24 @@ before_install:
     if [[ $TRAVIS_OS_NAME == 'linux' ]]; then
       apt-get -qq update; 
       sudo apt-get install -y jq icnsutils graphicsmagick;
-      PLAYER_ARTIFACT="webrecorder-player-linux"      
     fi
   - | 
     if [[ $TRAVIS_OS_NAME == 'osx' ]]; then 
       brew update; 
       brew install jq;
-      PLAYER_ARTIFACT="webrecorder-player-osx"      
     fi
   
 install:
   - BUCKET="https://s3.amazonaws.com/webrecorder-builds"
+  - CURRENT_BRANCH="$BUCKET/$TRAVIS_BRANCH/webrecorder-player-$TRAVIS_OS_NAME"
+  - DEVELOP_BRANCH="$BUCKET/develop/webrecorder-player-$TRAVIS_OS_NAME"
   - |
-    if [[ $TRAVIS_BRANCH == 'master' ]]; then
-      curl -o python-binaries/webrecorder $BUCKET/master/$PLAYER_ARTIFACT;
+    if curl -o /dev/null -s -I -f "$CURRENT_BRANCH"; then
+          curl -o python-binaries/webrecorder $CURRENT_BRANCH;
     else
-      curl -o python-binaries/webrecorder $BUCKET/develop/$PLAYER_ARTIFACT;      
+          curl -o python-binaries/webrecorder $DEVELOP_BRANCH;
     fi
-  - chmod +x python-binaries/webrecorder  
+  - chmod +x python-binaries/webrecorder
   - npm install
 
 script:
