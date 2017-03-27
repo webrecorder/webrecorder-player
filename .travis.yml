@@ -1,0 +1,35 @@
+matrix:
+  include:
+    - os: linux
+      language: node_js
+      node_js:
+        - "7"
+    - os: osx
+      language: node_js
+      node_js:
+        - "7"
+
+before_install:
+  - |
+    if [[ $TRAVIS_OS_NAME == 'linux' ]]; then
+      apt-get -qq update; 
+      sudo apt-get install -y icnsutils graphicsmagick;
+    fi
+  
+install:
+  - BUCKET="https://s3.amazonaws.com/webrecorder-builds"
+  - CURRENT_BRANCH="$BUCKET/$TRAVIS_BRANCH/webrecorder-player-$TRAVIS_OS_NAME"
+  - DEVELOP_BRANCH="$BUCKET/develop/webrecorder-player-$TRAVIS_OS_NAME"
+  - |
+    if curl -o /dev/null -s -I -f "$CURRENT_BRANCH"; then
+          echo "downloading webrecorder artifact: $CURRENT_BRANCH";
+          curl -o python-binaries/webrecorder $CURRENT_BRANCH;
+    else
+          echo "downloading webrecorder artifact: $DEVELOP_BRANCH";
+          curl -o python-binaries/webrecorder $DEVELOP_BRANCH;
+    fi
+  - chmod +x python-binaries/webrecorder
+  - npm install
+
+script:
+  - npm run dist
