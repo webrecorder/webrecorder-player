@@ -51,6 +51,7 @@
   },
   "devDependencies": {
     "electron": "1.6.2",
-    "electron-builder": "15.6.2"
+    "electron-builder": "15.6.2",
+    "electron-publisher-s3": "^16.4.0"
   }
 }
