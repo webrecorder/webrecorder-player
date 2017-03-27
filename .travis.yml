@@ -13,12 +13,7 @@ before_install:
   - |
     if [[ $TRAVIS_OS_NAME == 'linux' ]]; then
       apt-get -qq update; 
-      sudo apt-get install -y jq icnsutils graphicsmagick;
-    fi
-  - | 
-    if [[ $TRAVIS_OS_NAME == 'osx' ]]; then 
-      brew update; 
-      brew install jq;
+      sudo apt-get install -y icnsutils graphicsmagick;
     fi
   
 install:
@@ -27,8 +22,10 @@ install:
   - DEVELOP_BRANCH="$BUCKET/develop/webrecorder-player-$TRAVIS_OS_NAME"
   - |
     if curl -o /dev/null -s -I -f "$CURRENT_BRANCH"; then
+          echo "downloading webrecorder artifact: $CURRENT_BRANCH";
           curl -o python-binaries/webrecorder $CURRENT_BRANCH;
     else
+          echo "downloading webrecorder artifact: $DEVELOP_BRANCH";
           curl -o python-binaries/webrecorder $DEVELOP_BRANCH;
     fi
   - chmod +x python-binaries/webrecorder
