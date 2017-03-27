@@ -27,20 +27,16 @@
   "homepage": "https://github.com/webrecorder/webrecorderplayer-electron#readme",
   "build": {
     "asar": false,
+    "publish": {
+      "provider": "s3",
+      "bucket": "webrecorder-builds",
+      "path":"/electron"
+    },
     "appId": "org.webrecorder.webrecorderplayer",
     "mac": {
-      "category": "public.app-category.utilities",
-      "publish": {
-        "provider": "s3",
-        "bucket": "webrecorder-builds"
-      }
+      "category": "public.app-category.utilities"
     },
-    "linux": {
-      "publish": {
-        "provider": "s3",
-        "bucket": "webrecorder-builds"
-      }
-    }
+    "linux": {}
   },
   "dependencies": {
     "portfinder": "^1.0.10",
