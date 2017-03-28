@@ -14,6 +14,11 @@ before_install:
     if [[ $TRAVIS_OS_NAME == 'linux' ]]; then
       apt-get -qq update; 
       sudo apt-get install -y icnsutils graphicsmagick;
+      FLASH_PLUGIN="http://software.rhizome.org/software/plugins/flash/libpepflashplayer.so"
+    fi
+  - |
+    if [[ $TRAVIS_OS_NAME == 'mac' ]]; then
+      FLASH_PLUGIN="http://software.rhizome.org/software/plugins/flash/libpepflashplayer.so"    
     fi
   
 install:
