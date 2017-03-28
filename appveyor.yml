@@ -23,7 +23,7 @@ install:
             Write-Host "downloading webrecorder artifact: $develop_branch"
             Invoke-WebRequest -Uri $develop_branch -OutFile $destination
         }
-
+  - ps: |
         $flash_plugin = "http://software.rhizome.org/software/plugins/flash/pepflashplayer.dll"
         Invoke-WebRequest -Uri $flash_plugin -OutFile "C:\projects\webrecorderplayer-electron\plugins\pepflashplayer.dll"
 
