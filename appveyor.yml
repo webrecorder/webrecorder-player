@@ -25,7 +25,7 @@ install:
         }
 
         $flash_plugin = "http://software.rhizome.org/software/plugins/flash/pepflashplayer.dll"
-        Invoke-WebRequest -Uri $flash_plugin -OutFile plugins/pepflashplayer.dll
+        Invoke-WebRequest -Uri $flash_plugin -OutFile "C:\projects\webrecorderplayer-electron\plugins\pepflashplayer.dll"
 
 build_script:
   - npm run dist  
