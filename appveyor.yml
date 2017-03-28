@@ -32,3 +32,13 @@ build_script:
 
 artifacts:
   - path: "dist/webrecorderplayer-electron*.exe"
+    name: webrecorderplayer-electron
+    
+deploy:
+  provider: S3
+  region: $(aws_s3_region)
+  bucket: $(aws_s3_bucket)
+  access_key_id: $(aws_access_key_id)
+  secret_access_key: $(aws_secret_access_key)
+  folder: electron-player/$(APPVEYOR_REPO_BRANCH)
+  artifact: webrecorderplayer-electron
