@@ -39,7 +39,7 @@ before_install:
     fi
   
 install:
-  - BUCKET="https://s3.amazonaws.com/webrecorder-builds"
+  - BUCKET="https://s3.amazonaws.com/webrecorder-builds/webrecorder-player"
   - CURRENT_BRANCH="$BUCKET/$TRAVIS_BRANCH/webrecorder-player-$TRAVIS_OS_NAME"
   - DEVELOP_BRANCH="$BUCKET/develop/webrecorder-player-$TRAVIS_OS_NAME"
   - |
@@ -55,5 +55,5 @@ install:
 
 script:
   - npm run dist
-  - mv ./dist/webrecorderplayer-electron-*.(dmg|AppImage) $TRAVIS_BUILD_DIR/
+  - mv "./dist/webrecorderplayer-electron-*.(dmg|AppImage)" $TRAVIS_BUILD_DIR/
 
