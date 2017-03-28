@@ -109,13 +109,10 @@ replay_webview.addEventListener("ipc-message", event => {
 replay_webview.addEventListener("did-navigate", event => {
   // Initial View
   if (event.url.startsWith("file://")) {
-    topBar.className = "side";
-    // Collection view: eg http://localhost:8090/local/collection
-  } else if (event.url.split("/").length == 5) {
-    topBar.className = "side viewCollection";
-    // Anything else is replay!
-  } else {
-    topBar.className = "side replay";
+     topBar.className = "side";
+  // Everything else (except home page progress load) uses replay view
+  } else if (event.url != getHost() + "/") {
+     topBar.className = "side replay";
   }
 });
 
