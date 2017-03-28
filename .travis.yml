@@ -55,5 +55,6 @@ install:
 
 script:
   - npm run dist
+  - shopt -s extglob
   - mv "./dist/webrecorderplayer-electron-*.(dmg|AppImage)" $TRAVIS_BUILD_DIR/
 
