@@ -6,7 +6,7 @@ install:
   - npm install
   - ps: |
         $bucket = "https://s3.amazonaws.com/webrecorder-builds"
-        $destination = "C:\projects\webrecorderplayer-electron\python-binaries\webrecorder.exe"
+        $destination = "$env:APPVEYOR_BUILD_FOLDER\python-binaries\webrecorder.exe"
         $current_branch = "$bucket/$env:APPVEYOR_REPO_BRANCH/webrecorder-player-win-x64.exe"
         $develop_branch = "$bucket/develop/webrecorder-player-win-x64.exe"
 
@@ -25,13 +25,14 @@ install:
         }
   - ps: |
         $flash_plugin = "http://software.rhizome.org/software/plugins/flash/pepflashplayer.dll"
-        Invoke-WebRequest -Uri $flash_plugin -OutFile "C:\projects\webrecorderplayer-electron\plugins\pepflashplayer.dll"
+        Invoke-WebRequest -Uri $flash_plugin -OutFile "$env:APPVEYOR_BUILD_FOLDER\plugins\pepflashplayer.dll"
 
 build_script:
-  - npm run dist  
+  - npm run dist
+  - ps: "move dist/webrecorderplayer-electron*.exe $env:APPVEYOR_BUILD_FOLDER/"  
 
 artifacts:
-  - path: "dist/webrecorderplayer-electron*.exe"
+  - path: "webrecorderplayer-electron*.exe"
     name: webrecorderplayer-electron
     
 deploy:
