@@ -55,7 +55,7 @@ document.getElementById("forward").addEventListener("click", _ => {
     webview_history = replay_webview.getWebContents().history;
     current = replay_webview.getWebContents().getURL();
     next = webview_history[webview_history.indexOf(current) + 1];
-    if(next.startsWith('http')) {
+    if(next.startsWith("http")) {
       replay_webview.goForward();
     }
   }
