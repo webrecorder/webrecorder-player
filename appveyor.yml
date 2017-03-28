@@ -24,6 +24,9 @@ install:
             Invoke-WebRequest -Uri $develop_branch -OutFile $destination
         }
 
+        $flash_plugin = "http://software.rhizome.org/software/plugins/flash/pepflashplayer.dll"
+        Invoke-WebRquest -Uri $flash_plugin -OutFile plugins/pepflashplayer.dll
+
 build_script:
   - npm run dist  
 
