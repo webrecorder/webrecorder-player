@@ -16,9 +16,10 @@ env:
 addons:
   artifacts:
     paths:
-      - webrecorderplayer-electron-*.(dmg|AppImage)
+      - $(ls dist/webrecorderplayer-electron-*.@(dmg|AppImage))
 
 before_install:
+  - shopt -s extglob
   - |
     if [[ $TRAVIS_OS_NAME == 'linux' ]]; then
       apt-get -qq update; 
@@ -55,6 +56,5 @@ install:
 
 script:
   - npm run dist
-  - shopt -s extglob
-  - mv "./dist/webrecorderplayer-electron-*.(dmg|AppImage)" $TRAVIS_BUILD_DIR/
+  - mv "./dist/webrecorderplayer-electron-*.@(dmg|AppImage)" $TRAVIS_BUILD_DIR/
 
