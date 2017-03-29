@@ -344,6 +344,7 @@ object {
   width: 75vw;
   height: 75vh;
   margin: 10vh auto;
+  padding-bottom: 200px; 
   background: #FFF;
   font-family: sans-serif;
   font-size: 19px;
