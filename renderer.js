@@ -113,7 +113,14 @@ ipcRenderer.on("loadWebview", (event, message) => {
 });
 
 replay_webview.addEventListener("ipc-message", event => {
-  openFile();
+  switch(event.channel) {
+    case "open":
+      openFile();
+      break;
+    case "version":
+      replay_webview.send("version", electron.remote.getGlobal("sharedConfig").version);
+      break;
+  }
 });
 
 replay_webview.addEventListener("did-navigate", event => {
