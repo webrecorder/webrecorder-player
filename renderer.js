@@ -62,10 +62,10 @@ document.getElementById("forward").addEventListener("click", _ => {
 });
 
 /*
-Go to collection listing?
+Go to collection listing
 */
 document.getElementById("home").addEventListener("click", _ => {
-  //TODO
+  replay_webview.loadURL(`${getHost()}/local/collection`);
 });
 
 /*
@@ -87,13 +87,6 @@ document.getElementById("help").addEventListener("click", _ => {
     img.src = "images/close.png";
     replay_webview.loadURL(`file://${path.join(__dirname, "help.html")}`);
   }
-});
-
-/*
-Go to landing page
-*/
-document.getElementById("home").addEventListener("click", _ => {
-  replay_webview.loadURL(`file://${path.join(__dirname, "landing.html")}`);
 });
 
 /*
