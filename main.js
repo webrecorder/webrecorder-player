@@ -17,6 +17,8 @@ let webrecorder_process;
 let pluginName;
 let pluginDir = "plugins";
 let spawn_options;
+global.sharedConfig = {};
+
 
 switch (process.platform) {
   case "win32":
@@ -64,6 +66,12 @@ var openWarc = function() {
       }
     }
 
+    // get versions for stack
+    child_process.execFile(webrecorder, ["--version"], (err, stdout, stderr) => {
+        const electronVersion = `electron ${process.versions.electron}<BR>chrome ${process.versions.chrome}`;
+        global.sharedConfig = Object.assign(global.sharedConfig, {version: `${stdout.replace("\n", "<BR>")}<BR>${electronVersion}`});
+    });
+
     portfinder.getPort(function(err, port) {
       webrecorder_process = child_process.spawn(
         webrecorder,
@@ -78,7 +86,7 @@ var openWarc = function() {
       console.log(
         `webrecorder is listening on: http://localhost:${port} (pid ${webrecorder_process.pid}) `
       );
-      global.sharedConfig = {host: `http://localhost:${port}`};
+      global.sharedConfig = Object.assign(global.sharedConfig, {host: `http://localhost:${port}`});
       loadWebview(port);
     });
 
