@@ -64,9 +64,17 @@ document.getElementById("forward").addEventListener("click", _ => {
 /*
 Go to collection listing
 */
-document.getElementById("home").addEventListener("click", _ => {
-  replay_webview.loadURL(`${getHost()}/local/collection`);
-});
+const buttons = document.querySelectorAll(".home-btn");
+for(btn of buttons) {
+  btn.addEventListener("click", _ => {
+    const currentUrl = replay_webview.getURL();
+    if(currentUrl.startsWith("file") && currentUrl.endsWith("help.html")) {
+      document.querySelector(".halp").src = "images/halp.png";
+    }
+
+    replay_webview.loadURL(`${getHost()}/local/collection`);
+  });
+}
 
 /*
 Go to collection listing
@@ -80,7 +88,8 @@ Go to help page
 */
 document.getElementById("help").addEventListener("click", _ => {
   img = document.querySelector(".halp");
-  if(replay_webview.getURL().indexOf("help.html") !== -1) {
+  const currentUrl = replay_webview.getURL();
+  if(currentUrl.startsWith("file") && currentUrl.endsWith("help.html")) {
     img.src = "images/halp.png";
     replay_webview.goBack();
   } else {
@@ -96,6 +105,19 @@ document.getElementById("refresh").addEventListener("click", _ => {
   replay_webview.reload();
 });
 
+
+/*
+Open help page links in external browser
+*/
+replay_webview.addEventListener('new-window', (e) => {
+  const currentUrl = replay_webview.getURL();
+  if(currentUrl.startsWith("file") && currentUrl.endsWith("help.html")) {
+    const protocol = require('url').parse(e.url).protocol
+    if (protocol === 'http:' || protocol === 'https:') {
+      electron.shell.openExternal(e.url);
+    }
+  }
+});
 
 /*
 renderer ipc "loadWebview"
