@@ -29,14 +29,12 @@
     "asar": false,
     "appId": "org.webrecorder.webrecorderplayer",
     "mac": {
-      "category": "public.app-category.utilities"
+      "category": "public.app-category.utilities",
+      "target": "dmg"
     },
     "linux": {},
     "win": {
       "target": "portable"
-    },
-    "mac": {
-      "target": "dmg"
     }
   },
   "dependencies": {
