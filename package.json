@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node_modules/.bin/electron .",
     "pack": "build --dir",
-    "dist": "build"
+    "dist": "build --x64"
   },
   "repository": {
     "type": "git",
@@ -31,7 +31,10 @@
     "mac": {
       "category": "public.app-category.utilities"
     },
-    "linux": {}
+    "linux": {},
+    "win": {
+      "target": "portable"
+    }
   },
   "dependencies": {
     "portfinder": "^1.0.10",
