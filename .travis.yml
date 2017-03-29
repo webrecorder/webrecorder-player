@@ -1,0 +1,60 @@
+matrix:
+  include:
+    - os: linux
+      language: node_js
+      node_js:
+        - "7"
+    - os: osx
+      language: node_js
+      node_js:
+        - "7"
+
+env:
+  global:
+    - ARTIFACTS_TARGET_PATHS="electron-player/$TRAVIS_BRANCH"
+
+addons:
+  artifacts:
+    paths:
+      - $(ls dist/webrecorderplayer-electron-*.@(dmg|AppImage))
+
+before_install:
+  - |
+    if [[ $TRAVIS_OS_NAME == 'linux' ]]; then
+      apt-get -qq update; 
+      sudo apt-get install -y icnsutils graphicsmagick;
+      FLASH_PLUGIN="http://software.rhizome.org/software/plugins/flash/libpepflashplayer.so";
+      cd plugins; 
+      wget $FLASH_PLUGIN; 
+      cd -;
+    fi
+  - |
+    if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
+      FLASH_PLUGIN="https://s3.amazonaws.com/webrecorder-builds/flashplugin/PepperFlashPlayer.plugin.zip";
+      cd plugins; 
+      wget $FLASH_PLUGIN; 
+      unzip PepperFlashPlayer.plugin.zip; 
+      rm PepperFlashPlayer.plugin.zip; 
+      cd -;
+    fi
+  
+install:
+  - BUCKET="https://s3.amazonaws.com/webrecorder-builds/webrecorder-player"
+  - CURRENT_BRANCH="$BUCKET/$TRAVIS_BRANCH/webrecorder-player-$TRAVIS_OS_NAME"
+  - DEVELOP_BRANCH="$BUCKET/develop/webrecorder-player-$TRAVIS_OS_NAME"
+  - |
+    if curl -o /dev/null -s -I -f "$CURRENT_BRANCH"; then
+          echo "downloading webrecorder artifact: $CURRENT_BRANCH";
+          curl -o python-binaries/webrecorder $CURRENT_BRANCH;
+    else
+          echo "downloading webrecorder artifact: $DEVELOP_BRANCH";
+          curl -o python-binaries/webrecorder $DEVELOP_BRANCH;
+    fi
+  - chmod +x python-binaries/webrecorder
+  - npm install
+
+script:
+  - npm run dist
+  - shopt -s extglob
+  - mv "./dist/webrecorderplayer-electron-*.@(dmg|AppImage)" $TRAVIS_BUILD_DIR/
+
