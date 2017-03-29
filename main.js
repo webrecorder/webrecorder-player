@@ -69,7 +69,7 @@ var openWarc = function() {
     // get versions for stack
     child_process.execFile(webrecorder, ["--version"], (err, stdout, stderr) => {
         const electronVersion = `electron ${process.versions.electron}<BR>chrome ${process.versions.chrome}`;
-        global.sharedConfig = Object.assign(global.sharedConfig, {version: `${stdout.replace("\n", "<BR>")}<BR>${electronVersion}`});
+        Object.assign(global.sharedConfig, {version: `${stdout.replace("\n", "<BR>")}<BR>${electronVersion}`});
     });
 
     portfinder.getPort(function(err, port) {
@@ -86,7 +86,7 @@ var openWarc = function() {
       console.log(
         `webrecorder is listening on: http://localhost:${port} (pid ${webrecorder_process.pid}) `
       );
-      global.sharedConfig = Object.assign(global.sharedConfig, {host: `http://localhost:${port}`});
+      Object.assign(global.sharedConfig, {host: `http://localhost:${port}`});
       loadWebview(port);
     });
 
