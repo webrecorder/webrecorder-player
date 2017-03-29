@@ -142,7 +142,10 @@ button {
 #back {
   display: none;
 }
-
+#refresh {
+  display: none;
+  margin-right: 20px;
+}
 #forwardArrow {
   transform: rotate(180deg) translate(0, -1px);
 }
@@ -214,6 +217,11 @@ button {
 .side.replay {
   transition: line-height 1s ease;
   line-height: 40px;
+}
+.side.replay #refresh{
+  -webkit-animation: fadeIn 0.2s 1 normal; /* Safari 4.0 - 8.0 */
+  animation: fadeIn 0.2s 1 normal;
+  display: inline-block;
 }
 .side.replay #back{
   -webkit-animation: fadeIn 0.2s 1 normal; /* Safari 4.0 - 8.0 */
@@ -325,4 +333,19 @@ object {
   display: block;
   margin: 10px auto;
   width: 220px;
+}
+
+/**
+ * help page
+ */
+.help {
+  display: block;
+  position: relative;
+  padding: 25px;
+  width: 75vw;
+  margin: 100px auto;
+  background: #FFF;
+  font-family: Georgia;
+  font-size: 19px;
+  z-index: 90;
 }

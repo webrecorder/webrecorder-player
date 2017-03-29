@@ -78,6 +78,7 @@ var openWarc = function() {
       console.log(
         `webrecorder is listening on: http://localhost:${port} (pid ${webrecorder_process.pid}) `
       );
+      global.sharedConfig = {host: `http://localhost:${port}`};
       loadWebview(port);
     });
 
