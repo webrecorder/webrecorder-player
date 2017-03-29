@@ -51,14 +51,21 @@ document.getElementById("back").addEventListener("click", _ => {
 Go Forward
 */
 document.getElementById("forward").addEventListener("click", _ => {
-  replay_webview.goForward();
+  if(replay_webview.canGoForward()) {
+    webview_history = replay_webview.getWebContents().history;
+    current = replay_webview.getWebContents().getURL();
+    next = webview_history[webview_history.indexOf(current) + 1];
+    if(next.startsWith("http")) {
+      replay_webview.goForward();
+    }
+  }
 });
 
 /*
-Go to collection listing?
+Go to collection listing
 */
 document.getElementById("home").addEventListener("click", _ => {
-  //TODO
+  replay_webview.loadURL(`${getHost()}/local/collection`);
 });
 
 /*
@@ -72,18 +79,14 @@ document.getElementById("backToCollection").addEventListener("click", _ => {
 Go to help page
 */
 document.getElementById("help").addEventListener("click", _ => {
+  img = document.querySelector(".halp");
   if(replay_webview.getURL().indexOf("help.html") !== -1) {
+    img.src = "images/halp.png";
     replay_webview.goBack();
   } else {
+    img.src = "images/close.png";
     replay_webview.loadURL(`file://${path.join(__dirname, "help.html")}`);
   }
-});
-
-/*
-Go to landing page
-*/
-document.getElementById("home").addEventListener("click", _ => {
-  replay_webview.loadURL(`file://${path.join(__dirname, "landing.html")}`);
 });
 
 /*
@@ -103,7 +106,14 @@ ipcRenderer.on("loadWebview", (event, message) => {
 });
 
 replay_webview.addEventListener("ipc-message", event => {
-  openFile();
+  switch(event.channel) {
+    case "open":
+      openFile();
+      break;
+    case "version":
+      replay_webview.send("version", electron.remote.getGlobal("sharedConfig").version);
+      break;
+  }
 });
 
 replay_webview.addEventListener("did-navigate", event => {
@@ -113,6 +123,25 @@ replay_webview.addEventListener("did-navigate", event => {
   // Everything else (except home page progress load) uses replay view
   } else if (event.url != getHost() + "/") {
      topBar.className = "side replay";
+  }
+
+  // manage navigation arrow states
+  webview_history = replay_webview.getWebContents().history;
+  current = replay_webview.getWebContents().getURL();
+  idx = webview_history.indexOf(current);
+
+  if(webview_history.length > 1) {
+    if(replay_webview.canGoBack() && idx > 0 && webview_history[idx - 1].startsWith("http")) {
+      document.getElementById("back").style.opacity = 1;
+    } else {
+      document.getElementById("back").style.opacity = 0.5;
+    }
+
+    if(replay_webview.canGoForward() && idx < (webview_history.length-1) && webview_history[idx + 1].startsWith("http")) {
+      document.getElementById("forward").style.opacity = 1;
+    } else {
+      document.getElementById("forward").style.opacity = 0.5;
+    }
   }
 });
 

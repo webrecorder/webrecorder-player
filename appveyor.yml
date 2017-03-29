@@ -1,0 +1,45 @@
+environment:
+  nodejs_version: "7"
+
+install:
+  - ps: Install-Product node $env:nodejs_version
+  - npm install
+  - ps: |
+        $bucket = "https://s3.amazonaws.com/webrecorder-builds/webrecorder-player"
+        $destination = "$env:APPVEYOR_BUILD_FOLDER\python-binaries\webrecorder.exe"
+        $current_branch = "$bucket/$env:APPVEYOR_REPO_BRANCH/webrecorder-player-win-x64.exe"
+        $develop_branch = "$bucket/develop/webrecorder-player-win-x64.exe"
+
+        $status = try { (invoke-webrequest -Uri $current_branch -Method Head).statuscode } catch {
+        $_.Exception.Response.StatusCode.Value__
+        }
+        
+        if ($status -eq "200") { 
+            Write-Host "downloading webrecorder artifact: $current_branch"
+            Invoke-WebRequest -Uri $current_branch -OutFile $destination
+
+        }
+        else {
+            Write-Host "downloading webrecorder artifact: $develop_branch"
+            Invoke-WebRequest -Uri $develop_branch -OutFile $destination
+        }
+  - ps: |
+        $flash_plugin = "http://software.rhizome.org/software/plugins/flash/pepflashplayer.dll"
+        Invoke-WebRequest -Uri $flash_plugin -OutFile "$env:APPVEYOR_BUILD_FOLDER\plugins\pepflashplayer.dll"
+
+build_script:
+  - npm run dist
+  - ps: "move dist/webrecorderplayer-electron*.exe $env:APPVEYOR_BUILD_FOLDER/"  
+
+artifacts:
+  - path: "webrecorderplayer-electron*.exe"
+    name: webrecorderplayer-electron
+    
+deploy:
+  provider: S3
+  region: $(aws_s3_region)
+  bucket: $(aws_s3_bucket)
+  access_key_id: $(aws_access_key_id)
+  secret_access_key: $(aws_secret_access_key)
+  folder: electron-player/$(APPVEYOR_REPO_BRANCH)
+  artifact: webrecorderplayer-electron
