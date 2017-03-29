@@ -55,5 +55,5 @@ install:
 
 script:
   - npm run dist
-  - mv ./dist/webrecorderplayer-electron-*{dmg,AppImage} $TRAVIS_BUILD_DIR/
+  - mv ./dist/webrecorderplayer-electron-* $TRAVIS_BUILD_DIR/
 
