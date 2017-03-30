@@ -39,7 +39,13 @@ To view your web archives offline, you can download them from [https://webrecord
 
 		$ npm install
 
-- copy a release of **webrecorderplayer** into `./python-binaries`. you can get a [prebuilt](https://s3.amazonaws.com/webrecorder-builds/webrecorder-player/master/) **!!!CAN WE CREATE A index.html HERE? !!!** release , otherwise you can compile it following instructions in the script `build-macos.sh`
+- copy a release of python *webrecorder-player* into `./python-binaries`. You can obtain pre-built python binaries here:
+  - [OS X](https://s3.amazonaws.com/webrecorder-builds/webrecorder-player/develop/webrecorder-player-osx)
+  - [Windows 32-bit](https://s3.amazonaws.com/webrecorder-builds/webrecorder-player/develop/webrecorder-player-win-x32.exe)
+  - [Windows 64-bit](https://s3.amazonaws.com/webrecorder-builds/webrecorder-player/develop/webrecorder-player-win-x64.exe)
+  - [Linux](https://s3.amazonaws.com/webrecorder-builds/webrecorder-player/develop/webrecorder-player-linux)
+  
+  Or, you can compile the [Webrecorder](https://github.com/webrecorder/webrecorder) python binary following instructions found in the `build-macos.sh`.
 
 - if you want to enable Flash you have to copy a flash plugin into `./plugins`. Follow these [instructions](plugins/README.md) to find a local copy of PepperFlashPlugin in Chrome/Chromium
 
