@@ -1,4 +1,4 @@
-# webrecorderplayer
+# Webrecorder Player
 
 1. **Choose the local web archive you would like to open.**
 ![Loading a WARC](https://s3.amazonaws.com/wr-demo-assets/gif_01_Load.gif "Webrecorder Player Loading")  
