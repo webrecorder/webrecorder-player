@@ -1,28 +1,58 @@
-# webrecorder player
+# Webrecorder Player
 
-1. install electron and required npm modules
+1. **Choose the local web archive you would like to open.**
+![Loading a WARC](https://s3.amazonaws.com/wr-demo-assets/gif_01_Load.gif "Webrecorder Player Loading")  
 
-    	~ npm install
+2. **Browse web archive offline.**
+![Browsing a WARC](https://s3.amazonaws.com/wr-demo-assets/gif_02_open.gif "Browsing WARC")
 
-2. compile webrecorder standalone
 
- * macos/linux
+## What are Web Archives?
 
-			~ build-macos.sh 
-	
- * windows
+A web archive is a record of web resources. It may include HTML and images, scripts, stylesheets, as well as video, audio and other elements that web pages and web apps are made of, all in one file.
 
- 			~ build-windows.sh (TODO)
+Webrecorder Player currently supports browsing web archives in the following formats:
 
- the binary is copied in `./python-binaries`
+- [WARC format](https://en.wikipedia.org/wiki/Web_ARChive) **(.warc, warc.gz)** — the most commonly used one
+- [HAR format](https://en.wikipedia.org/wiki/.har) **(.har)**
+- [ARC format](http://archive.org/web/researcher/ArcFileFormat.php) **(.arc, .arg.gz)**
 
-3. enable Flash: copy the [Pepperflashplayer](plugins/README.md) of a local Chrome/Chromium in `plugins`
 
-4. start (debug)
+## How do I Create Web Archives?
+You can use free service [https://webrecorder.io](https://webrecorder.io) to create, view, share and save your web archives online.
 
-    	~ npm start
-    	
-5. package
+To view your web archives offline, you can download them from [https://webrecorder.io](https://webrecorder.io) and use this app to browse your archives.
 
-		~ npm install electron-packager
-		~ electron-packager . --icon=ico/new.icns --overwrite
+
+
+
+------
+
+## Build locally
+
+- clone this repository
+
+		$ git clone https://github.com/webrecorder/webrecorderplayer-electron/tree/readme
+		$ cd webrecorderplayer-electron
+
+- install required npm modules
+
+		$ npm install
+
+- copy a release of python *webrecorder-player* into `./python-binaries`. You can obtain pre-built python binaries here:
+  - [OS X](https://s3.amazonaws.com/webrecorder-builds/webrecorder-player/develop/webrecorder-player-osx)
+  - [Windows 32-bit](https://s3.amazonaws.com/webrecorder-builds/webrecorder-player/develop/webrecorder-player-win-x32.exe)
+  - [Windows 64-bit](https://s3.amazonaws.com/webrecorder-builds/webrecorder-player/develop/webrecorder-player-win-x64.exe)
+  - [Linux](https://s3.amazonaws.com/webrecorder-builds/webrecorder-player/develop/webrecorder-player-linux)
+  
+  Or, you can compile the [Webrecorder](https://github.com/webrecorder/webrecorder) python binary following instructions found in the `build-macos.sh`.
+
+- if you want to enable Flash you have to copy a flash plugin into `./plugins`. Follow these [instructions](plugins/README.md) to find a local copy of PepperFlashPlugin in Chrome/Chromium
+
+- start the player
+
+    	$ npm start
+
+- package the player. a self-packaged version for you environment (linux, macos, windows) will be saved in `./dist`
+
+		$ npm run dist
