@@ -1,9 +1,15 @@
 # webrecorderplayer
 Browse Web Archives offline.
 
-## {{Introduction}}
-+screenshots
+## What are Web Archives?
 
+A web archive is a record of web resources. It may include HTML and images, scripts, stylesheets, as well as video, audio and other elements that web pages and web apps are made of, all in one file. 
+
+Webrecorder Player currently supports browsing web archives in the following formats:
+
+- [WARC format](https://en.wikipedia.org/wiki/Web_ARChive) **(.warc, warc.gz)** — the most commonly used one
+- [HAR format](https://en.wikipedia.org/wiki/.har) **(.har)**
+- [ARC format](http://archive.org/web/researcher/ArcFileFormat.php) **(.arc, .arg.gz)**
 
 
 ## Build locally
