@@ -25,7 +25,7 @@ function openFile() {
     function(filename) {
       if (filename && filename.toString().match(/\.w?arc(\.gz)?|\.har$/)) {
         ipcRenderer.send("open-warc", filename.toString());
-      } else {
+      } else if (filename) {
         window.alert("Sorry, only WARC or ARC files (.warc, .warc.gz, .arc, .arc.gz) or HAR (.har) can be opened");
       }
     }
