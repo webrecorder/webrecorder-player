@@ -39,11 +39,18 @@ app.commandLine.appendSwitch(
   path.join(__dirname, pluginDir, pluginName)
 );
 
-var openWarc = function() {
+var registerOpenWarc = function() {
+  const webrecorder = path.join(__dirname, "python-binaries", "webrecorder");
+
+  // get versions for stack
+  child_process.execFile(webrecorder, ["--version"], (err, stdout, stderr) => {
+    const electronVersion = `electron ${process.versions.electron}<BR>chrome ${process.versions.chrome}`;
+    Object.assign(global.sharedConfig, {version: `${stdout.replace("\n", "<BR>")}<BR>${electronVersion}`});
+  });
+
   ipcMain.on("open-warc", (event, argument) => {
     const warc = argument;
     console.log(`warc file: ${warc}`);
-    const webrecorder = path.join(__dirname, "python-binaries", "webrecorder");
 
     // load spinner.html into webview
     mainWindow.webContents.send(
@@ -65,12 +72,6 @@ var openWarc = function() {
         webrecorder_process.kill("SIGINT");
       }
     }
-
-    // get versions for stack
-    child_process.execFile(webrecorder, ["--version"], (err, stdout, stderr) => {
-        const electronVersion = `electron ${process.versions.electron}<BR>chrome ${process.versions.chrome}`;
-        Object.assign(global.sharedConfig, {version: `${stdout.replace("\n", "<BR>")}<BR>${electronVersion}`});
-    });
 
     portfinder.getPort(function(err, port) {
       webrecorder_process = child_process.spawn(
@@ -137,7 +138,7 @@ var createWindow = function() {
 
 app.on("ready", function() {
   createWindow();
-  openWarc();
+  registerOpenWarc();
 });
 
 app.on("window-all-closed", function() {
