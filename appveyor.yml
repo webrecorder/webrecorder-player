@@ -26,6 +26,7 @@ install:
   - ps: |
         $flash_plugin = "http://software.rhizome.org/software/plugins/flash/pepflashplayer.dll"
         Invoke-WebRequest -Uri $flash_plugin -OutFile "$env:APPVEYOR_BUILD_FOLDER\plugins\pepflashplayer.dll"
+  - ps: "& $destination '-v'"
 
 build_script:
   - npm run dist
