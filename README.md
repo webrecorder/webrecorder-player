@@ -1,9 +1,9 @@
 # webrecorderplayer
 
-**1. Choose the local web archive you would like to open.**
+1. **Choose the local web archive you would like to open.**
 ![Loading a WARC](https://s3.amazonaws.com/wr-demo-assets/gif_01_Load.gif "Webrecorder Player Loading")  
 
-**2. Browse web archive offline.**
+2. **Browse web archive offline.**
 ![Browsing a WARC](https://s3.amazonaws.com/wr-demo-assets/gif_02_open.gif "Browsing WARC")
 
 
@@ -25,7 +25,7 @@ To view your web archives offline, you can download them from [https://webrecord
 
 
 
-	
+
 ------
 
 ## Build locally
