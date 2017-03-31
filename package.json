@@ -1,6 +1,6 @@
 {
   "name": "webrecorderplayer-electron",
-  "version": "1.0.0",
+  "version": "1.0.1-dev",
   "description": "webrecorderplayer - standalone warc viewer",
   "main": "main.js",
   "scripts": {
