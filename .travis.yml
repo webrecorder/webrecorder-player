@@ -41,14 +41,14 @@ before_install:
 install:
   - BUCKET="https://s3.amazonaws.com/webrecorder-builds/webrecorder-player"
   - CURRENT_BRANCH="$BUCKET/$TRAVIS_BRANCH/webrecorder-player-$TRAVIS_OS_NAME"
-  - DEVELOP_BRANCH="$BUCKET/develop/webrecorder-player-$TRAVIS_OS_NAME"
+  - MASTER_BRANCH="$BUCKET/master/webrecorder-player-$TRAVIS_OS_NAME"
   - |
     if curl -o /dev/null -s -I -f "$CURRENT_BRANCH"; then
           echo "downloading webrecorder artifact: $CURRENT_BRANCH";
           curl -o python-binaries/webrecorder $CURRENT_BRANCH;
     else
-          echo "downloading webrecorder artifact: $DEVELOP_BRANCH";
-          curl -o python-binaries/webrecorder $DEVELOP_BRANCH;
+          echo "downloading webrecorder artifact: $MASTER_BRANCH";
+          curl -o python-binaries/webrecorder $MASTER_BRANCH;
     fi
   - chmod +x python-binaries/webrecorder
   - python-binaries/webrecorder -v

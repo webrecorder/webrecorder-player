@@ -8,7 +8,7 @@ install:
         $bucket = "https://s3.amazonaws.com/webrecorder-builds/webrecorder-player"
         $destination = "$env:APPVEYOR_BUILD_FOLDER\python-binaries\webrecorder.exe"
         $current_branch = "$bucket/$env:APPVEYOR_REPO_BRANCH/webrecorder-player-win-x64.exe"
-        $develop_branch = "$bucket/develop/webrecorder-player-win-x64.exe"
+        $master_branch = "$bucket/master/webrecorder-player-win-x64.exe"
 
         $status = try { (invoke-webrequest -Uri $current_branch -Method Head).statuscode } catch {
         $_.Exception.Response.StatusCode.Value__
@@ -20,8 +20,8 @@ install:
 
         }
         else {
-            Write-Host "downloading webrecorder artifact: $develop_branch"
-            Invoke-WebRequest -Uri $develop_branch -OutFile $destination
+            Write-Host "downloading webrecorder artifact: $master_branch"
+            Invoke-WebRequest -Uri $master_branch -OutFile $destination
         }
   - ps: |
         $flash_plugin = "http://software.rhizome.org/software/plugins/flash/pepflashplayer.dll"
