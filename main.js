@@ -11,6 +11,8 @@ const child_process = require("child_process");
 const portfinder = require("portfinder");
 portfinder.basePort = 8095;
 
+const packageInfo = require('./package.json');
+
 let mainWindow;
 let webrecorder_process;
 
@@ -44,8 +46,12 @@ var registerOpenWarc = function() {
 
   // get versions for stack
   child_process.execFile(webrecorder, ["--version"], (err, stdout, stderr) => {
-    const electronVersion = `electron ${process.versions.electron}<BR>chrome ${process.versions.chrome}`;
-    Object.assign(global.sharedConfig, {version: `${stdout.replace("\n", "<BR>")}<BR>${electronVersion}`});
+    const electronVersion = `webrecorder player ${packageInfo.version}<BR>
+                             electron ${process.versions.electron}<BR>
+                             chrome ${process.versions.chrome}`;
+    Object.assign(global.sharedConfig, {
+      version: `${stdout.replace("\n", "<BR>")}<BR>${electronVersion}`
+    });
   });
 
   ipcMain.on("open-warc", (event, argument) => {
