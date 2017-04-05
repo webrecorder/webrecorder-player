@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node_modules/.bin/electron .",
     "pack": "build --dir",
-    "dist": "build --x64"
+    "dist": "build --x64",
+    "dist-no-gh": "build --x64 --publish never"
   },
   "repository": {
     "type": "git",

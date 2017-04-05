@@ -29,7 +29,13 @@ install:
   - ps: "& $destination '-v'"
 
 build_script:
-  - npm run dist
+  - ps: |
+        if ($env:APPVEYOR_REPO_BRANCH -eq "master"){
+          npm run dist
+        }
+        else {
+          npm run dist-no-gh          
+        }
   - ps: "move dist/webrecorderplayer-electron*.exe $env:APPVEYOR_BUILD_FOLDER/"  
 
 artifacts:
