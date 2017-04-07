@@ -52,8 +52,10 @@ html, body {
 .grow:active { transform: rotate(-4deg);}
 
 .arrow {transition: all .1s ease-in-out; }
-.arrow:hover { transform: scale(1.1); }
+.arrow:not(.inactive):hover { transform: scale(1.1); }
 .arrow:active { transform: scale(1) translate(0, 3px);}
+.arrow.inactive { opacity: .5; }
+.arrow.off { opacity: 0; }
 
 /* ----------------------------
  ON APP LAUNCH
@@ -152,6 +154,7 @@ button {
   display: none;
 }
 #refresh {
+  transition: opacity .1s ease-in-out;
   display: none;
   margin-right: 20px;
 }
@@ -164,6 +167,10 @@ button {
 }
 
 #open {
+}
+
+#backToCollection.off {
+  opacity: 0;
 }
 
 

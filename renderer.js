@@ -128,7 +128,7 @@ ipcRenderer.on("loadWebview", (event, message) => {
 });
 
 replay_webview.addEventListener("ipc-message", event => {
-  switch(event.channel) {
+  switch (event.channel) {
     case "open":
       openFile();
       break;
@@ -151,18 +151,42 @@ replay_webview.addEventListener("did-navigate", event => {
   webview_history = replay_webview.getWebContents().history;
   current = replay_webview.getWebContents().getURL();
   idx = webview_history.indexOf(current);
+  const backBtn = document.getElementById("back");
+  const fwdBtn = document.getElementById("forward");
+  const refresh = document.getElementById("refresh");
+  const backToCollection = document.getElementById("backToCollection");
 
-  if(webview_history.length > 1) {
-    if(replay_webview.canGoBack() && idx > 0 && webview_history[idx - 1].startsWith("http")) {
-      document.getElementById("back").style.opacity = 1;
-    } else {
-      document.getElementById("back").style.opacity = 0.5;
-    }
+  if (current === `${getHost()}/local/collection`) {
+    backBtn.classList.add("off");
+    fwdBtn.classList.add("off");
+    refresh.classList.add("off");
+    backToCollection.classList.add("off");
+  } else {
+    backBtn.classList.remove("off");
+    fwdBtn.classList.remove("off");
+    refresh.classList.remove("off");
+    backToCollection.classList.remove("off");
 
-    if(replay_webview.canGoForward() && idx < (webview_history.length-1) && webview_history[idx + 1].startsWith("http")) {
-      document.getElementById("forward").style.opacity = 1;
-    } else {
-      document.getElementById("forward").style.opacity = 0.5;
+    if (webview_history.length > 1) {
+      if (replay_webview.canGoBack() && idx > 0 && webview_history[idx - 1].startsWith("http")) {
+        if (backBtn.classList.contains("inactive")) {
+          backBtn.classList.remove("inactive");
+        }
+      } else {
+        if (!backBtn.classList.contains("inactive")) {
+          backBtn.classList.add("inactive");
+        }
+      }
+
+      if(replay_webview.canGoForward() && idx < (webview_history.length-1) && webview_history[idx + 1].startsWith("http")) {
+        if (fwdBtn.classList.contains("inactive")) {
+          fwdBtn.classList.remove("inactive");
+        }
+      } else {
+        if (!fwdBtn.classList.contains("inactive")) {
+          fwdBtn.classList.add("inactive");
+        }
+      }
     }
   }
 });
