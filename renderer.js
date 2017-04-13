@@ -7,9 +7,25 @@ const dialog = electron.remote.dialog;
 const replay_webview = document.getElementById("replay");
 
 const top_bar = document.getElementById("topBar");
+let wrConfig;
+
+ipcRenderer.on("async-response", (evt, arg) => {
+  wrConfig = arg;
+});
+ipcRenderer.send("async-call");
 
 function getHost() {
-  return electron.remote.getGlobal("sharedConfig").host;
+  if (typeof wrConfig === "undefined" || typeof wrConfig.host === "undefined") {
+    return ipcRenderer.send("async-call");
+  }
+  return wrConfig.host;
+}
+
+function getVersion() {
+  if (typeof wrConfig === "undefined" || typeof wrConfig.version === "undefined") {
+    return ipcRenderer.send("async-call");
+  }
+  return wrConfig.version;
 }
 
 /*
@@ -133,7 +149,7 @@ replay_webview.addEventListener("ipc-message", event => {
       openFile();
       break;
     case "version":
-      replay_webview.send("version", electron.remote.getGlobal("sharedConfig").version);
+      replay_webview.send("version", getVersion());
       break;
   }
 });

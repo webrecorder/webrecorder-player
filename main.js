@@ -13,13 +13,14 @@ portfinder.basePort = 8095;
 
 const packageInfo = require('./package.json');
 
+const wrConfig = {};
+
 let mainWindow;
 let webrecorder_process;
 
 let pluginName;
 let pluginDir = "plugins";
 let spawn_options;
-global.sharedConfig = {};
 
 
 switch (process.platform) {
@@ -49,7 +50,7 @@ var registerOpenWarc = function() {
     const electronVersion = `webrecorder player ${packageInfo.version}<BR>
                              electron ${process.versions.electron}<BR>
                              chrome ${process.versions.chrome}`;
-    Object.assign(global.sharedConfig, {
+    Object.assign(wrConfig, {
       version: `${stdout.replace("\n", "<BR>")}<BR>${electronVersion}`
     });
   });
@@ -93,7 +94,7 @@ var registerOpenWarc = function() {
       console.log(
         `webrecorder is listening on: http://localhost:${port} (pid ${webrecorder_process.pid}) `
       );
-      Object.assign(global.sharedConfig, {host: `http://localhost:${port}`});
+      Object.assign(wrConfig, {host: `http://localhost:${port}`});
       loadWebview(port);
     });
 
@@ -149,4 +150,9 @@ app.on("ready", function() {
 
 app.on("window-all-closed", function() {
   app.quit();
+});
+
+// renderer process communication
+electron.ipcMain.on("async-call", (evt, arg) => {
+  evt.sender.send("async-response", wrConfig);
 });
