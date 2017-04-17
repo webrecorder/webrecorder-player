@@ -47,11 +47,11 @@ var registerOpenWarc = function() {
 
   // get versions for stack
   child_process.execFile(webrecorder, ["--version"], (err, stdout, stderr) => {
-    const electronVersion = `webrecorder player ${packageInfo.version}<BR>
-                             electron ${process.versions.electron}<BR>
+    const electronVersion = `electron ${process.versions.electron}<BR>
                              chrome ${process.versions.chrome}`;
     Object.assign(wrConfig, {
-      version: `${stdout.replace("\n", "<BR>")}<BR>${electronVersion}`
+      version: `webrecorder player ${packageInfo.version}<BR>
+                ${stdout.replace("\n", "<BR>")}<BR>${electronVersion}`
     });
   });
 

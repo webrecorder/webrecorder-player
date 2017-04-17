@@ -1,7 +1,8 @@
 {
   "name": "webrecorderplayer-electron",
+  "productName": "Webrecorder Player",
   "version": "1.0.2",
-  "description": "webrecorderplayer - standalone warc viewer",
+  "description": "Webrecorder Player -- Standalone Web Archive Browser App",
   "main": "main.js",
   "scripts": {
     "start": "node_modules/.bin/electron .",
@@ -29,6 +30,7 @@
   "build": {
     "asar": false,
     "appId": "org.webrecorder.webrecorderplayer",
+    "artifactName": "${name}-${version}.${ext}",
     "mac": {
       "category": "public.app-category.utilities",
       "target": "dmg"
