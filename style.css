@@ -53,9 +53,9 @@ html, body {
 
 .arrow {transition: all .1s ease-in-out; }
 .arrow:not(.inactive):hover { transform: scale(1.1); }
-.arrow:active { transform: scale(1) translate(0, 3px);}
+.arrow:not(.inactive):active { transform: scale(1) translate(0, 3px);}
 .arrow.inactive { opacity: .5; }
-.arrow.off { 
+.arrow.off {
   opacity: 0;
   animation: none !important;
   -webkit-animation: none !important;
