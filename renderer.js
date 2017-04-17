@@ -55,9 +55,9 @@ Go Back
 (excluding about:blank and loader.html)
 */
 document.getElementById("back").addEventListener("click", _ => {
-  webview_history = replay_webview.getWebContents().history;
-  current = replay_webview.getWebContents().getURL();
-  previous = webview_history[webview_history.indexOf(current) - 1];
+  var webview_history = replay_webview.getWebContents().history;
+  var current = replay_webview.getWebContents().getURL();
+  var previous = webview_history[webview_history.indexOf(current) - 1];
   if (previous.startsWith("http")) {
     replay_webview.goBack();
   }
@@ -67,11 +67,11 @@ document.getElementById("back").addEventListener("click", _ => {
 Go Forward
 */
 document.getElementById("forward").addEventListener("click", _ => {
-  if(replay_webview.canGoForward()) {
-    webview_history = replay_webview.getWebContents().history;
-    current = replay_webview.getWebContents().getURL();
-    next = webview_history[webview_history.indexOf(current) + 1];
-    if(next.startsWith("http")) {
+  if (replay_webview.canGoForward()) {
+    var webview_history = replay_webview.getWebContents().history;
+    var current = replay_webview.getWebContents().getURL();
+    var next = webview_history[webview_history.indexOf(current) + 1];
+    if (next.startsWith("http")) {
       replay_webview.goForward();
     }
   }
@@ -140,6 +140,7 @@ renderer ipc "loadWebview"
 called by main after pywb is launched, load a url into webview
 */
 ipcRenderer.on("loadWebview", (event, message) => {
+  replay_webview.clearHistory();
   replay_webview.loadURL(message);
 });
 
@@ -158,53 +159,69 @@ replay_webview.addEventListener("did-navigate", event => {
   // Initial View
   if (event.url.startsWith("file://")) {
      topBar.className = "side";
+     return;
+
   // Everything else (except home page progress load) uses replay view
   } else if (event.url != getHost() + "/") {
      topBar.className = "side replay";
   }
 
   // manage navigation arrow states
-  webview_history = replay_webview.getWebContents().history;
-  current = replay_webview.getWebContents().getURL();
-  idx = webview_history.indexOf(current);
+  var webview_history = replay_webview.getWebContents().history;
+  var current = replay_webview.getWebContents().getURL();
+  var idx = webview_history.indexOf(current);
+
+  //console.log(getHost());
+
+  // Check if coll or home page url, eg.
+  //  http://localhost:<port>/local/collection or
+  //  http://localhost:<port>
+  function isCollPage(url) {
+     return url.split("/").length <= 5;
+  }
+
+  // is collection page
+  var isColl = isCollPage(current);
+
   const backBtn = document.getElementById("back");
   const fwdBtn = document.getElementById("forward");
   const refresh = document.getElementById("refresh");
   const backToCollection = document.getElementById("backToCollection");
 
-  if (current === `${getHost()}/local/collection`) {
-    backBtn.classList.add("off");
-    fwdBtn.classList.add("off");
-    refresh.classList.add("off");
-    backToCollection.classList.add("off");
-  } else {
-    backBtn.classList.remove("off");
-    fwdBtn.classList.remove("off");
-    refresh.classList.remove("off");
-    backToCollection.classList.remove("off");
+  backToCollection.classList.toggle("off", isColl);
+  refresh.classList.toggle("off", isColl);
 
-    if (webview_history.length > 1) {
-      if (replay_webview.canGoBack() && idx > 0 && webview_history[idx - 1].startsWith("http")) {
-        if (backBtn.classList.contains("inactive")) {
-          backBtn.classList.remove("inactive");
-        }
-      } else {
-        if (!backBtn.classList.contains("inactive")) {
-          backBtn.classList.add("inactive");
-        }
-      }
+  // determine if on collection page for first time after loading WARC
+  // if history is length 1, then def for first time
+  // if history is length 2, check if first page was the homepage/progress bar, if so, also first time
+  if (isColl && (webview_history.length == 1 ||
+      (webview_history.length == 2 && idx == 1 && isCollPage(webview_history[0])))) {
 
-      if(replay_webview.canGoForward() && idx < (webview_history.length-1) && webview_history[idx + 1].startsWith("http")) {
-        if (fwdBtn.classList.contains("inactive")) {
-          fwdBtn.classList.remove("inactive");
-        }
-      } else {
-        if (!fwdBtn.classList.contains("inactive")) {
-          fwdBtn.classList.add("inactive");
-        }
-      }
+    backBtn.classList.toggle("off", true);
+    fwdBtn.classList.toggle("off", true);
+    return;
+  }
+
+  var backEnabled = false;
+  var fwdEnabled = false;
+
+  if (webview_history.length > 1) {
+    if (replay_webview.canGoBack() && idx > 0 && webview_history[idx - 1].startsWith("http")) {
+      backEnabled = true;
+    }
+
+    if (replay_webview.canGoForward() && idx < (webview_history.length-1) && webview_history[idx + 1].startsWith("http")) {
+      fwdEnabled = true;
     }
   }
+
+  // otherwise, toggle enabled state
+  backBtn.classList.toggle("off", false);
+  backBtn.classList.toggle("inactive", !backEnabled);
+
+  fwdBtn.classList.toggle("off", false);
+  fwdBtn.classList.toggle("inactive", !fwdEnabled);
+
 });
 
 /*
