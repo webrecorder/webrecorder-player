@@ -54,12 +54,14 @@ document.getElementById("open").addEventListener("click", openFile);
 Go Back
 (excluding about:blank and loader.html)
 */
-document.getElementById("back").addEventListener("click", _ => {
-  var webview_history = replay_webview.getWebContents().history;
-  var current = replay_webview.getWebContents().getURL();
-  var previous = webview_history[webview_history.indexOf(current) - 1];
-  if (previous.startsWith("http")) {
-    replay_webview.goBack();
+document.getElementById("back").addEventListener("click", event => {
+  if (replay_webview.canGoBack()) {
+    var webview_history = replay_webview.getWebContents().history;
+    var current = replay_webview.getWebContents().getURL();
+    var previous = webview_history[webview_history.indexOf(current) - 1];
+    if (previous.startsWith("http")) {
+      replay_webview.goBack();
+    }
   }
 });
 
@@ -155,6 +157,22 @@ replay_webview.addEventListener("ipc-message", event => {
   }
 });
 
+// Check if coll or home page url, eg.
+//  http://localhost:<port>/local/collection or
+//  http://localhost:<port>
+function isCollPage(url) {
+   return url.split("/").length <= 5;
+}
+
+replay_webview.addEventListener("will-navigate", event => {
+  var webview_history = replay_webview.getWebContents().history;
+  var current = replay_webview.getWebContents().getURL();
+
+  if (isCollPage(current)) {
+    replay_webview.clearHistory();
+  }
+});
+
 replay_webview.addEventListener("did-navigate", event => {
   // Initial View
   if (event.url.startsWith("file://")) {
@@ -173,13 +191,6 @@ replay_webview.addEventListener("did-navigate", event => {
 
   //console.log(getHost());
 
-  // Check if coll or home page url, eg.
-  //  http://localhost:<port>/local/collection or
-  //  http://localhost:<port>
-  function isCollPage(url) {
-     return url.split("/").length <= 5;
-  }
-
   // is collection page
   var isColl = isCollPage(current);
 
@@ -191,14 +202,11 @@ replay_webview.addEventListener("did-navigate", event => {
   backToCollection.classList.toggle("off", isColl);
   refresh.classList.toggle("off", isColl);
 
-  // determine if on collection page for first time after loading WARC
-  // if history is length 1, then def for first time
-  // if history is length 2, check if first page was the homepage/progress bar, if so, also first time
-  if (isColl && (webview_history.length == 1 ||
-      (webview_history.length == 2 && idx == 1 && isCollPage(webview_history[0])))) {
-
-    backBtn.classList.toggle("off", true);
-    fwdBtn.classList.toggle("off", true);
+  // determine if on collection page
+  if (isColl) {
+    backBtn.classList.add("off");
+    fwdBtn.classList.add("off");
+    refresh.classList.add("off");
     return;
   }
 
