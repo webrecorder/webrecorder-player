@@ -1,10 +1,18 @@
 # Webrecorder Player
 
-1. **Choose the local web archive you would like to open.**
-![Loading a WARC](https://s3.amazonaws.com/wr-demo-assets/gif_01_Load.gif "Webrecorder Player Loading")  
+Webrecorder Player is a desktop application for viewing high-fidelity web archives on your local machine, no internet connection required. Webrecorder Player is available for download for OSX, Windows and Linux (experimental).
 
-2. **Browse web archive offline.**
-![Browsing a WARC](https://s3.amazonaws.com/wr-demo-assets/gif_02_open.gif "Browsing WARC")
+### [Download Latest Release](https://github.com/webrecorder/webrecorderplayer-electron/releases/latest)
+
+## Usage
+
+1) Download the latest version for your platform. On OSX, you can move the extracted Webrecorder Player app into your Applications directory.
+
+2) Start the application. (Note: At this time, Webrecorder Player is not yet signed through official app store, so you may have to accept launching unsigned apps).
+
+3) Click **Load Web Archive** to select a web archive file and start browsing.
+
+See [Visual Walkthrough](walkthrough.md)
 
 
 ## What are Web Archives?
