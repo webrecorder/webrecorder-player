@@ -228,7 +228,6 @@ function didNavigate() {
 }
 
 replay_webview.addEventListener("will-navigate", event => {
-  console.log('will-navigate')
   var webview_history = replay_webview.getWebContents().history;
   var current = replay_webview.getWebContents().getURL();
 
