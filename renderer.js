@@ -154,6 +154,9 @@ replay_webview.addEventListener("ipc-message", event => {
     case "version":
       replay_webview.send("version", getVersion());
       break;
+    case "did-frame-navigate":
+      didNavigate();
+      break;
   }
 });
 
@@ -164,32 +167,24 @@ function isCollPage(url) {
    return url.split("/").length <= 5;
 }
 
-replay_webview.addEventListener("will-navigate", event => {
-  var webview_history = replay_webview.getWebContents().history;
-  var current = replay_webview.getWebContents().getURL();
 
-  if (isCollPage(current)) {
-    replay_webview.clearHistory();
-  }
-});
+function didNavigate() {
+  var currUrl = replay_webview.getWebContents().getURL();
 
-replay_webview.addEventListener("did-navigate", event => {
   // Initial View
-  if (event.url.startsWith("file://")) {
+  if (currUrl.startsWith("file://")) {
      topBar.className = "side";
      return;
 
   // Everything else (except home page progress load) uses replay view
-  } else if (event.url != getHost() + "/") {
+  } else if (currUrl != getHost() + "/") {
      topBar.className = "side replay";
   }
 
   // manage navigation arrow states
   var webview_history = replay_webview.getWebContents().history;
   var current = replay_webview.getWebContents().getURL();
-  var idx = webview_history.indexOf(current);
-
-  //console.log(getHost());
+  var idx = replay_webview.getWebContents().getActiveIndex();
 
   // is collection page
   var isColl = isCollPage(current);
@@ -230,7 +225,18 @@ replay_webview.addEventListener("did-navigate", event => {
   fwdBtn.classList.toggle("off", false);
   fwdBtn.classList.toggle("inactive", !fwdEnabled);
 
+}
+
+replay_webview.addEventListener("will-navigate", event => {
+  var webview_history = replay_webview.getWebContents().history;
+  var current = replay_webview.getWebContents().getURL();
+
+  if (isCollPage(current)) {
+    replay_webview.clearHistory();
+  }
 });
+
+replay_webview.addEventListener("did-navigate", didNavigate);
 
 /*
 hides all .btn on webview dom-ready
