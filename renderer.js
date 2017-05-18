@@ -57,10 +57,11 @@ Go Back
 document.getElementById("back").addEventListener("click", event => {
   if (replay_webview.canGoBack()) {
     var webview_history = replay_webview.getWebContents().history;
-    var current = replay_webview.getWebContents().getURL();
-    var previous = webview_history[webview_history.indexOf(current) - 1];
+    var idx = replay_webview.getWebContents().getActiveIndex();
+    var previous = webview_history[idx - 1];
+
     if (previous.startsWith("http")) {
-      replay_webview.goBack();
+      replay_webview.goToIndex(idx - 1);
     }
   }
 });
@@ -71,10 +72,11 @@ Go Forward
 document.getElementById("forward").addEventListener("click", _ => {
   if (replay_webview.canGoForward()) {
     var webview_history = replay_webview.getWebContents().history;
-    var current = replay_webview.getWebContents().getURL();
-    var next = webview_history[webview_history.indexOf(current) + 1];
+    var idx = replay_webview.getWebContents().getActiveIndex();
+    var next = webview_history[idx + 1];
+
     if (next.startsWith("http")) {
-      replay_webview.goForward();
+      replay_webview.goToIndex(idx + 1);
     }
   }
 });
