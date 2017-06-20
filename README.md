@@ -64,3 +64,16 @@ To view your web archives offline, you can download them from [https://webrecord
 - package the player. a self-packaged version for you environment (linux, macos, windows) will be saved in `./dist`
 
 		$ npm run dist
+
+## Contact
+
+Webrecorder Player is a project of [Rhizome](https://rhizome.org)
+
+For issues with the project, you can open an issue or contact us at [support@webrecorder.io](mailto:support@webrecorder.io)
+
+
+## License
+
+Webrecorder is Licensed under the Apache 2.0 License. See [NOTICE](NOTICE) and [LICENSE](LICENSE) for details.
+
+
