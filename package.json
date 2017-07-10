@@ -41,13 +41,13 @@
     }
   },
   "dependencies": {
-    "portfinder": "^1.0.10",
-    "request": "^2.79.0",
-    "request-promise": "^4.1.1"
+    "portfinder": "^1.0.13",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1"
   },
   "devDependencies": {
-    "electron": "1.6.2",
-    "electron-builder": "15.6.2",
-    "electron-publisher-s3": "^16.4.0"
+    "electron": "^1.6.11",
+    "electron-builder": "^19.13.0",
+    "electron-publisher-s3": "^19.15.0"
   }
 }
