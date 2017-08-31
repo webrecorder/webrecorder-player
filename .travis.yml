@@ -23,14 +23,14 @@ before_install:
     if [[ $TRAVIS_OS_NAME == 'linux' ]]; then
       apt-get -qq update; 
       sudo apt-get install -y icnsutils graphicsmagick;
-      FLASH_PLUGIN="http://software.rhizome.org/software/plugins/webrecorder-flash/libpepflashplayer.so";
+      FLASH_PLUGIN="https://s3.amazonaws.com/webrecorder-builds/flashplugin/libpepflashplayer.so";
       cd plugins; 
       wget $FLASH_PLUGIN; 
       cd -;
     fi
   - |
     if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
-      FLASH_PLUGIN="https://s3.amazonaws.com/webrecorder-builds/webrecorder-flash/plugin/PepperFlashPlayer.plugin.zip";
+      FLASH_PLUGIN="https://s3.amazonaws.com/webrecorder-builds/flashplugin/PepperFlashPlayer.plugin.zip";
       cd plugins; 
       wget $FLASH_PLUGIN; 
       unzip PepperFlashPlayer.plugin.zip; 
