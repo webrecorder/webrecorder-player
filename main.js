@@ -9,7 +9,7 @@ const rq = require("request-promise");
 const child_process = require("child_process");
 
 const portfinder = require("portfinder");
-portfinder.basePort = 8095;
+portfinder.basePort = parseInt(Math.random() * 32000) + 16000;
 
 const packageInfo = require('./package.json');
 
@@ -107,7 +107,7 @@ var registerOpenWarc = function() {
           );
         })
         .catch(function(err) {
-          loadWebview(port);
+          setTimeout(function() { loadWebview(port); }, 750);
         });
     };
   });
