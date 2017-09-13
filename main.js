@@ -8,9 +8,6 @@ const url = require("url");
 const rq = require("request-promise");
 const child_process = require("child_process");
 
-const portfinder = require("portfinder");
-portfinder.basePort = parseInt(Math.random() * 32000) + 16000;
-
 const packageInfo = require('./package.json');
 
 const wrConfig = {};
@@ -22,19 +19,20 @@ let pluginName;
 let pluginDir = "plugins";
 let spawn_options;
 
+let stdio = ['ignore', 'pipe', 'ignore'];
 
 switch (process.platform) {
   case "win32":
     pluginName = "pepflashplayer.dll";
-    spawn_options = { detached: false, stdio: "ignore" };
+    spawn_options = { detached: false, stdio: stdio };
     break;
   case "darwin":
     pluginName = "PepperFlashPlayer.plugin";
-    spawn_options = { detached: true, stdio: "ignore" };
+    spawn_options = { detached: true, stdio: stdio };
     break;
   case "linux":
     pluginName = "libpepflashplayer.so";
-    spawn_options = { detached: true, stdio: "ignore" };
+    spawn_options = { detached: true, stdio: stdio };
     break;
 }
 app.commandLine.appendSwitch(
@@ -53,21 +51,19 @@ var registerOpenWarc = function() {
       version: `webrecorder player ${packageInfo.version}<BR>
                 ${stdout.replace("\n", "<BR>")}<BR>${electronVersion}`
     });
-  });
+ });
 
   ipcMain.on("open-warc", (event, argument) => {
     const warc = argument;
     console.log(`warc file: ${warc}`);
 
+    var message = {"url": url.format({
+                            pathname: path.join(__dirname, "loader.html"),
+                            protocol: "file:",
+                            slashes: true})};
+ 
     // load spinner.html into webview
-    mainWindow.webContents.send(
-      "loadWebview",
-      url.format({
-        pathname: path.join(__dirname, "loader.html"),
-        protocol: "file:",
-        slashes: true
-      })
-    );
+    mainWindow.webContents.send("loadWebview", message);
 
     // if a previous webrecorder player is running, kill it
     if (webrecorder_process) {
@@ -80,36 +76,52 @@ var registerOpenWarc = function() {
       }
     }
 
-    portfinder.getPort(function(err, port) {
-      webrecorder_process = child_process.spawn(
+    webrecorder_process = child_process.spawn(
         webrecorder,
-        ["--no-browser", "--port", port, warc],
+        ["--no-browser", "--port", 0, warc],
         spawn_options
       );
+
+    let port = undefined;
+
+    var findPort = function(buff) {
+      if (!buff) {
+        return;
+      }
+
+      buff = buff.toString();
+
+      console.log(buff);
+
+      if (port) {
+        return;
+      }
+
+      var parts = buff.split("APP_HOST=http://localhost:");
+      if (parts.length != 2) {
+        return;
+      }
+
+      port = parts[1];
 
       if (process.platform != "win32") {
         webrecorder_process.unref();
       }
 
-      console.log(
-        `webrecorder is listening on: http://localhost:${port} (pid ${webrecorder_process.pid}) `
-      );
-      Object.assign(wrConfig, {host: `http://localhost:${port}`});
-      loadWebview(port);
-    });
+      var url = `http://localhost:${port}/`
 
-    var loadWebview = function(port) {
-      rq(`http://localhost:${port}`)
-        .then(function() {
-          mainWindow.webContents.send(
-            "loadWebview",
-            `http://localhost:${port}/`
-          );
-        })
-        .catch(function(err) {
-          setTimeout(function() { loadWebview(port); }, 750);
-        });
+      console.log(
+        `webrecorder is listening on: ${url} (pid ${webrecorder_process.pid}) `
+      );
+      Object.assign(wrConfig, {host: url});
+
+      var message = {"url": url, "url_base": url};
+
+      mainWindow.webContents.send("loadWebview", message);
     };
+
+    webrecorder_process.stdout.on('data', findPort);
+
   });
 };
 

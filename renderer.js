@@ -145,7 +145,11 @@ called by main after pywb is launched, load a url into webview
 */
 ipcRenderer.on("loadWebview", (event, message) => {
   replay_webview.clearHistory();
-  replay_webview.loadURL(message);
+  replay_webview.loadURL(message.url);
+  wrConfig = wrConfig || {};
+  if (message.url_base) {
+    wrConfig.host = message.url_base;
+  }
 });
 
 replay_webview.addEventListener("ipc-message", event => {
