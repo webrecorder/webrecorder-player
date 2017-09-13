@@ -10,10 +10,8 @@ environment:
 install:
   - ps: Install-Product node $env:nodejs_version
   - ps: |
-        if ($env:platform -eq "x32") {
-            npm set npm_config_arch ia32
-        }
-        npm --arch=$switch install
+        npm set npm_config_arch $env:switch
+        npm install
 
   - ps: |
         $bucket = "https://s3.amazonaws.com/webrecorder-builds/webrecorder-player"
