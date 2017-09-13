@@ -9,8 +9,8 @@ environment:
 
 install:
   - ps: Install-Product node $env:nodejs_version
-  - ps: npm set npm_config_arch $env:switch
-  - ps: npm install
+  - npm set npm_config_arch $env:switch
+  - npm install
 
   - ps: |
         $bucket = "https://s3.amazonaws.com/webrecorder-builds/webrecorder-player"
