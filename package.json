@@ -35,7 +35,9 @@
       "category": "public.app-category.utilities",
       "target": "dmg"
     },
-    "linux": {},
+    "linux": {
+      "category": "network"
+    },
     "win": {
       "target": "portable"
     }
