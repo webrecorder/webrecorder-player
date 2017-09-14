@@ -24,7 +24,7 @@ let stdio = ['ignore', 'pipe', 'ignore'];
 switch (process.platform) {
   case "win32":
     pluginName = "pepflashplayer.dll";
-    spawn_options = { detached: false, stdio: stdio };
+    spawn_options = { detached: true, stdio: stdio };
     break;
   case "darwin":
     pluginName = "PepperFlashPlayer.plugin";
