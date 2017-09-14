@@ -39,10 +39,10 @@ install:
 build_script:
   - ps: |
         if ($env:APPVEYOR_REPO_BRANCH -eq "master"){
-          npm run dist -- --$env:arch
+          npm run dist -- --ia32 --x64
         }
         else {
-          npm run dist-no-gh -- --$env:arch
+          npm run dist-no-gh -- --ia32 --x64
         }
   - ps: "move dist/webrecorderplayer-electron*.exe $env:APPVEYOR_BUILD_FOLDER/"  
 
