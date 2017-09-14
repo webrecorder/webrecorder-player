@@ -2,7 +2,7 @@ environment:
   nodejs_version: "7"
   matrix:
     - platform: x32
-      ARCH_SUFFIX: '-ia32'
+      ARCH_SUFFIX: '-x32'
 
     - platform: x64
       ARCH_SUFFIX: '-x64'
@@ -15,8 +15,8 @@ install:
   - ps: |
         $bucket = "https://s3.amazonaws.com/webrecorder-builds/webrecorder-player"
         $destination = "$env:APPVEYOR_BUILD_FOLDER\python-binaries\webrecorder.exe"
-        $current_branch = "$bucket/$env:APPVEYOR_REPO_BRANCH/webrecorder-player-win-$env:platform.exe"
-        $master_branch = "$bucket/master/webrecorder-player-win-$env:platform.exe"
+        $current_branch = "$bucket/$env:APPVEYOR_REPO_BRANCH/webrecorder-player-win$env:ARCH_SUFFIX.exe"
+        $master_branch = "$bucket/master/webrecorder-player-win$env.ARCH_SUFFIX.exe"
 
         $status = try { (invoke-webrequest -Uri $current_branch -Method Head).statuscode } catch {
         $_.Exception.Response.StatusCode.Value__
