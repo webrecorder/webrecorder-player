@@ -2,21 +2,21 @@ environment:
   nodejs_version: "7"
   matrix:
     - platform: x32
-      switch: 'ia32'
+      arch: 'ia32'
 
     - platform: x64
-      switch: 'x64'
+      arch: 'x64'
 
 install:
   - ps: Install-Product node $env:nodejs_version
-  - npm set npm_config_arch $env:switch
+  - npm set npm_config_arch %arch%
   - npm install
 
   - ps: |
         $bucket = "https://s3.amazonaws.com/webrecorder-builds/webrecorder-player"
         $destination = "$env:APPVEYOR_BUILD_FOLDER\python-binaries\webrecorder.exe"
-        $current_branch = "$bucket/$env:APPVEYOR_REPO_BRANCH/webrecorder-player-win-$platform.exe"
-        $master_branch = "$bucket/master/webrecorder-player-win-$platform.exe"
+        $current_branch = "$bucket/$env:APPVEYOR_REPO_BRANCH/webrecorder-player-win-$env:platform.exe"
+        $master_branch = "$bucket/master/webrecorder-player-win-$env:platform.exe"
 
         $status = try { (invoke-webrequest -Uri $current_branch -Method Head).statuscode } catch {
         $_.Exception.Response.StatusCode.Value__
@@ -39,10 +39,10 @@ install:
 build_script:
   - ps: |
         if ($env:APPVEYOR_REPO_BRANCH -eq "master"){
-          npm run dist $switch
+          npm run dist $env:arch
         }
         else {
-          npm run dist-no-gh $switch
+          npm run dist-no-gh $env:arch
         }
   - ps: "move dist/webrecorderplayer-electron*.exe $env:APPVEYOR_BUILD_FOLDER/"  
 
