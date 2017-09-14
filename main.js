@@ -78,7 +78,7 @@ var registerOpenWarc = function() {
 
     webrecorder_process = child_process.spawn(
         webrecorder,
-        ["--no-browser", "--port", 0, warc],
+        ["--no-browser", "--loglevel", "error", "--port", 0, warc],
         spawn_options
       );
 
