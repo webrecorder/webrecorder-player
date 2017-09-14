@@ -30,7 +30,7 @@
   "build": {
     "asar": false,
     "appId": "org.webrecorder.webrecorderplayer",
-    "artifactName": "${name}-${version}.${ext}",
+    "artifactName": "${name}-${version}-${arch}.${ext}",
     "mac": {
       "category": "public.app-category.utilities",
       "target": "dmg"
