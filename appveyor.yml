@@ -1,14 +1,23 @@
 environment:
   nodejs_version: "7"
+  matrix:
+    - platform: x32
+      ARCH_SUFFIX: '-x86'
+      ARCH_ARG: '--ia32'
+
+    - platform: x64
+      ARCH_SUFFIX: '-x86_64'
+      ARCH_ARG: '--x64'
 
 install:
   - ps: Install-Product node $env:nodejs_version
   - npm install
+
   - ps: |
         $bucket = "https://s3.amazonaws.com/webrecorder-builds/webrecorder-player"
         $destination = "$env:APPVEYOR_BUILD_FOLDER\python-binaries\webrecorder.exe"
-        $current_branch = "$bucket/$env:APPVEYOR_REPO_BRANCH/webrecorder-player-win-x64.exe"
-        $master_branch = "$bucket/master/webrecorder-player-win-x64.exe"
+        $current_branch = "$bucket/$env:APPVEYOR_REPO_BRANCH/webrecorder-player-win-$env:platform.exe"
+        $develop_branch = "$bucket/develop/webrecorder-player-win-$env:platform.exe"
 
         $status = try { (invoke-webrequest -Uri $current_branch -Method Head).statuscode } catch {
         $_.Exception.Response.StatusCode.Value__
@@ -20,8 +29,8 @@ install:
 
         }
         else {
-            Write-Host "downloading webrecorder artifact: $master_branch"
-            Invoke-WebRequest -Uri $master_branch -OutFile $destination
+            Write-Host "downloading webrecorder artifact: $develop_branch"
+            Invoke-WebRequest -Uri $develop_branch -OutFile $destination
         }
   - ps: |
         $flash_plugin = "https://s3.amazonaws.com/webrecorder-builds/flashplugin/pepflashplayer.dll"
@@ -31,10 +40,10 @@ install:
 build_script:
   - ps: |
         if ($env:APPVEYOR_REPO_BRANCH -eq "master"){
-          npm run dist
+          npm run dist -- $env:ARCH_ARG
         }
         else {
-          npm run dist-no-gh          
+          npm run dist-no-gh -- $env:ARCH_ARG
         }
   - ps: "move dist/webrecorderplayer-electron*.exe $env:APPVEYOR_BUILD_FOLDER/"  
 
