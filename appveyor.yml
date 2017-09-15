@@ -42,12 +42,10 @@ install:
 build_script:
   - ps: |
         if ($env:APPVEYOR_REPO_BRANCH -eq "master"){
-          $suffix = "ARCH_SUFFIX=$env:ARCH_SUFFIX"
-          $suffix | Out-File electron-builder.env
           npm run release -- $env:ARCH_ARG
         }
         else {
-          npm run dist-no-gh -- $env:ARCH_ARG
+          npm run dist -- $env:ARCH_ARG
         }
   - ps: "move dist/webrecorderplayer-electron*.exe $env:APPVEYOR_BUILD_FOLDER/"  
 

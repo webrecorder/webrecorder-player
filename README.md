@@ -63,7 +63,7 @@ To view your web archives offline, you can download them from [https://webrecord
 
 - package the player. a self-packaged version for you environment (linux, macos, windows) will be saved in `./dist`
 
-		$ npm run dist
+        $ npm run dist
 
 ## Contact
 

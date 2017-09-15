@@ -57,9 +57,9 @@ install:
 script:
   - |
     if [[ $TRAVIS_BRANCH == 'master' ]]; then
-      npm run dist
+      npm run release
     else
-      npm run dist-no-gh
+      npm run dist
     fi
   - mv ./dist/webrecorderplayer-electron-* $TRAVIS_BUILD_DIR/
 

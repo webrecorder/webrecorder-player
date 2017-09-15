@@ -8,7 +8,7 @@
     "start": "node_modules/.bin/electron .",
     "pack": "build --dir",
     "release": "build",
-    "dist-no-gh": "build --publish never"
+    "dist": "build --publish never"
   },
   "repository": {
     "type": "git",
