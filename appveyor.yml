@@ -14,6 +14,8 @@ install:
   - npm install
 
   - ps: |
+        $replace_name = '"name": "$1' + "$env:ARCH_SUFFIX" + '"'
+        (Get-Content package.json) -replace '"name": "(.*)"', $replace_name | Set-Content package.json
         $bucket = "https://s3.amazonaws.com/webrecorder-builds/webrecorder-player"
         $destination = "$env:APPVEYOR_BUILD_FOLDER\python-binaries\webrecorder.exe"
         $current_branch = "$bucket/$env:APPVEYOR_REPO_BRANCH/webrecorder-player-win-$env:platform.exe"
@@ -40,7 +42,9 @@ install:
 build_script:
   - ps: |
         if ($env:APPVEYOR_REPO_BRANCH -eq "master"){
-          npm run dist -- $env:ARCH_ARG
+          $suffix = "ARCH_SUFFIX=$env:ARCH_SUFFIX"
+          $suffix | Out-File electron-builder.env
+          npm run release -- $env:ARCH_ARG
         }
         else {
           npm run dist-no-gh -- $env:ARCH_ARG

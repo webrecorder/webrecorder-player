@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node_modules/.bin/electron .",
     "pack": "build --dir",
-    "dist": "build",
+    "release": "build",
     "dist-no-gh": "build --publish never"
   },
   "repository": {
@@ -30,7 +30,7 @@
   "build": {
     "asar": false,
     "appId": "org.webrecorder.webrecorderplayer",
-    "artifactName": "${name}-${version}${env.ARCH_SUFFIX}.${ext}",
+    "artifactName": "${name}-${version}.${ext}",
     "mac": {
       "category": "public.app-category.utilities",
       "target": "dmg"
