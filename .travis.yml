@@ -21,7 +21,7 @@ addons:
 before_install:
   - |
     if [[ $TRAVIS_OS_NAME == 'linux' ]]; then
-      sed -i'' -E 's/"name": "(.*)"/"name": "\1-linux"' ./package.json
+      sed -i'' -E 's/"name": "(.*)"/"name": "\1-linux"/' ./package.json
       apt-get -qq update; 
       sudo apt-get install -y icnsutils graphicsmagick;
       FLASH_PLUGIN="https://s3.amazonaws.com/webrecorder-builds/flashplugin/libpepflashplayer.so";
@@ -31,7 +31,7 @@ before_install:
     fi
   - |
     if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
-      sed -i '' -E 's/"name": "(.*)"/"name": "\1-osx"' ./package.json
+      sed -i '' -E 's/"name": "(.*)"/"name": "\1-osx"/' ./package.json
       FLASH_PLUGIN="https://s3.amazonaws.com/webrecorder-builds/flashplugin/PepperFlashPlayer.plugin.zip";
       cd plugins; 
       wget $FLASH_PLUGIN; 
