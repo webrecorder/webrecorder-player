@@ -1,7 +1,7 @@
 {
   "name": "webrecorderplayer-electron",
   "productName": "Webrecorder Player",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Webrecorder Player -- Standalone Web Archive Browser App",
   "main": "main.js",
   "scripts": {
@@ -36,10 +36,10 @@
       "target": "dmg"
     },
     "linux": {
-      "category": "network"
+      "category": "Archiving;Utility;"
     },
     "win": {
-      "target": "portable"
+      "target": ["portable", "zip"]
     }
   },
   "dependencies": {

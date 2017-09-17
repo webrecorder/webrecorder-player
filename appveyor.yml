@@ -14,7 +14,7 @@ install:
   - npm install
 
   - ps: |
-        $replace_name = '"name": "$1' + "$env:ARCH_SUFFIX" + '"'
+        $replace_name = '"name": "$1' + "-win$env:ARCH_SUFFIX" + '"'
         (Get-Content package.json) -replace '"name": "(.*)"', $replace_name | Set-Content package.json
         $bucket = "https://s3.amazonaws.com/webrecorder-builds/webrecorder-player"
         $destination = "$env:APPVEYOR_BUILD_FOLDER\python-binaries\webrecorder.exe"
@@ -47,10 +47,10 @@ build_script:
         else {
           npm run dist -- $env:ARCH_ARG
         }
-  - ps: "move dist/webrecorderplayer-electron*.exe $env:APPVEYOR_BUILD_FOLDER/"  
+  - ps: "move dist/webrecorderplayer-electron*.* $env:APPVEYOR_BUILD_FOLDER/"
 
 artifacts:
-  - path: "webrecorderplayer-electron*.exe"
+  - path: "webrecorderplayer-electron*.*"
     name: webrecorderplayer-electron
     
 deploy:
