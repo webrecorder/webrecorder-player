@@ -36,10 +36,10 @@
       "target": "dmg"
     },
     "linux": {
-      "category": "network"
+      "category": "Archiving;Utility;"
     },
     "win": {
-      "target": ["zip", "7z", "portable"]
+      "target": ["portable", "zip"]
     }
   },
   "dependencies": {
