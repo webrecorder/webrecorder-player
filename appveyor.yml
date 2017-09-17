@@ -47,10 +47,10 @@ build_script:
         else {
           npm run dist -- $env:ARCH_ARG
         }
-  - ps: "move dist/webrecorderplayer-electron*.zip $env:APPVEYOR_BUILD_FOLDER/"
+  - ps: "move dist/webrecorderplayer-electron*.* $env:APPVEYOR_BUILD_FOLDER/"
 
 artifacts:
-  - path: "webrecorderplayer-electron*.zip"
+  - path: "webrecorderplayer-electron*.*"
     name: webrecorderplayer-electron
     
 deploy:

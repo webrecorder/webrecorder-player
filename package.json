@@ -39,7 +39,7 @@
       "category": "network"
     },
     "win": {
-      "target": "zip"
+      "target": ["zip", "7z", "portable"]
     }
   },
   "dependencies": {
