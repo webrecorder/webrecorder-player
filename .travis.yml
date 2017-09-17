@@ -19,7 +19,7 @@ addons:
       - $(ls webrecorderplayer-electron-*{dmg,AppImage})
 
 before_install:
-  - "sed -i '' -E \"s/\\\"name\\\": \\\"(.*)\\\"/\\\"name\\\": \\\"\\1-$TRAVIS_OS_NAME\\\"/\" ./package.json"
+  - "sed -i'' -E \"s/\\\"name\\\": \\\"(.*)\\\"/\\\"name\\\": \\\"\\1-$TRAVIS_OS_NAME\\\"/\" ./package.json"
   - |
     if [[ $TRAVIS_OS_NAME == 'linux' ]]; then
       apt-get -qq update; 

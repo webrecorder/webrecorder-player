@@ -14,7 +14,7 @@ install:
   - npm install
 
   - ps: |
-        $replace_name = '"name": "$1' + "$env:ARCH_SUFFIX" + '"'
+        $replace_name = '"name": "$1' + "-win-$env:ARCH_SUFFIX" + '"'
         (Get-Content package.json) -replace '"name": "(.*)"', $replace_name | Set-Content package.json
         $bucket = "https://s3.amazonaws.com/webrecorder-builds/webrecorder-player"
         $destination = "$env:APPVEYOR_BUILD_FOLDER\python-binaries\webrecorder.exe"
