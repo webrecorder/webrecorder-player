@@ -39,7 +39,7 @@
       "category": "Archiving;Utility;"
     },
     "win": {
-      "target": ["portable", "zip"]
+      "target": "portable"
     }
   },
   "dependencies": {
