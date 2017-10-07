@@ -7,6 +7,7 @@ const path = require("path");
 const url = require("url");
 const rq = require("request-promise");
 const child_process = require("child_process");
+const windowStateKeeper = require("electron-window-state");
 
 const packageInfo = require('./package.json');
 
@@ -126,13 +127,36 @@ var registerOpenWarc = function() {
 };
 
 var createWindow = function() {
-  mainWindow = new BrowserWindow({
-    width: 1000,
-    height: 800,
-    webPreferences: { plugins: true }
+  // keep track of window state
+  let mainWindowState = windowStateKeeper({
+    defaultWidth: 1000,
+    defaultHeight: 800
   });
-  mainWindow.maximize();
 
+  mainWindow = new BrowserWindow({
+    webPreferences: { plugins: true },
+
+    // start with state from windowStateKeeper
+    x: mainWindowState.x,
+    y: mainWindowState.y,
+    width: mainWindowState.width,
+    height: mainWindowState.height,
+    isMaximized: mainWindowState.isMaximized,
+    isFullScreen: mainWindowState.isFullScreen,
+
+    // hide the window until the content is loaded
+    show: false
+  });
+
+  // have windowStateKeeper subscribe to window state changes
+  mainWindowState.manage(mainWindow);
+
+  // show the window once its content is ready to go
+  mainWindow.once('ready-to-show', function() {
+    mainWindow.show();
+  });
+
+  // load the application into the main window
   mainWindow.loadURL(
     url.format({
       pathname: path.join(__dirname, "main.html"),
