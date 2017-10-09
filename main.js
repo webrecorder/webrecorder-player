@@ -13,6 +13,7 @@ const packageInfo = require('./package.json');
 const wrConfig = {};
 
 let mainWindow;
+let webrecorder_filename;
 let webrecorder_process;
 
 let pluginName;
@@ -41,27 +42,33 @@ app.commandLine.appendSwitch(
 );
 
 var registerOpenWarc = function() {
-  const webrecorder = path.join(__dirname, "python-binaries", "webrecorder");
+  webrecorder_filename = path.join(__dirname, "python-binaries", "webrecorder");
 
   // get versions for stack
-  child_process.execFile(webrecorder, ["--version"], (err, stdout, stderr) => {
+  child_process.execFile(webrecorder_filename, ["--version"], (err, stdout, stderr) => {
     const electronVersion = `electron ${process.versions.electron}<BR>
                              chrome ${process.versions.chrome}`;
     Object.assign(wrConfig, {
       version: `webrecorder player ${packageInfo.version}<BR>
                 ${stdout.replace("\n", "<BR>")}<BR>${electronVersion}`
     });
- });
+  });
 
   ipcMain.on("open-warc", (event, argument) => {
     const warc = argument;
-    console.log(`warc file: ${warc}`);
+    return loadWarc(warc);
+  });
+};
+
+
+function loadWarc(warc) {
+    console.log(`loading warc file: ${warc}`);
 
     var message = {"url": url.format({
                             pathname: path.join(__dirname, "loader.html"),
                             protocol: "file:",
                             slashes: true})};
- 
+
     // load spinner.html into webview
     mainWindow.webContents.send("loadWebview", message);
 
@@ -77,8 +84,8 @@ var registerOpenWarc = function() {
     }
 
     webrecorder_process = child_process.spawn(
-        webrecorder,
-        ["--no-browser", "--loglevel", "error", "--port", 0, warc],
+        webrecorder_filename,
+        ["--no-browser", "--loglevel", "error", "--port", 0, "--cache-dir", "_warc_cache", warc],
         spawn_options
       );
 
@@ -121,11 +128,10 @@ var registerOpenWarc = function() {
     };
 
     webrecorder_process.stdout.on('data', findPort);
+}
 
-  });
-};
 
-var createWindow = function() {
+var createWindow = function(html_page, hash) {
   mainWindow = new BrowserWindow({
     width: 1000,
     height: 800,
@@ -135,9 +141,10 @@ var createWindow = function() {
 
   mainWindow.loadURL(
     url.format({
-      pathname: path.join(__dirname, "main.html"),
+      pathname: path.join(__dirname, html_page),
       protocol: "file:",
-      slashes: true
+      slashes: true,
+      hash: hash,
     })
   );
 
@@ -156,8 +163,30 @@ var createWindow = function() {
 };
 
 app.on("ready", function() {
-  createWindow();
-  registerOpenWarc();
+  var filename;
+
+  if (process.argv.length > 1) {
+    filename = process.argv[1];
+    if (filename == ".") {
+      if (process.argv.length > 2) {
+        filename = process.argv[2];
+      } else {
+        filename = null;
+      }
+    }
+  }
+
+  if (filename) {
+    createWindow("main.html", "#loading");
+    registerOpenWarc();
+
+    loadWarc(filename);
+  } else {
+    createWindow("main.html");
+    registerOpenWarc();
+  }
+
+
 });
 
 app.on("window-all-closed", function() {

@@ -47,10 +47,15 @@
   </div>
 
   <div id="webviewContainer" class="replay">
-    <webview id="replay" src="./landing.html" autosize="on" preload="./preload.js" plugins></webview>
+    <webview id="replay" autosize="on" preload="./preload.js" plugins></webview>
   </div>
 
   <script>
+    var frame = "./landing.html";
+    if (window.location.hash == "#loading")  {
+      frame = "./loader.html"
+    }
+    document.querySelector("webview").setAttribute("src", frame);
     require('./renderer.js')
   </script>
 

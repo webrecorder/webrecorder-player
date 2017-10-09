@@ -144,6 +144,7 @@ renderer ipc "loadWebview"
 called by main after pywb is launched, load a url into webview
 */
 ipcRenderer.on("loadWebview", (event, message) => {
+  console.log("Loading!!");
   replay_webview.clearHistory();
   replay_webview.loadURL(message.url);
   wrConfig = wrConfig || {};
