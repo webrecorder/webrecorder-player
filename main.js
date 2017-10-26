@@ -1,6 +1,7 @@
 const electron = require("electron");
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
+const session = electron.session;
 const ipcMain = electron.ipcMain;
 
 const path = require("path");
@@ -40,6 +41,8 @@ app.commandLine.appendSwitch(
   "ppapi-flash-path",
   path.join(__dirname, pluginDir, pluginName)
 );
+
+app.commandLine.appendSwitch("ignore-certificate-errors");
 
 var registerOpenWarc = function() {
   const webrecorder = path.join(__dirname, "python-binaries", "webrecorder");
@@ -103,7 +106,7 @@ var registerOpenWarc = function() {
         return;
       }
 
-      port = parts[1];
+      port = parts[1].trim();
 
       if (process.platform != "win32") {
         webrecorder_process.unref();
@@ -116,9 +119,17 @@ var registerOpenWarc = function() {
       );
       Object.assign(wrConfig, {host: url});
 
+      // proxy override!
+      url = "http://webrecorder.proxy/";
+
       var message = {"url": url, "url_base": url};
 
-      mainWindow.webContents.send("loadWebview", message);
+      var sesh = session.fromPartition("persist:wr", {cache: true});
+      //var proxy = `http=localhost:${port};https=localhost:${port}`;
+      var proxy = `localhost:${port}`;
+      sesh.setProxy({proxyRules: proxy}, function() {
+          mainWindow.webContents.send("loadWebview", message);
+      });
     };
 
     webrecorder_process.stdout.on('data', findPort);

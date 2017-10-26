@@ -170,7 +170,8 @@ replay_webview.addEventListener("ipc-message", event => {
 //  http://localhost:<port>/local/collection or
 //  http://localhost:<port>
 function isCollPage(url) {
-   return url.split("/").length <= 5;
+   return url.indexOf("webrecorder.proxy") >= 0;
+   //return url.split("/").length <= 5;
 }
 
 
