@@ -1,0 +1,76 @@
+.help-container {
+  background-image: url('../../images/Bg.png');
+  background-repeat: repeat;
+  padding-top: 9rem;
+  min-height: calc(100% - 9rem);
+
+  .help {
+    padding: 25px;
+    width: 75vw;
+    margin: 0 auto;
+    padding-bottom: 10rem;
+    background: #FFF;
+    font-family: sans-serif;
+    margin-top: 2.5rem;
+  }
+
+  .help h3 {
+    font-size: 2rem;
+    margin: 0 0 0.8rem 0;
+  }
+  .help h4 {
+    font-size: 1.1rem;
+    margin: 0 0 0.5rem 0;
+    font-weight: lighter;
+  }
+  .help h5 {
+    font-size: 1.9rem;
+    margin: 3rem 0 0.3rem 0;
+    color: #0232F5;
+  }
+  .help h5:first-child {
+    margin: 0 0 0.3rem 0;
+  }
+
+  .help p {
+    font-size: 1.4rem;
+    line-height: 2.2rem;
+    margin: 1.2rem auto;
+  }
+
+  .help li {
+    font-size: 1.5rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .help a {
+    color: #4D6AE1;
+    text-decoration: none;
+  }
+  .help a:hover{
+    color: #0232F5 !important;
+    box-shadow: 0 3px 0 #0232F5;
+  }
+  .help a:active{
+    color: #0232F5;
+    box-shadow: 0 4px 0 #0232F5;
+  }
+  .help a:visited{
+    color: #4D6AE1;
+    text-decoration: none;
+  }
+
+  .support {
+    margin-top: 50px;
+    font-style: italic;
+    width: 70%;
+  }
+  .support hr {
+    border: transparent;
+    border-top: 1px solid #ccc;
+    height: 1px;
+  }
+  .support p {
+    font-size: 1.3rem;
+  }
+}
