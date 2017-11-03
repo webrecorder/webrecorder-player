@@ -1,0 +1,109 @@
+nav.topBar {
+  transition: height 1s ease;
+  animation: fadeIn 0.2s 1 normal;
+
+  position: fixed;
+  display: flex;
+  align-items: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
+  z-index: 1024;
+  padding: 0 .8rem;
+
+  background: #FFF;
+  color: #e8e8e8;
+  border-bottom: 4px solid #0232F5;
+
+  &.replay {
+
+    #back {
+      display: inline-block;
+    }
+    #forward {
+      display: inline-block;
+    }
+    #refresh {
+      display: inline-block;
+    }
+
+    .backToColl {
+      opacity: 1;
+    }
+  }
+}
+
+button, .home-btn {
+  background-color: Transparent;
+  background-repeat: no-repeat;
+  border: none;
+  outline: none;
+  padding: 0px 8px 0px 8px;
+  vertical-align: middle;
+  animation: fadeIn 1s 1 normal;
+  cursor: pointer;
+}
+
+.pull-right {
+  margin-left: auto;
+}
+
+.wrLogoImg {
+  transition: all 1s ease;
+  width: 60px;
+  float: left;
+}
+.wrLogoPlayerTxt{
+  height: 15px;
+  display: none;
+}
+.wrLogoImgTxt {
+  transition: all 1s ease;
+  height: 50px;
+}
+.replayCollection{
+  height: 30px;
+  position: relative;
+  left: -150px;
+  display: none;
+}
+.replayCollection:active{
+  top: 2px;
+}
+.backToColl {
+  height: 12px;
+  margin-right: 5px;
+  transition: all 0.5s ease;
+  opacity: 0;
+}
+.openFile {
+  transition: all 0.5s ease;
+  height: 30px;
+}
+.halp {
+  height: 20px;
+}
+
+#back {
+  display: none;
+}
+#refresh {
+  transition: opacity .1s ease-in-out;
+  display: none;
+  margin-right: 20px;
+}
+#forwardArrow {
+  transform: rotate(180deg) translate(0, -1px);
+}
+
+#forward {
+  display: none;
+}
+
+#open {
+}
+
+#backToCollection.off {
+  opacity: 0;
+}
