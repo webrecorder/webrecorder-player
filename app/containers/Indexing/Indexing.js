@@ -71,9 +71,9 @@ class Indexing extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = ({ app }) => {
   return {
-    host: state.getIn(['appSettings', 'host'])
+    host: app.getIn(['appSettings', 'host'])
   };
 };
 

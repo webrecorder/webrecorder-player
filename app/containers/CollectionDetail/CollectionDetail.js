@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { asyncConnect } from 'redux-connect';
+import { createSearchAction } from 'redux-search';
 
 import { truncate } from 'helpers/utils';
 import { load as loadColl } from 'redux/modules/collection';
-import { getOrderedBookmarks, getOrderedRecordings } from 'redux/selectors';
+import { getOrderedBookmarks, getOrderedRecordings,
+         bookmarkSearchResults } from 'redux/selectors';
 
 import CollectionDetailUI from 'components/CollectionDetailUI';
 
@@ -38,23 +40,37 @@ const initialData = [
   {
     promise: ({ params, store: { getState, dispatch } }) => {
       const { user, coll } = params;
-      const host = getState().getIn(['appSettings', 'host']);
-      console.log('load users', host, user, coll);
+      const { app } = getState();
+      const host = app.getIn(['appSettings', 'host']);
+
       return dispatch(loadColl(user, coll, host));
     }
   }
 ];
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (outerState) => {
+  const { app } = outerState;
+  const { bookmarkFeed, searchText } = bookmarkSearchResults(outerState);
+  const isIndexing = !bookmarkFeed.size && app.getIn(['collection', 'bookmarks']).size && !searchText;
+
   return {
-    auth: state.get('auth'),
-    collection: state.get('collection'),
-    recordings: getOrderedRecordings(state),
-    bookmarks: getOrderedBookmarks(state)
+    auth: app.get('auth'),
+    collection: app.get('collection'),
+    recordings: getOrderedRecordings(app),
+    bookmarks: isIndexing ? getOrderedBookmarks(app) : bookmarkFeed,
+    searchText
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    searchBookmarks: createSearchAction('bookmarks'),
+    dispatch
   };
 };
 
 export default asyncConnect(
   initialData,
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(CollectionDetail);
