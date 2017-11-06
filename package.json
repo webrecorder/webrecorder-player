@@ -3,12 +3,14 @@
   "productName": "Webrecorder Player",
   "version": "1.0.7",
   "description": "Webrecorder Player -- Standalone Web Archive Browser App",
-  "main": "main.js",
   "scripts": {
-    "build-dll": "cross-env NODE_ENV=development node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack/webpack.config.renderer.dev.dll.js --colors",
+    "build": "concurrently \"npm run build-main\" \"npm run build-renderer\"",
+    "build-main": "cross-env NODE_ENV=production node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack/webpack.config.main.prod.js --display-error-details --colors",
+    "build-renderer": "cross-env NODE_ENV=production node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack/webpack.config.renderer.prod.js --display-error-details --colors",
     "dev": "cross-env START_HOT=1 npm run start-renderer-dev",
     "start": "node_modules/.bin/electron .",
     "pack": "build --dir",
+    "package": "npm run build && build --publish never",
     "release": "build",
     "dist": "build --publish never",
     "start-main-dev": "cross-env HOT=1 NODE_ENV=development electron -r babel-register ./app/main.dev",
@@ -32,9 +34,18 @@
   },
   "homepage": "https://github.com/webrecorder/webrecorderplayer-electron#readme",
   "build": {
+    "productName": "Webrecorder Player",
     "asar": false,
     "appId": "org.webrecorder.webrecorderplayer",
     "artifactName": "${name}-${version}.${ext}",
+    "files": [
+      "dist/",
+      "node_modules/",
+      "app.html",
+      "main.prod.js",
+      "main.prod.js.map",
+      "package.json"
+    ],
     "mac": {
       "category": "public.app-category.utilities",
       "target": "dmg"
