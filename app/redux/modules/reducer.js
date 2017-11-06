@@ -1,7 +1,10 @@
 import Immutable from 'immutable';
-import { combineReducers } from 'redux-immutable';
-import { setToImmutableStateFunc, setToMutableStateFunc,
-         immutableReducer as immutableReduxAsyncConnect } from 'redux-connect';
+import { combineReducers } from 'redux';
+import { combineReducers as combineImmutableReduers } from 'redux-immutable';
+import { reducer as reduxAsyncConnect } from 'redux-connect';
+
+import { reducer as searchReducer } from 'redux-search';
+
 
 import routerReducer from './routerReducer';
 
@@ -13,14 +16,8 @@ import infoStats from './infoStats';
 import sizeCounter from './sizeCounter';
 import user from './user';
 
-
-// Set the mutability/immutability functions for reduxAsyncConnect
-setToImmutableStateFunc(mutableState => Immutable.fromJS(mutableState));
-setToMutableStateFunc(immutableState => immutableState.toJS());
-
-export default combineReducers({
+const makeAppReducer = () => combineImmutableReduers({
   routing: routerReducer,
-  reduxAsyncConnect: immutableReduxAsyncConnect,
   auth,
   appSettings,
   collection,
@@ -28,4 +25,10 @@ export default combineReducers({
   sizeCounter,
   infoStats,
   user
+});
+
+export default combineReducers({
+  search: searchReducer,
+  reduxAsyncConnect,
+  app: makeAppReducer()
 });

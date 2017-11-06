@@ -80,9 +80,9 @@ class Application extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = ({ app }) => {
   return {
-    colectionLoaded: state.getIn(['collection', 'loaded'])
+    colectionLoaded: app.getIn(['collection', 'loaded'])
   };
 }
 

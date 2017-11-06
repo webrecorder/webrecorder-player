@@ -27,7 +27,8 @@ class CollectionDetailUI extends Component {
     browsers: PropTypes.object,
     auth: PropTypes.object,
     params: PropTypes.object,
-    recordings: PropTypes.object
+    recordings: PropTypes.object,
+    searchText: PropTypes.string
   };
 
   constructor(props) {
@@ -58,7 +59,7 @@ class CollectionDetailUI extends Component {
 
   onToggle = (e) => {
     let bool;
-    if (typeof e.target.checked !== 'undefined') {
+    if (e && typeof e.target.checked !== 'undefined') {
       bool = e.target.checked;
     } else {
       bool = !this.state.groupDisplay;
@@ -103,12 +104,23 @@ class CollectionDetailUI extends Component {
     });
   }
 
+  search = (evt) => {
+    const { dispatch, searchBookmarks } = this.props;
+
+    // if in group mode, switch to flat display
+    if(this.state.groupDisplay) {
+      this.onToggle();
+    }
+
+    dispatch(searchBookmarks(evt.target.value));
+  }
+
   toggleExpandAllSessions = () => {
     this.setState({ expandAll: !this.state.expandAll });
   }
 
   render() {
-    const { bookmarks, browsers, collection, recordings } = this.props;
+    const { bookmarks, browsers, collection, recordings, searchText } = this.props;
     const { groupDisplay, expandAll, selectedBookmark, selectedBookmarkIdx,
             selectedSession, selectedGroupedBookmark, selectedGroupedBookmarkIdx } = this.state;
 
@@ -184,7 +196,9 @@ class CollectionDetailUI extends Component {
               <CollectionManagement
                 groupDisplay={groupDisplay}
                 onToggle={this.onToggle}
-                toggleExpandAllSessions={this.toggleExpandAllSessions} />
+                toggleExpandAllSessions={this.toggleExpandAllSessions}
+                search={this.search}
+                searchText={searchText} />
             </div>
             <div className="wr-coll-detail-table">
               {
@@ -243,17 +257,6 @@ class CollectionDetailUI extends Component {
                             label="url"
                             dataKey="url"
                             flexGrow={1} />
-                          <Column
-                            width={100}
-                            label="labels"
-                            dataKey="labels"
-                            cellRenderer={TagRenderer} />
-                          <Column
-                            width={100}
-                            label="remote browser"
-                            dataKey="browser"
-                            columnData={{ browsers }}
-                            cellRenderer={BrowserRenderer} />
                         </Table>
                       )
                     }

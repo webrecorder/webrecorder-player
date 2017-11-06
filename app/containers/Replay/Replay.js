@@ -92,7 +92,7 @@ const initialData = [
   {
     promise: ({ params, store: { dispatch, getState } }) => {
       const state = getState();
-      const collection = state.get('collection');
+      const collection = state.app.get('collection');
       const { user, coll } = params;
 
       if(!isLoaded(state) || (collection.get('id') === coll &&
@@ -105,11 +105,11 @@ const initialData = [
   },
   {
     promise: ({ store: { dispatch, getState } }) => {
-      const state = getState();
-      const host = state.getIn(['appSettings', 'host']);
+      const { app } = getState();
+      const host = app.getIn(['appSettings', 'host']);
 
       // TODO: determine if we need to test for stale archives
-      if (!state.getIn(['controls', 'archives']).size) {
+      if (!app.getIn(['controls', 'archives']).size) {
         return dispatch(getArchives(host));
       }
 
@@ -118,14 +118,14 @@ const initialData = [
   }
 ];
 
-const mapStateToProps = (state, props) => {
+const mapStateToProps = ({ app }) => {
   return {
-    bookmarks: getOrderedBookmarks(state),
-    collection: state.get('collection'),
-    recording: getRecording(state),
-    recordingIndex: getActiveRecording(state),
-    timestamp: state.getIn(['controls', 'timestamp']),
-    url: state.getIn(['controls', 'url'])
+    bookmarks: getOrderedBookmarks(app),
+    collection: app.get('collection'),
+    recording: getRecording(app),
+    recordingIndex: getActiveRecording(app),
+    timestamp: app.getIn(['controls', 'timestamp']),
+    url: app.getIn(['controls', 'url'])
   };
 };
 

@@ -7,7 +7,7 @@ import 'shared/scss/toggle.scss';
 
 function CollectionManagement(props, context) {
   const { canAdmin } = context;
-  const { groupDisplay, onToggle, toggleExpandAllSessions } = props;
+  const { groupDisplay, onToggle, toggleExpandAllSessions, search, searchText } = props;
 
   return (
     <nav>
@@ -36,7 +36,7 @@ function CollectionManagement(props, context) {
           <button className="open-all" onClick={toggleExpandAllSessions}>Open All Sessions</button>
       }
       <span className="search-box">
-        <input type="text" name="filter" />
+        <input type="text" onChange={search} value={searchText} name="filter" />
         <span className="glyphicon glyphicon-search" />
       </span>
     </nav>
@@ -46,7 +46,9 @@ function CollectionManagement(props, context) {
 CollectionManagement.propTypes = {
   groupDisplay: PropTypes.bool,
   onToggle: PropTypes.func,
-  toggleExpandAllSessions: PropTypes.func
+  toggleExpandAllSessions: PropTypes.func,
+  search: PropTypes.func,
+  searchText: PropTypes.string
 };
 
 CollectionManagement.contextTypes = {
