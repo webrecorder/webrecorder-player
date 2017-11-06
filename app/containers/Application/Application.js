@@ -6,6 +6,9 @@ import { Link } from 'react-router';
 
 import Nav from 'components/Nav';
 
+import 'shared/css/bootstrap-theme.min.css';
+import 'shared/css/bootstrap.min.css';
+
 
 class Application extends Component {
   static contextTypes = {
@@ -27,24 +30,35 @@ class Application extends Component {
   }
 
   componentDidMount() {
-    document.addEventListener('drop', (evt) => {
-      evt.preventDefault();
-      evt.stopPropagation();
-      const filename = evt.dataTransfer.files[0].path;
-      console.log(filename);
-
-      if (filename && filename.toString().match(/\.w?arc(\.gz)?|\.har$/)) {
-        this.context.router.push('/');
-        ipcRenderer.send('open-warc', filename.toString());
-      } else if (filename) {
-        window.alert('Sorry, only WARC or ARC files (.warc, .warc.gz, .arc, .arc.gz) or HAR (.har) can be opened');
-      }
-    });
+    document.addEventListener('drop', this.openDroppedFile);
 
     document.addEventListener('dragover', (evt) => {
       evt.preventDefault();
       evt.stopPropagation();
     });
+  }
+
+  componentWillUnmount() {
+    document.removeEventListever('drop', this.openDroppedFile);
+  }
+
+  openDroppedFile = (evt) => {
+    evt.preventDefault();
+    evt.stopPropagation();
+    const filename = evt.dataTransfer.files[0].path;
+    console.log(filename);
+
+    if (filename && filename.toString().match(/\.w?arc(\.gz)?|\.har$/)) {
+      this.context.router.push('/');
+      ipcRenderer.send('open-warc', filename.toString());
+    } else if (filename) {
+      window.alert('Sorry, only WARC or ARC files (.warc, .warc.gz, .arc, .arc.gz) or HAR (.har) can be opened');
+    }
+  }
+
+  appReset = () => {
+    this.context.router.replace('/');
+    window.location.reload();
   }
 
   render() {
@@ -54,7 +68,7 @@ class Application extends Component {
     if (error) {
       return (
         <div>
-          <h1><Link to='/'>Error Encountered, please try again.</Link></h1>
+          <h1><a onClick={this.appReset}>Error Encountered, please try again.</a></h1>
         </div>
       );
     }

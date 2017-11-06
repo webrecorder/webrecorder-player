@@ -35,7 +35,7 @@ class Indexing extends Component {
       fetch(reqUrl).then(res => res.json())
                    .then(this.displayProgress)
                    .catch(err => console.log(err));
-    }, 50);
+    }, 250);
   }
 
   componentWillUnmount() {

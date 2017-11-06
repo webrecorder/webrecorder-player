@@ -17,8 +17,6 @@ import CollectionManagement from './management';
 import { BrowserRenderer, LinkRenderer, TagRenderer,
          TimestampRenderer } from './columns';
 
-import 'shared/css/bootstrap-theme.min.css';
-import 'shared/css/bootstrap.min.css';
 import './style.scss';
 
 
