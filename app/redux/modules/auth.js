@@ -1,10 +1,16 @@
 import { fromJS } from 'immutable';
 
-const defaultUser = fromJS({
-  username: 'local',
-  role: 'archivist',
-  anon: true
-});
+const defaultUser = __PLAYER__ ?
+  fromJS({
+    username: 'local',
+    role: 'archivist',
+    anon: true
+  }) :
+  fromJS({
+    username: null,
+    role: null,
+    anon: true
+  });
 
 const initialState = fromJS({
   loaded: true,

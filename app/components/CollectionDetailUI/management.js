@@ -5,13 +5,25 @@ import Toggle from 'react-toggle';
 import 'shared/scss/toggle.scss';
 
 
-function CollectionManagement(props) {
+function CollectionManagement(props, context) {
+  const { canAdmin } = context;
   const { groupDisplay, onToggle, toggleExpandAllSessions } = props;
+
   return (
     <nav>
-      <span className="glyphicon glyphicon-download" />
-      <span className="glyphicon glyphicon-upload" />
-      <span className="glyphicon glyphicon-th-list" />
+      {
+        canAdmin &&
+          <span className="glyphicon glyphicon-download" />
+      }
+      {
+        canAdmin &&
+          <span className="glyphicon glyphicon-upload" />
+      }
+      {
+        /* not implemented yet
+        <span className="glyphicon glyphicon-th-list" />
+        */
+      }
       <div className="toggle-label">
         <span onClick={onToggle}>Group by session</span>
         <Toggle
@@ -35,6 +47,10 @@ CollectionManagement.propTypes = {
   groupDisplay: PropTypes.bool,
   onToggle: PropTypes.func,
   toggleExpandAllSessions: PropTypes.func
+};
+
+CollectionManagement.contextTypes = {
+  canAdmin: PropTypes.bool
 };
 
 export default CollectionManagement;
