@@ -76,9 +76,11 @@ class Replay extends Component {
 const initialData = [
   {
     // set url and ts in store
-    promise: ({ params: { ts, splat }, store: { dispatch } }) => {
+    promise: ({ location: { hash, search }, params: { ts, splat }, store: { dispatch } }) => {
+
+      const compositeUrl = `${splat}${hash}${search}`;
       const promises = [
-        dispatch(updateUrl(splat)),
+        dispatch(updateUrl(compositeUrl)),
         dispatch(updateTimestamp(ts))
       ];
 

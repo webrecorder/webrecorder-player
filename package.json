@@ -51,6 +51,7 @@
     "electron-debug": "^1.4.0",
     "electron-devtools-installer": "^2.2.1",
     "electron-window-state": "^4.1.1",
+    "history": "^3.3.2",
     "immutable": "^3.8.1",
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
