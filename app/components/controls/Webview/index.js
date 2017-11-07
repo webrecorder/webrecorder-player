@@ -11,11 +11,10 @@ class Webview extends Component {
   };
 
   render() {
-    const { params: { user, coll}, timestamp, url } = this.props;
-    const proxyUrl = `${config.proxyHost}/${user}/${coll}/${timestamp}_mp/${url}`;
+    const { url } = this.props;
 
     return (
-      <webview id="replay" src={proxyUrl} autosize="on" plugins partition="persist:wr" />
+      <webview id="replay" src={url} autosize="on" plugins partition="persist:wr" />
     );
   }
 }

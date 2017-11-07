@@ -8,6 +8,9 @@ const CTRLS_SET_ALL_SOURCES = 'wr/ctrls/SET_ALL_SOURCES';
 const CTRLS_SET_SOURCES = 'wr/ctrls/SET_SOURCES';
 const CTRLS_SET_URL = 'wr/ctrls/CTRLS_SET_URL';
 const CTRLS_SET_TS = 'wr/ctrls/CTRLS_SET_TS';
+const CTRLS_CONFIG_PROXY = 'wr/ctrls/CTRLS_CONFIG_PROXY';
+const CTRLS_CONFIG_PROXY_SUCCESS = 'wr/ctrls/CTRLS_CONFIG_PROXY_SUCCESS';
+const CTRLS_CONFIG_PROXY_FAIL = 'wr/ctrls/CTRLS_CONFIG_PROXY_FAIL';
 
 const CTRLS_GET_ARCHIVES = 'wr/ctrls/ARCHIVES';
 const CTRLS_GET_ARCHIVES_SUCCESS = 'wr/ctrls/ARCHIVES_SUCCESS';
@@ -64,6 +67,13 @@ export function getArchives(host = '') {
     types: [CTRLS_GET_ARCHIVES, CTRLS_GET_ARCHIVES_SUCCESS, CTRLS_GET_ARCHIVES_FAIL],
     accessed: Date.now(),
     promise: client => client.get(`${rts(host)}${config.apiPath}/client_archives`)
+  };
+}
+
+export function configureProxy(user, coll, ts, host = '') {
+  return {
+    types: [CTRLS_CONFIG_PROXY, CTRLS_CONFIG_PROXY_SUCCESS, CTRLS_CONFIG_PROXY_FAIL],
+    promise: client => client.get(`${rts(host)}${config.apiPath}/update_remote_browser/@INIT?user=${user}&coll=${coll}&timestamp=${ts}`)
   };
 }
 
