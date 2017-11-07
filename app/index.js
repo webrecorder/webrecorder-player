@@ -1,10 +1,8 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { is } from 'immutable';
 import { AppContainer } from 'react-hot-loader';
 import { createHashHistory, createHistory, useBasename } from 'history';
 import { Provider } from 'react-redux';
-import { syncHistoryWithStore } from 'react-router-redux';
 
 import ApiClient from './helpers/ApiClient';
 import baseRoute from './playerRoutes';
@@ -17,35 +15,15 @@ const client = new ApiClient();
 const dest = document.getElementById('root');
 window.wrAppContainer = dest;
 
-let hstory;
+let history;
 if (process.env.NODE_ENV === 'production') {
-  hstory = useBasename(createHistory)({
+  history = useBasename(createHistory)({
     basename: window.location.pathname
   });
 } else {
-  hstory = createHashHistory();
+  history = createHashHistory();
 }
-const store = createStore(hstory, client);
-
-const createSelectLocationState = () => {
-  let prevRoutingState;
-  let prevRoutingStateJS;
-
-  return (state) => {
-    const routingState = state.app.get('routing');
-
-    if (!is(prevRoutingState, routingState)) {
-      prevRoutingState = routingState;
-      prevRoutingStateJS = routingState.toJS();
-    }
-
-    return prevRoutingStateJS;
-  };
-};
-
-const history = syncHistoryWithStore(hstory, store, {
-  selectLocationState: createSelectLocationState()
-});
+const store = createStore(history, client);
 
 const renderApp = (renderProps) => {
   render(
