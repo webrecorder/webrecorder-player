@@ -2,8 +2,9 @@ import { fromJS } from 'immutable';
 
 const SET_HOST = 'wr/appSettings/SET_HOST';
 
+// see if host is stored in sessionStorage or null
 const initialState = fromJS({
-  host: null
+  host: window.sessionStorage.getItem('_wr_host')
 });
 
 export default function appSettings(state = initialState, action = {}) {
@@ -17,6 +18,7 @@ export default function appSettings(state = initialState, action = {}) {
 
 
 export function setHost({ host }) {
+  window.sessionStorage.setItem('_wr_host', host);
   return {
     type: SET_HOST,
     host
