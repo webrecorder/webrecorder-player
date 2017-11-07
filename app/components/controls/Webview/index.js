@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import config from 'config';
+import './style.scss';
 
 class Webview extends Component {
   static propTypes = {
