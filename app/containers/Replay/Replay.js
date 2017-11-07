@@ -7,7 +7,7 @@ import config from 'config';
 
 import { getOrderedBookmarks, getActiveRecording, getRecording } from 'redux/selectors';
 import { isLoaded, load as loadColl } from 'redux/modules/collection';
-import { getArchives, updateUrl, updateTimestamp } from 'redux/modules/controls';
+import { configureProxy, getArchives, updateUrl, updateTimestamp } from 'redux/modules/controls';
 import { resetStats } from 'redux/modules/infoStats';
 
 import { ReplayUI, Webview } from 'components/controls';
@@ -57,23 +57,19 @@ class Replay extends Component {
     const { bookmarks, collection, dispatch, params, recording,
             recordingIndex, timestamp, url } = this.props;
 
-    return (
-      <div>
-        <ReplayUI
-          bookmarks={bookmarks}
-          recordingIndex={recordingIndex}
-          params={params}
-          timestamp={timestamp}
-          url={url} />
-
-        {/*
-        <Webview
-          params={params}
-          timestamp={timestamp}
-          url={url} />
-        */}
-      </div>
-    );
+    return [
+      <ReplayUI
+        key="replay-ui"
+        bookmarks={bookmarks}
+        recordingIndex={recordingIndex}
+        params={params}
+        timestamp={timestamp}
+        url={url} />,
+      <Webview
+        key="webview"
+        timestamp={timestamp}
+        url={url} />
+    ];
   }
 }
 
@@ -114,6 +110,15 @@ const initialData = [
       }
 
       return undefined;
+    }
+  },
+  // initialize proxy
+  {
+    promise: ({ params: { ts }, store: { dispatch, getState }}) => {
+      const { app } = getState();
+      const host = app.getIn(['appSettings', 'host']);
+
+      return dispatch(configureProxy('local', 'collection', ts, host));
     }
   }
 ];
