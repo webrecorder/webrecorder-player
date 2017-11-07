@@ -2,9 +2,8 @@ import React from 'react';
 import { render } from 'react-dom';
 import { is } from 'immutable';
 import { AppContainer } from 'react-hot-loader';
-import { createHashHistory } from 'history';
+import { createHashHistory, createHistory, useBasename } from 'history';
 import { Provider } from 'react-redux';
-import { browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 
 import ApiClient from './helpers/ApiClient';
@@ -17,7 +16,15 @@ import './app.global.scss';
 const client = new ApiClient();
 const dest = document.getElementById('root');
 window.wrAppContainer = dest;
-const hstory = createHashHistory();
+
+let hstory;
+if (process.env.NODE_ENV === 'production') {
+  hstory = useBasename(createHistory)({
+    basename: window.location.pathname
+  });
+} else {
+  hstory = createHashHistory();
+}
 const store = createStore(hstory, client);
 
 const createSelectLocationState = () => {
