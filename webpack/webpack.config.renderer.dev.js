@@ -218,8 +218,7 @@ export default merge.smart(baseConfig, {
       __SERVER__: false,
       __PLAYER__: true,
       __DEVELOPMENT__: true,
-      __DEVTOOLS__: true,
-      "global.GENTLY": false
+      __DEVTOOLS__: true
     }),
 
     new webpack.LoaderOptionsPlugin({
