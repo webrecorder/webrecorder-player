@@ -7,7 +7,7 @@ export default () => {
   const routes = [
     {
       path: ':user/:coll(/:rec)',
-      name: 'collectionDetail',
+      name: 'collection-detail',
       component: CollectionDetail
     },
     {
@@ -37,6 +37,7 @@ export default () => {
     component: Application,
     indexRoute: {
       component: Landing,
+      name: 'landing'
     },
     childRoutes: routes
   };
