@@ -78,7 +78,7 @@ const initialData = [
     // set url and ts in store
     promise: ({ location: { hash, search }, params: { ts, splat }, store: { dispatch } }) => {
 
-      const compositeUrl = `${splat}${hash}${search}`;
+      const compositeUrl = `${splat}${search}${hash}`;
       const promises = [
         dispatch(updateUrl(compositeUrl)),
         dispatch(updateTimestamp(ts))
