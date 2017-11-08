@@ -114,15 +114,15 @@ const initialData = [
       return undefined;
     }
   },
-  // initialize proxy
-  {
-    promise: ({ params: { ts }, store: { dispatch, getState }}) => {
-      const { app } = getState();
-      const host = app.getIn(['appSettings', 'host']);
+  // api based proxy
+  // {
+  //   promise: ({ params: { ts }, store: { dispatch, getState }}) => {
+  //     const { app } = getState();
+  //     const host = app.getIn(['appSettings', 'host']);
 
-      return dispatch(configureProxy('local', 'collection', ts, host));
-    }
-  }
+  //     return dispatch(configureProxy('local', 'collection', ts, host));
+  //   }
+  // }
 ];
 
 const mapStateToProps = ({ app }) => {
