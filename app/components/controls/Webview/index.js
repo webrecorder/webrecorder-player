@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import config from 'config';
 import './style.scss';
 
 class Webview extends Component {
@@ -12,10 +11,11 @@ class Webview extends Component {
   };
 
   render() {
-    const { url } = this.props;
+    const { timestamp, url } = this.props;
+    const proxyUrl = `http://webrecorder.proxy/local/collection/${timestamp}/${url}`;
 
     return (
-      <webview id="replay" src={url} autosize="on" plugins partition="persist:wr" />
+      <webview id="replay" src={proxyUrl} autosize="on" plugins partition="persist:wr" />
     );
   }
 }
