@@ -32,6 +32,14 @@ nav.topBar {
       opacity: 1;
     }
   }
+
+  &.replay, &.collection-detail {
+    height: 55px;
+
+    .wrLogoImg {
+      width: 40px;
+    }
+  }
 }
 
 button, .home-btn {

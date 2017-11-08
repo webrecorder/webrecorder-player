@@ -19,6 +19,10 @@ class PageRow extends Component {
     selected: PropTypes.bool
   };
 
+  static contextTypes = {
+    canAdmin: PropTypes.bool
+  }
+
   selectRow = () => {
     const { index, rec } = this.props;
 
@@ -29,6 +33,7 @@ class PageRow extends Component {
   }
 
   render() {
+    const { canAdmin } = this.context;
     const { browserObj, coll, page, selected } = this.props;
 
     const browser = page.get('browser') || null;
@@ -41,27 +46,23 @@ class PageRow extends Component {
         onClick={this.selectRow}
         onTransitionEnd={e => e.stopPropagation()}
         role="button">
-        <td className="bookmark-hidden-switch"><span className="glyphicon glyphicon-star" /></td>
-        <td className="bookmark-edit-title"><span className="glyphicon glyphicon-bookmark" /></td>
+        {
+          canAdmin &&
+            <td className="bookmark-hidden-switch"><span className="glyphicon glyphicon-star" /></td>
+        }
+        {
+          canAdmin &&
+            <td className="bookmark-edit-title"><span className="glyphicon glyphicon-bookmark" /></td>
+        }
         <td className="timestamp"><TimeFormat dt={ts} /></td>
-        <td className="bookmark-title">
-          <Link to={`/${coll.get('user')}/${coll.get('id')}/${remoteBrowserMod(browser, ts)}/${url}`}>
-            <EditableString
-              string={page.get('title') || 'No Title'}
-              className="edit-coll-title" />
-          </Link>
-        </td>
+          <td className="bookmark-title">
+            <Link to={`/${coll.get('user')}/${coll.get('id')}/${remoteBrowserMod(browser, ts)}/${url}`}>
+              <EditableString
+                string={page.get('title') || 'No Title'}
+                className="edit-coll-title" />
+            </Link>
+          </td>
         <td className="bookmark-url">{url}</td>
-        <td>#page</td>
-        <td className="rec-browser" >
-          {
-            browserObj &&
-              <span>
-                <img src={`/api/browsers/browsers/${browserObj.get('id')}/icon`} alt={`Recorded with ${capitalize(browserObj.get('name'))} version ${browserObj.get('version')}`} />
-                { ` v${browserObj.get('version')}` }
-              </span>
-          }
-        </td>
       </tr>
     );
   }

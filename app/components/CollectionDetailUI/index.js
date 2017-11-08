@@ -31,6 +31,10 @@ class CollectionDetailUI extends Component {
     searchText: PropTypes.string
   };
 
+  static contextTypes = {
+    canAdmin: PropTypes.bool,
+  }
+
   constructor(props) {
     super(props);
 
@@ -120,6 +124,7 @@ class CollectionDetailUI extends Component {
   }
 
   render() {
+    const { canAdmin } = this.context;
     const { bookmarks, browsers, collection, recordings, searchText } = this.props;
     const { groupDisplay, expandAll, selectedBookmark, selectedBookmarkIdx,
             selectedSession, selectedGroupedBookmark, selectedGroupedBookmarkIdx } = this.state;
@@ -232,14 +237,20 @@ class CollectionDetailUI extends Component {
                           rowGetter={({ index }) => bookmarks.get(index)}
                           rowClassName={({ index }) => { return index === selectedBookmarkIdx ? 'selected' : ''; }}
                           onRowClick={this.onSelectRow}>
-                          <Column
-                            width={20}
-                            dataKey="fav"
-                            cellRenderer={() => <span className="glyphicon glyphicon-star" />} />
-                          <Column
-                            width={20}
-                            dataKey="bookmark"
-                            cellRenderer={() => <span className="glyphicon glyphicon-bookmark" />} />
+                          {
+                            canAdmin &&
+                              <Column
+                                width={20}
+                                dataKey="fav"
+                                cellRenderer={() => <span className="glyphicon glyphicon-star" />} />
+                          }
+                          {
+                            canAdmin &&
+                            <Column
+                              width={20}
+                              dataKey="bookmark"
+                              cellRenderer={() => <span className="glyphicon glyphicon-bookmark" />} />
+                          }
                           <Column
                             width={200}
                             label="timestamp"
