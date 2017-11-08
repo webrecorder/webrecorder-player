@@ -51,7 +51,7 @@ class BookmarkListItem extends Component {
         role="button"
         title={page.get('url')}>
         {
-          page.get('browser') &&
+          !__PLAYER__ && page.get('browser') &&
             <img src={`/api/browsers/browsers/${page.get('browser')}/icon`} alt="Browser icon" />
         }
         <div className="url">

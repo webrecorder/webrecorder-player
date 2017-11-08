@@ -82,6 +82,15 @@ export function rts(val) {
   return val.replace(/\/$/, '');
 }
 
+/**
+ * Remove http/https from the beginning of a url
+ * @param  {string} val url to modify
+ * @return {string}     url without protocol
+ */
+export function stripProtocol(url) {
+  return url.replace(/^https?:\/\//i, '');
+}
+
 /*
 button #open
 display a file selector and call ipc "open-warc" on main

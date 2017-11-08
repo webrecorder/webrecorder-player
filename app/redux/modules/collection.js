@@ -66,7 +66,6 @@ export function isLoaded({ app }) {
 }
 
 export function load(username, coll, host = '') {
-  console.log('making request', `${rts(host)}${config.apiPath}/collections/${coll}?user=${username}`);
   return {
     types: [COLL_LOAD, COLL_LOAD_SUCCESS, COLL_LOAD_FAIL],
     accessed: Date.now(),

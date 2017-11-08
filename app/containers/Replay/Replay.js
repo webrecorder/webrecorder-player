@@ -54,7 +54,7 @@ class Replay extends Component {
   }
 
   render() {
-    const { bookmarks, collection, dispatch, params, recording,
+    const { bookmarks, collection, dispatch, host, params, recording,
             recordingIndex, timestamp, url } = this.props;
 
     return [
@@ -67,6 +67,9 @@ class Replay extends Component {
         url={url} />,
       <Webview
         key="webview"
+        host={host}
+        params={params}
+        dispatch={dispatch}
         timestamp={timestamp}
         url={url} />
     ];
@@ -91,11 +94,12 @@ const initialData = [
     promise: ({ params, store: { dispatch, getState } }) => {
       const state = getState();
       const collection = state.app.get('collection');
+      const host = state.app.getIn(['appSettings', 'host']);
       const { user, coll } = params;
 
       if(!isLoaded(state) || (collection.get('id') === coll &&
          Date.now() - collection.get('accessed') > 15 * 60 * 1000)) {
-        return dispatch(loadColl(user, coll));
+        return dispatch(loadColl(user, coll, host));
       }
 
       return undefined;
@@ -129,6 +133,7 @@ const mapStateToProps = ({ app }) => {
   return {
     bookmarks: getOrderedBookmarks(app),
     collection: app.get('collection'),
+    host: app.getIn(['appSettings', 'host']),
     recording: getRecording(app),
     recordingIndex: getActiveRecording(app),
     timestamp: app.getIn(['controls', 'timestamp']),

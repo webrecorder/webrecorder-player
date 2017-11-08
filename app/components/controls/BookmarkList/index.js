@@ -73,7 +73,7 @@ class BookmarkList extends Component {
 
   handleSubmit = (evt) => {
     if (evt.key === 'Enter') {
-      console.log('unimplemented');
+      // TODO: implement
       //this.changeUrl();
     }
   }
