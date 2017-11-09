@@ -39,7 +39,6 @@ class WebSocketHandler {
   }
 
   initWS = () => {
-    console.log('init ws', this.reqUrl);
     const wsProtocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
     let url = `${wsProtocol}${stripProtocol(this.host ? rts(this.host) : __DEVELOPMENT__ ? config.devApi : config.prodApi)}/${this.wsEndpoint}?user=${this.user}&coll=${this.coll}`;
 
@@ -97,7 +96,6 @@ class WebSocketHandler {
 
   wsReceived = (evt) => {
     const msg = JSON.parse(evt.data);
-    console.log('ws received', msg)
 
     switch (msg.ws_type) {
       case 'status':

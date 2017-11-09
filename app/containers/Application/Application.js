@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { ipcRenderer } from 'electron';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
+import { ipcRenderer } from 'electron';
 
-import Nav from 'components/Nav';
+import { Nav } from 'containers';
 
 import 'shared/css/bootstrap-theme.min.css';
 import 'shared/css/bootstrap.min.css';
@@ -25,10 +23,6 @@ class Application extends Component {
     this.state = { error: false };
   }
 
-  componentDidCatch(error, info) {
-    this.setState({ error, info });
-  }
-
   componentDidMount() {
     document.addEventListener('drop', this.openDroppedFile);
 
@@ -42,11 +36,14 @@ class Application extends Component {
     document.removeEventListever('drop', this.openDroppedFile);
   }
 
+  componentDidCatch(error, info) {
+    this.setState({ error, info });
+  }
+
   openDroppedFile = (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
     const filename = evt.dataTransfer.files[0].path;
-    console.log(filename);
 
     if (filename && filename.toString().match(/\.w?arc(\.gz)?|\.har$/)) {
       this.context.router.push('/');
@@ -63,7 +60,6 @@ class Application extends Component {
 
   render() {
     const { error } = this.state;
-    const { children, colectionLoaded } = this.props;
 
     if (error) {
       return (
@@ -73,17 +69,13 @@ class Application extends Component {
       );
     }
 
-    return [
-      <Nav key="navigation" collectionLoaded={colectionLoaded} />,
-      children
-    ];
+    return (
+      <div id="root">
+        <Nav />
+        { this.props.children }
+      </div>
+    );
   }
 }
 
-const mapStateToProps = ({ app }) => {
-  return {
-    colectionLoaded: app.getIn(['collection', 'loaded'])
-  };
-}
-
-export default connect(mapStateToProps)(Application);
+export default Application;

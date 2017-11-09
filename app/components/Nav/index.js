@@ -1,31 +1,55 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { Link } from 'react-router';
+
 
 import { openFile } from 'helpers/utils';
 
 import './style.scss';
 
 
-class Nav extends Component {
-  static contextTypes = {
-    router: PropTypes.object,
-    route: PropTypes.object
-  };
-
+export default class Nav extends Component {
   static propTypes = {
     collectionLoaded: PropTypes.bool,
+    canGoBackward: PropTypes.bool,
+    canGoForward: PropTypes.bool,
+    router: PropTypes.object
   };
 
+  triggerBack = () => {
+    if (this.props.canGoBackward) {
+      window.dispatchEvent(new Event('wr-go-back'));
+    }
+  }
+
+  triggerForward = () => {
+    if (this.props.canGoForward) {
+      window.dispatchEvent(new Event('wr-go-forward'));
+    }
+  }
+
+  triggerRefresh = () => {
+    window.dispatchEvent(new Event('wr-refresh'));
+  }
+
   render() {
-    const { router } = this.context;
-    const { collectionLoaded } = this.props;
+    const { canGoBackward, canGoForward, collectionLoaded, router } = this.props;
 
     const route = router.routes[router.routes.length - 1];
     const isLanding = route && route.name === 'landing';
     const isReplay = route && route.name === 'replay';
     const isHelp = route && route.name === 'help';
     const indexUrl = collectionLoaded ? '/local/collection/' : '/';
+
+    const fwdClass = classNames('button arrow', {
+      inactive: !canGoForward,
+      off: false
+    });
+    const backClass = classNames('button arrow', {
+      inactive: !canGoBackward,
+      off: false
+    });
 
     return (
       <nav className={`topBar ${route.name}`}>
@@ -43,13 +67,13 @@ class Nav extends Component {
         {
           isReplay &&
             <div className="browser-nav">
-              <button id="back" className="button arrow off" title="Click to go back">
+              <button id="back" onClick={this.triggerBack} className={backClass} title="Click to go back">
                 <object data="images/Back_Arrow.svg" type="image/svg+xml" aria-label="navigate back" />
               </button>
-              <button id="forward" className="button arrow off" title="Click to go forward">
+              <button id="forward" onClick={this.triggerForward} className={fwdClass} title="Click to go forward">
                 <object id="forwardArrow" data="images/Back_Arrow.svg" type="image/svg+xml" aria-label="navigate forward" />
               </button>
-              <button id="refresh" className="button arrow off" title="Refresh replay window">
+              <button id="refresh" onClick={this.triggerRefresh} className="button arrow" title="Refresh replay window">
                 <object data="images/Refresh.svg" type="image/svg+xml" aria-label="refresh" />
               </button>
             </div>
@@ -82,5 +106,3 @@ class Nav extends Component {
     );
   }
 }
-
-export default Nav;
