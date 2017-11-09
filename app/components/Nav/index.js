@@ -40,7 +40,6 @@ export default class Nav extends Component {
     const isLanding = route && route.name === 'landing';
     const isReplay = route && route.name === 'replay';
     const isHelp = route && route.name === 'help';
-    const indexUrl = collectionLoaded ? '/local/collection/' : '/';
 
     const fwdClass = classNames('button arrow', {
       inactive: !canGoForward,
@@ -53,13 +52,13 @@ export default class Nav extends Component {
 
     return (
       <nav className={`topBar ${route.name}`}>
-        <Link to={indexUrl} className="button home-btn">
+        <Link to="/" className="button home-btn">
           <img className="wrLogoImg" src={require('images/WebRecorder_Logo-Only.png')} alt="webrecorder logo" /><br />
           <img className="wrLogoPlayerTxt" src={require('images/PLAYER_text.png')} alt="webrecorder logo" />
         </Link>
         {
           isLanding &&
-            <Link to={indexUrl} className="button home-btn">
+            <Link to="/" className="button home-btn">
               <img className="wrLogoImgTxt" src={require('images/Webrecorder_Player_logo_text.png')} alt="webrecorder logo" />
             </Link>
         }

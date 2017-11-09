@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
+import { updateUrl } from 'redux/modules/controls';
+
 import { InfoWidget} from 'containers';
 
 import BookmarkListItem from 'components/controls/BookmarkListItem';
@@ -58,13 +60,12 @@ class BookmarkList extends Component {
     }
   }
 
-  // TODO: update iframe src not page url
   changeUrl = () => {
-    const { params: { user, coll } } = this.props;
+    const { dispatch, params: { user, coll } } = this.props;
     const { url } = this.state;
 
     this.close();
-    this.context.router.push(`/${user}/${coll}/${url}`);
+    dispatch(updateUrl(url));
   }
 
   handleInput = (evt) => {
@@ -74,8 +75,7 @@ class BookmarkList extends Component {
 
   handleSubmit = (evt) => {
     if (evt.key === 'Enter') {
-      // TODO: implement
-      //this.changeUrl();
+      this.changeUrl();
     }
   }
 
