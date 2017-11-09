@@ -51,7 +51,7 @@ class CollectionDetailUI extends Component {
     this.state = this.initialState;
   }
 
-  componentDidMount() {
+  componentWillMount() {
     if (inStorage('groupDisplay')) {
       try {
         this.setState({ groupDisplay: JSON.parse(getStorage('groupDisplay')) });
