@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
+import { updateUrlAndTimestamp } from 'redux/modules/controls';
+
 import { rts } from 'helpers/utils';
 
 import TimeFormat from 'components/TimeFormat';
@@ -15,6 +17,7 @@ class BookmarkListItem extends Component {
 
   static propTypes = {
     closeList: PropTypes.func,
+    dispatch: PropTypes.func,
     page: PropTypes.object,
     params: PropTypes.object,
     ts: PropTypes.string,
@@ -34,10 +37,10 @@ class BookmarkListItem extends Component {
   }
 
   changeUrl = () => {
-    const { closeList, page, params: { user, coll } } = this.props;
+    const { closeList, dispatch, page, params: { user, coll } } = this.props;
 
     closeList();
-    this.context.router.push(`/${user}/${coll}/${page.get('timestamp')}/${page.get('url')}`);
+    dispatch(updateUrlAndTimestamp(page.get('url'), page.get('timestamp')));
   }
 
   render() {

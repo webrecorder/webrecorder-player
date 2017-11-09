@@ -7,7 +7,7 @@ import config from 'config';
 
 import { getOrderedBookmarks, getActiveRecording, getRecording } from 'redux/selectors';
 import { isLoaded, load as loadColl } from 'redux/modules/collection';
-import { configureProxy, getArchives, updateUrl, updateTimestamp } from 'redux/modules/controls';
+import { configureProxy, getArchives, updateUrlAndTimestamp } from 'redux/modules/controls';
 import { resetStats } from 'redux/modules/infoStats';
 
 import { ReplayUI, Webview } from 'components/controls';
@@ -54,13 +54,14 @@ class Replay extends Component {
   }
 
   render() {
-    const { bookmarks, collection, dispatch, host, params, recording,
-            recordingIndex, timestamp, url } = this.props;
+    const { bookmarks, canGoBackward, canGoForward, collection, dispatch,
+            host, params, recording, recordingIndex, timestamp, url } = this.props;
 
     return [
       <ReplayUI
         key="replay-ui"
         bookmarks={bookmarks}
+        dispatch={dispatch}
         recordingIndex={recordingIndex}
         params={params}
         timestamp={timestamp}
@@ -71,6 +72,8 @@ class Replay extends Component {
         params={params}
         dispatch={dispatch}
         timestamp={timestamp}
+        canGoBackward={canGoBackward}
+        canGoForward={canGoForward}
         url={url} />
     ];
   }
@@ -80,14 +83,9 @@ const initialData = [
   {
     // set url and ts in store
     promise: ({ location: { hash, search }, params: { ts, splat }, store: { dispatch } }) => {
-
       const compositeUrl = `${splat}${search}${hash}`;
-      const promises = [
-        dispatch(updateUrl(compositeUrl)),
-        dispatch(updateTimestamp(ts))
-      ];
 
-      return Promise.all(promises);
+      return dispatch(updateUrlAndTimestamp(compositeUrl, ts));
     }
   },
   {
@@ -97,8 +95,7 @@ const initialData = [
       const host = state.app.getIn(['appSettings', 'host']);
       const { user, coll } = params;
 
-      if(!isLoaded(state) || (collection.get('id') === coll &&
-         Date.now() - collection.get('accessed') > 15 * 60 * 1000)) {
+      if(!isLoaded(state)) {
         return dispatch(loadColl(user, coll, host));
       }
 
@@ -117,16 +114,7 @@ const initialData = [
 
       return undefined;
     }
-  },
-  // api based proxy
-  // {
-  //   promise: ({ params: { ts }, store: { dispatch, getState }}) => {
-  //     const { app } = getState();
-  //     const host = app.getIn(['appSettings', 'host']);
-
-  //     return dispatch(configureProxy('local', 'collection', ts, host));
-  //   }
-  // }
+  }
 ];
 
 const mapStateToProps = ({ app }) => {
@@ -137,7 +125,9 @@ const mapStateToProps = ({ app }) => {
     recording: getRecording(app),
     recordingIndex: getActiveRecording(app),
     timestamp: app.getIn(['controls', 'timestamp']),
-    url: app.getIn(['controls', 'url'])
+    url: app.getIn(['controls', 'url']),
+    canGoBackward: app.getIn(['appSettings', 'canGoBackward']),
+    canGoForward: app.getIn(['appSettings', 'canGoForward'])
   };
 };
 

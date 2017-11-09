@@ -4,13 +4,16 @@ import WebSocketHandler from 'helpers/ws';
 import { ipcRenderer } from 'electron';
 import path from 'path';
 
-import { updateTimestamp, updateUrl } from 'redux/modules/controls';
+import { setBrowserHistory } from 'redux/modules/appSettings';
+import { updateUrlAndTimestamp, updateTimestamp, updateUrl } from 'redux/modules/controls';
 
 import './style.scss';
 
 
 class Webview extends Component {
   static propTypes = {
+    canGoBackward: PropTypes.bool,
+    canGoForward: PropTypes.bool,
     dispatch: PropTypes.func,
     host: PropTypes.string,
     params: PropTypes.object,
@@ -28,6 +31,7 @@ class Webview extends Component {
     this.initialReq = true;
     this.socket = null;
     this.webviewHandle = null;
+    this.internalUpdate = false;
   }
 
   componentDidMount() {
@@ -36,47 +40,54 @@ class Webview extends Component {
 
     this.socket = new WebSocketHandler(url, timestamp, params, currMode, dispatch, false, '@INIT', host);
     this.webviewHandle.addEventListener('ipc-message', this.handleReplayEvent);
+
+    window.addEventListener('wr-go-back', this.goBack);
+    window.addEventListener('wr-go-forward', this.goForward);
+    window.addEventListener('wr-refresh', this.refresh);
   }
 
-  setUrl = (url, noStatsUpdate = false) => {
-    const { currMode } = this.context;
-    const rawUrl = decodeURI(url);
+  componentWillUnmount() {
+    this.socket.close();
+    this.webviewHandle.removeEventListener('ipc-message', this.handleReplayEvent);
+    window.removeEventListener('wr-go-back', this.goBack);
+    window.removeEventListener('wr-go-forward', this.goBack);
+    window.removeEventListener('wr-refresh', this.refresh);
+  }
 
-    console.log('setUrl called', this.props.url, rawUrl);
+  componentWillReceiveProps(nextProps) {
+    const { timestamp, url } = this.props;
+    console.log(nextProps.url, url, nextProps.url === url, nextProps.timestamp, timestamp, nextProps.timestamp === timestamp)
 
-    if (this.props.url !== rawUrl) {
-      this.props.dispatch(updateUrl(rawUrl));
-    }
-
-    if (!noStatsUpdate) {
-      this.socket.setStatsUrls([rawUrl]);
+    if (nextProps.url !== url || nextProps.timestamp !== timestamp) {
+      if (!this.internalUpdate) {
+        const proxyUrl = `http://webrecorder.proxy/local/collection/${nextProps.timestamp}/${nextProps.url}`;
+        console.log('updating url', proxyUrl);
+        this.webviewHandle.loadURL(proxyUrl);
+      }
+      this.internalUpdate = false;
     }
   }
 
-  handleReplayEvent = (evt, arg) => {
-    // ignore postMessages from other sources
-    if (!__PLAYER__ && (evt.origin.indexOf(config.contentHost) === -1 || typeof evt.data !== 'object')) {
-      return;
+  shouldComponentUpdate(nextProps) {
+    // never rerender
+    return false;
+  }
+
+  handleReplayEvent = (evt) => {
+    const { canGoBackward, canGoForward, dispatch } = this.props;
+    const state = evt.args[0];
+
+    // set back & forward availability
+    if (canGoBackward !== this.webviewHandle.canGoBack()) {
+      dispatch(setBrowserHistory('canGoBackward', this.webviewHandle.canGoBack()));
     }
-
-    const state = __PLAYER__ ? evt.args[0] : evt.data;
-    const specialModes = ['cookie', 'skipreq', 'bug-report'].indexOf(state.wb_type) !== -1;
-
-    if (!__PLAYER__ && (!this.iframe || (evt.source !== this.iframe.contentWindow && !specialModes))) {
-      return;
+    if (canGoForward !== this.webviewHandle.canGoForward()) {
+      dispatch(setBrowserHistory('canGoForward', this.webviewHandle.canGoForward()));
     }
 
     switch(state.wb_type) {
       case 'load':
         this.addNewPage(state);
-        break;
-      case 'cookie':
-        this.setDomainCookie(state);
-        break;
-      case 'snapshot':
-        break;
-      case 'skipreq':
-        this.addSkipReq(state);
         break;
       case 'hashchange': {
         let url = this.props.url.split("#", 1)[0];
@@ -86,9 +97,6 @@ class Webview extends Component {
         this.setUrl(url);
         break;
       }
-      case 'bug-report':
-        this.props.dispatch(showModal());
-        break;
       default:
         break;
     }
@@ -96,27 +104,38 @@ class Webview extends Component {
 
   addNewPage = (state) => {
     const { currMode } = this.context;
-    const { timestamp } = this.props;
+    const { dispatch, timestamp, url } = this.props;
 
-    if (state && state.ts && currMode !== 'record' && currMode.indexOf('extract') === -1 && state.ts !== timestamp) {
-      this.props.dispatch(updateTimestamp(state.ts));
-    }
+    if (!this.initialReq) {
+      const rawUrl = decodeURI(state.url);
 
-    if (state.is_error) {
-      this.setUrl(state.url);
-    } else if (['replay', 'replay-coll'].includes(currMode)) {
-      if (!this.initialReq) {
-        if (state.ts !== timestamp) {
-          this.props.dispatch(updateTimestamp(state.ts));
-        }
-
-        this.setUrl(state.url);
-        if (!__PLAYER__) {
-          setTitle('Archives', state.url, state.title);
-        }
+      if (state.ts !== timestamp && rawUrl !== url) {
+        this.internalUpdate = true;
+        dispatch(updateUrlAndTimestamp(rawUrl, state.ts));
+      } else if (state.ts !== timestamp) {
+        this.internalUpdate = true;
+        dispatch(updateTimestamp(state.ts));
       }
-      this.initialReq = false;
+
+      this.socket.setStatsUrls([rawUrl]);
     }
+    this.initialReq = false;
+  }
+
+  goBack = () => {
+    if (this.webviewHandle.canGoBack()) {
+      this.webviewHandle.goToIndex(this.webviewHandle.getWebContents().getActiveIndex() - 1);
+    }
+  }
+
+  goForward = () => {
+    if (this.webviewHandle.canGoForward()) {
+      this.webviewHandle.goToIndex(this.webviewHandle.getWebContents().getActiveIndex() + 1);
+    }
+  }
+
+  refresh = () => {
+    this.webviewHandle.reload();
   }
 
   render() {
