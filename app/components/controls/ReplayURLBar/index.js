@@ -9,15 +9,15 @@ import './style.scss';
 class ReplayURLBar extends Component {
   static contextTypes = {
     canAdmin: PropTypes.bool,
-    currMode: PropTypes.string,
-    router: PropTypes.object
-  }
+    currMode: PropTypes.string
+  };
 
   static propTypes = {
     bookmarks: PropTypes.object,
+    dispatch: PropTypes.func,
     params: PropTypes.object,
     recordingIndex: PropTypes.number
-  }
+  };
 
   constructor(props) {
     super(props);

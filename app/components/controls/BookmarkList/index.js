@@ -14,6 +14,7 @@ import 'shared/scss/dropdown.scss';
 class BookmarkList extends Component {
   static propTypes = {
     bookmarks: PropTypes.object,
+    dispatch: PropTypes.func,
     params: PropTypes.object,
     recordingIndex: PropTypes.number,
     timestamp: PropTypes.string,
@@ -79,7 +80,7 @@ class BookmarkList extends Component {
   }
 
   render() {
-    const { bookmarks, params, timestamp } = this.props;
+    const { bookmarks, dispatch, params, timestamp } = this.props;
     const { url } = this.state;
     const { showList } = this.state;
 
@@ -95,6 +96,7 @@ class BookmarkList extends Component {
               bookmarks.map((page, idx) =>
                 <BookmarkListItem
                   key={`${page.get('timestamp')}${page.url}${idx}`}
+                  dispatch={dispatch}
                   page={page}
                   params={params}
                   ts={timestamp}

@@ -1,6 +1,7 @@
 .wr-info-widget {
     transition: opacity .25s ease-in-out;
     opacity: 0;
+    position: relative;
 
     &.visible {
         opacity: 1;
@@ -98,23 +99,13 @@
         left: 50%;
     }
 
-    @media (max-width: 1200px) {
-        .arrow_box:before, .arrow_box:after {
-            left: initial;
-            right: 1.8rem;
-        }
+    .arrow_box:before, .arrow_box:after {
+        left: initial;
+        right: 1.8rem;
     }
 }
 
-@media (min-width: 768px) and (max-width: 1200px) {
-    .wr-info-widget.open > .dropdown-menu {
-        left: initial;
-        right: 0;
-    }
-}
-@media (max-width: 767px) {
-    .wr-info-widget.open > .dropdown-menu {
-        left: initial;
-        right: -1.9rem;
-    }
+#root .wr-info-widget.open > .dropdown-menu {
+    left: initial;
+    right: -1.9rem;
 }

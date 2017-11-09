@@ -11,6 +11,7 @@ class ReplayUI extends Component {
   static propTypes = {
     activeCollection: PropTypes.object,
     bookmarks: PropTypes.object,
+    dispatch: PropTypes.func,
     params: PropTypes.object,
     timestamp: PropTypes.string,
     url: PropTypes.string

@@ -4,7 +4,7 @@ import { asyncConnect } from 'redux-connect';
 import { createSearchAction } from 'redux-search';
 
 import { truncate } from 'helpers/utils';
-import { load as loadColl } from 'redux/modules/collection';
+import { isLoaded, load as loadColl } from 'redux/modules/collection';
 import { getOrderedBookmarks, getOrderedRecordings,
          bookmarkSearchResults } from 'redux/selectors';
 
@@ -40,10 +40,15 @@ const initialData = [
   {
     promise: ({ params, store: { getState, dispatch } }) => {
       const { user, coll } = params;
-      const { app } = getState();
+      const state = getState();
+      const { app } = state;
       const host = app.getIn(['appSettings', 'host']);
 
-      return dispatch(loadColl(user, coll, host));
+      if(!isLoaded(state)) {
+        return dispatch(loadColl(user, coll, host));
+      }
+
+      return undefined;
     }
   }
 ];
