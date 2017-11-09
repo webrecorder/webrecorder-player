@@ -6,14 +6,17 @@ const COLL_LOAD = 'wr/coll/LOAD';
 const COLL_LOAD_SUCCESS = 'wr/coll/LOAD_SUCCESS';
 const COLL_LOAD_FAIL = 'wr/coll/LOAD_FAIL';
 
+const COLL_SET_SORT = 'wr/coll/COLL_SET_SORT';
 const COLL_SET_PUBLIC = 'wr/coll/SET_PUBLIC';
 const COLL_SET_PUBLIC_SUCCESS = 'wr/coll/SET_PUBLIC_SUCCESS';
 const COLL_SET_PUBLIC_FAIL = 'wr/coll/SET_PUBLIC_FAIL';
 
+export const defaultSort = { sort: 'timestamp', dir: 'DESC' };
 const initialState = fromJS({
   loading: false,
   loaded: false,
   error: null,
+  sortBy: defaultSort
 });
 
 
@@ -55,6 +58,11 @@ export default function collection(state = initialState, action = {}) {
         loaded: false,
         error: action.error
       });
+    case COLL_SET_SORT:
+      return state.merge({
+        sortBy: action.sortBy
+      });
+
     default:
       return state;
   }
@@ -70,5 +78,12 @@ export function load(username, coll, host = '') {
     types: [COLL_LOAD, COLL_LOAD_SUCCESS, COLL_LOAD_FAIL],
     accessed: Date.now(),
     promise: client => client.get(`${host}api/v1/collections/${coll}?user=${username}`)
+  };
+}
+
+export function setSort(sortBy) {
+  return {
+    type: COLL_SET_SORT,
+    sortBy
   };
 }
