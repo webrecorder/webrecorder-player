@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
-import { createMemoryHistory, createHistory, useBasename } from 'history';
+import { createHashHistory, createMemoryHistory, createHistory, useBasename } from 'history';
 import { Provider } from 'react-redux';
 import { syncHistoryWithStore } from 'react-router-redux';
 
@@ -17,7 +17,7 @@ const client = new ApiClient();
 const dest = document.getElementById('app');
 window.wrAppContainer = dest;
 
-const browserHistory = createMemoryHistory();
+const browserHistory = createHashHistory();
 const store = createStore(browserHistory, client);
 const history = syncHistoryWithStore(browserHistory, store);
 

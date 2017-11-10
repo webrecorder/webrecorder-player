@@ -2,6 +2,8 @@ import config from 'config';
 import { fromJS } from 'immutable';
 import { rts } from 'helpers/utils';
 
+const COLL_CLEAR = 'wr/coll/COLL_CLEAR';
+
 const COLL_LOAD = 'wr/coll/LOAD';
 const COLL_LOAD_SUCCESS = 'wr/coll/LOAD_SUCCESS';
 const COLL_LOAD_FAIL = 'wr/coll/LOAD_FAIL';
@@ -22,6 +24,8 @@ const initialState = fromJS({
 
 export default function collection(state = initialState, action = {}) {
   switch (action.type) {
+    case COLL_CLEAR:
+      return state.set('loaded', false);
     case COLL_LOAD:
       return state.set('loading', true);
     case COLL_LOAD_SUCCESS: {
@@ -86,4 +90,10 @@ export function setSort(sortBy) {
     type: COLL_SET_SORT,
     sortBy
   };
+}
+
+export function clearColl() {
+  return {
+    type: COLL_CLEAR,
+  }
 }

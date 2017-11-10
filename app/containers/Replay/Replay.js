@@ -16,11 +16,14 @@ import { ReplayUI, Webview } from 'components/controls';
 class Replay extends Component {
   static propTypes = {
     auth: PropTypes.object,
-    collection: PropTypes.object,
-    dispatch: PropTypes.func,
     bookmarks: PropTypes.object,
-    recordingIndex: PropTypes.number,
+    collection: PropTypes.object,
+    canGoBackward: PropTypes.bool,
+    canGoForward: PropTypes.bool,
+    dispatch: PropTypes.func,
+    host: PropTypes.string,
     params: PropTypes.object,
+    recordingIndex: PropTypes.number,
     timestamp: PropTypes.string,
     url: PropTypes.string
   };
@@ -40,8 +43,6 @@ class Replay extends Component {
   }
 
   getChildContext() {
-    const { auth, params } = this.props;
-
     return {
       currMode: this.mode,
       canAdmin: false
@@ -54,8 +55,8 @@ class Replay extends Component {
   }
 
   render() {
-    const { bookmarks, canGoBackward, canGoForward, collection, dispatch,
-            host, params, recording, recordingIndex, timestamp, url } = this.props;
+    const { bookmarks, canGoBackward, canGoForward, dispatch,
+            host, params, recordingIndex, timestamp, url } = this.props;
 
     return [
       <ReplayUI
