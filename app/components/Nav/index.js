@@ -36,6 +36,7 @@ export default class Nav extends Component {
   render() {
     const { canGoBackward, canGoForward, collectionLoaded, router } = this.props;
 
+    const indexUrl = collectionLoaded ? '/local/collection/' : '/';
     const route = router.routes[router.routes.length - 1];
     const isLanding = route && route.name === 'landing';
     const isReplay = route && route.name === 'replay';
@@ -52,13 +53,13 @@ export default class Nav extends Component {
 
     return (
       <nav className={`topBar ${route.name}`}>
-        <Link to="/" className="button home-btn">
+        <Link to={indexUrl} className="button home-btn">
           <img className="wrLogoImg" src={require('images/WebRecorder_Logo-Only.png')} alt="webrecorder logo" /><br />
           <img className="wrLogoPlayerTxt" src={require('images/PLAYER_text.png')} alt="webrecorder logo" />
         </Link>
         {
           isLanding &&
-            <Link to="/" className="button home-btn">
+            <Link to={indexUrl} className="button home-btn">
               <img className="wrLogoImgTxt" src={require('images/Webrecorder_Player_logo_text.png')} alt="webrecorder logo" />
             </Link>
         }
@@ -79,12 +80,6 @@ export default class Nav extends Component {
         }
 
         <div className="pull-right">
-          {
-            isReplay &&
-              <Link to="/local/collection">
-                <img className="backToColl" src={require('images/Back_to_Coll.png')} alt="back to collection" />
-              </Link>
-          }
           <button onClick={openFile} className="button grow" title="Open file">
             <img className="openFile" src={require('images/OpenFileICO.png')} alt="open file" />
           </button>
