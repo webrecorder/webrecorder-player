@@ -11,7 +11,7 @@ environment:
 
 install:
   - ps: Install-Product node $env:nodejs_version
-  - npm install
+  - yarn install
 
   - ps: |
         $replace_name = '"name": "$1' + "-win$env:ARCH_SUFFIX" + '"'

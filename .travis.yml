@@ -54,7 +54,7 @@ install:
     fi
   - chmod +x python-binaries/webrecorder
   - python-binaries/webrecorder -v
-  - npm install
+  - yarn install
 
 script:
   - |
