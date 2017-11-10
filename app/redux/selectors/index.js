@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { is, List } from 'immutable';
+import { List } from 'immutable';
 import { getSearchSelectors } from 'redux-search';
 
 import { rts, truncate } from 'helpers/utils';
@@ -83,6 +83,14 @@ export const getOrderedRecordings = createSelector(
 );
 
 
+export const timestampOrderedBookmarks = createSelector(
+  [getBookmarks],
+  (bookmarks) => {
+    return bookmarks.toList().sortBy(b => b.get('timestamp'));
+  }
+);
+
+
 //let lastBookmarks = null;
 export const getOrderedBookmarks = createSelector(
   getBookmarks, userSortBy,
@@ -124,7 +132,7 @@ export const getRecording = createSelector(
 
 
 export const getActiveRecording = createSelector(
-  [getOrderedBookmarks, getTimestamp, getUrl],
+  [timestampOrderedBookmarks, getTimestamp, getUrl],
   (bookmarks, ts, url) => {
     if (!ts) {
       const idx = bookmarks.findIndex((b) => { return b.get('url') === url || rts(b.get('url')) === rts(url); });
@@ -169,6 +177,14 @@ export const getActiveRecording = createSelector(
     }
 
     return 0;
+  }
+);
+
+
+export const getBookmarkTitle = createSelector(
+  [getActiveRecording, timestampOrderedBookmarks],
+  (idx, bookmarks) => {
+    return bookmarks.getIn([idx, 'title']) || 'Untitled';
   }
 );
 

@@ -2,21 +2,16 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { asyncConnect } from 'redux-connect';
 
-import { remoteBrowserMod, truncate } from 'helpers/utils';
-import config from 'config';
-
-import { getOrderedBookmarks, getActiveRecording, getRecording } from 'redux/selectors';
 import { isLoaded, load as loadColl } from 'redux/modules/collection';
-import { configureProxy, getArchives, updateUrlAndTimestamp } from 'redux/modules/controls';
+import { getArchives, updateUrlAndTimestamp } from 'redux/modules/controls';
 import { resetStats } from 'redux/modules/infoStats';
 
-import { ReplayUI, Webview } from 'components/controls';
+import { Webview } from 'components/controls';
 
 
 class Replay extends Component {
   static propTypes = {
     auth: PropTypes.object,
-    bookmarks: PropTypes.object,
     collection: PropTypes.object,
     canGoBackward: PropTypes.bool,
     canGoForward: PropTypes.bool,
@@ -55,18 +50,10 @@ class Replay extends Component {
   }
 
   render() {
-    const { bookmarks, canGoBackward, canGoForward, dispatch,
-            host, params, recordingIndex, timestamp, url } = this.props;
+    const { canGoBackward, canGoForward, dispatch,
+            host, params, timestamp, url } = this.props;
 
-    return [
-      <ReplayUI
-        key="replay-ui"
-        bookmarks={bookmarks}
-        dispatch={dispatch}
-        recordingIndex={recordingIndex}
-        params={params}
-        timestamp={timestamp}
-        url={url} />,
+    return (
       <Webview
         key="webview"
         host={host}
@@ -76,7 +63,7 @@ class Replay extends Component {
         canGoBackward={canGoBackward}
         canGoForward={canGoForward}
         url={url} />
-    ];
+    );
   }
 }
 
@@ -92,7 +79,6 @@ const initialData = [
   {
     promise: ({ params, store: { dispatch, getState } }) => {
       const state = getState();
-      const collection = state.app.get('collection');
       const host = state.app.getIn(['appSettings', 'host']);
       const { user, coll } = params;
 
@@ -120,11 +106,7 @@ const initialData = [
 
 const mapStateToProps = ({ app }) => {
   return {
-    bookmarks: getOrderedBookmarks(app),
-    collection: app.get('collection'),
     host: app.getIn(['appSettings', 'host']),
-    recording: getRecording(app),
-    recordingIndex: getActiveRecording(app),
     timestamp: app.getIn(['controls', 'timestamp']),
     url: app.getIn(['controls', 'url']),
     canGoBackward: app.getIn(['appSettings', 'canGoBackward']),

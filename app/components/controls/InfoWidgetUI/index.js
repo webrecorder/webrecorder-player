@@ -4,6 +4,7 @@ import classNames from 'classnames';
 
 import OutsideClick from 'components/OutsideClick';
 
+import 'shared/scss/dropdown.scss';
 import './style.scss';
 
 
