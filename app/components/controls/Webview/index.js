@@ -147,7 +147,7 @@ class Webview extends Component {
         ref={(obj) => { this.webviewHandle = obj; }}
         src={proxyUrl}
         autosize="on"
-        plugins
+        plugins="true"
         preload={`file://${path.join(__dirname, 'helpers/preload.js')}`}
         partition="persist:wr" />
     );
