@@ -14,7 +14,7 @@ import { app, BrowserWindow, ipcMain, session } from 'electron';
 import child_process from 'child_process';
 import path from 'path';
 import url from 'url';
-import windowStateKeeper from 'electron-window-state'
+import windowStateKeeper from 'electron-window-state';
 
 import MenuBuilder from './menu';
 import packageInfo from '../package';

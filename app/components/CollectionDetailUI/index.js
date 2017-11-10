@@ -208,9 +208,6 @@ class CollectionDetailUI extends Component {
                     </div>
                 }
               </div>
-              <div className="wr-coll-sidebar">
-                Notes
-              </div>
             </aside>
             <div className="wr-coll-utilities">
               <CollectionManagement
