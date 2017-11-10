@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import WebSocketHandler from 'helpers/ws';
-import { ipcRenderer } from 'electron';
 import path from 'path';
 
 import { setBrowserHistory } from 'redux/modules/appSettings';
-import { updateUrlAndTimestamp, updateTimestamp, updateUrl } from 'redux/modules/controls';
+import { updateUrlAndTimestamp, updateTimestamp } from 'redux/modules/controls';
 
 import './style.scss';
 
@@ -46,17 +45,9 @@ class Webview extends Component {
     window.addEventListener('wr-refresh', this.refresh);
   }
 
-  componentWillUnmount() {
-    this.socket.close();
-    this.webviewHandle.removeEventListener('ipc-message', this.handleReplayEvent);
-    window.removeEventListener('wr-go-back', this.goBack);
-    window.removeEventListener('wr-go-forward', this.goBack);
-    window.removeEventListener('wr-refresh', this.refresh);
-  }
-
   componentWillReceiveProps(nextProps) {
     const { timestamp, url } = this.props;
-    console.log(nextProps.url, url, nextProps.url === url, nextProps.timestamp, timestamp, nextProps.timestamp === timestamp)
+    // console.log(nextProps.url, url, nextProps.url === url, nextProps.timestamp, timestamp, nextProps.timestamp === timestamp)
 
     if (nextProps.url !== url || nextProps.timestamp !== timestamp) {
       if (!this.internalUpdate) {
@@ -68,9 +59,17 @@ class Webview extends Component {
     }
   }
 
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate() {
     // never rerender
     return false;
+  }
+
+  componentWillUnmount() {
+    this.socket.close();
+    this.webviewHandle.removeEventListener('ipc-message', this.handleReplayEvent);
+    window.removeEventListener('wr-go-back', this.goBack);
+    window.removeEventListener('wr-go-forward', this.goBack);
+    window.removeEventListener('wr-refresh', this.refresh);
   }
 
   handleReplayEvent = (evt) => {
@@ -90,7 +89,7 @@ class Webview extends Component {
         this.addNewPage(state);
         break;
       case 'hashchange': {
-        let url = this.props.url.split("#", 1)[0];
+        let url = this.props.url.split('#', 1)[0];
         if (state.hash) {
           url = state.hash;
         }

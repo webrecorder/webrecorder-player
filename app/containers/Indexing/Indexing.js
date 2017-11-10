@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { ipcRenderer } from 'electron';
 import { basename } from 'path';
+
+import { clearColl } from 'redux/modules/collection';
 
 import './style.scss';
 
@@ -14,7 +15,8 @@ class Indexing extends Component {
   };
 
   static propTypes = {
-    host: PropTypes.string
+    host: PropTypes.string,
+    dispatch: PropTypes.func
   }
 
   constructor(props) {
@@ -24,6 +26,10 @@ class Indexing extends Component {
     this.state = {
       data: null
     };
+  }
+
+  componentWillMount() {
+    this.props.dispatch(clearColl());
   }
 
   componentDidMount() {
