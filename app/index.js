@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
-import { createHashHistory, createMemoryHistory, createHistory, useBasename } from 'history';
+import { createMemoryHistory, createHistory, useBasename } from 'history';
 import { Provider } from 'react-redux';
 import { syncHistoryWithStore } from 'react-router-redux';
 
@@ -17,15 +17,7 @@ const client = new ApiClient();
 const dest = document.getElementById('app');
 window.wrAppContainer = dest;
 
-let browserHistory;
-if (process.env.NODE_ENV === 'production') {
-  browserHistory = useBasename(createHistory)({
-    basename: window.location.pathname
-  });
-} else {
-  browserHistory = createMemoryHistory();
-}
-
+const browserHistory = createMemoryHistory();
 const store = createStore(browserHistory, client);
 const history = syncHistoryWithStore(browserHistory, store);
 
