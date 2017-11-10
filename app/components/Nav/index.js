@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Link } from 'react-router';
 
-
 import { openFile } from 'helpers/utils';
+
+import { PlayerURLBar } from 'containers';
 
 import './style.scss';
 
@@ -76,10 +77,12 @@ export default class Nav extends Component {
               <button id="refresh" onClick={this.triggerRefresh} className="button arrow" title="Refresh replay window">
                 <object data="images/Refresh.svg" type="image/svg+xml" aria-label="refresh" />
               </button>
+
+              <PlayerURLBar />
             </div>
         }
 
-        <div className="pull-right">
+        <div className="player-functions">
           <button onClick={openFile} className="button grow" title="Open file">
             <img className="openFile" src={require('images/OpenFileICO.png')} alt="open file" />
           </button>

@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 import { updateUrl } from 'redux/modules/controls';
 
-import { InfoWidget} from 'containers';
+import { InfoWidget } from 'containers';
 
 import BookmarkListItem from 'components/controls/BookmarkListItem';
 import OutsideClick from 'components/OutsideClick';
@@ -61,7 +61,7 @@ class BookmarkList extends Component {
   }
 
   changeUrl = () => {
-    const { dispatch, params: { user, coll } } = this.props;
+    const { dispatch } = this.props;
     const { url } = this.state;
 
     this.close();

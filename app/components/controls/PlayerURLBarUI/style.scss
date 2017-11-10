@@ -1,0 +1,51 @@
+
+.player-url {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: 100%;
+
+    li {
+        display: flex;
+        justify-content: space-between;
+
+        &:last-of-type {
+            border: solid 0 #000;
+            border-width: 0 0 .1rem 0;
+        }
+
+        input {
+            border-width: 0;
+            background: transparent;
+            color: #000;
+            padding: 0;
+            flex-grow: 1;
+
+            &[type=text] {
+                height: 2.5rem;
+            }
+
+            &:focus {
+                outline-width: 0;
+            }
+        }
+
+        .timestamp-label {
+            text-transform: uppercase;
+            font-size: 1.4rem;
+        }
+
+        label {
+            margin-bottom: 0;
+        }
+
+        label, .timestamp-label {
+            color: #0232F5;
+        }
+
+        .replay-date {
+            display: flex;
+            color: #000;
+        }
+    }
+}
