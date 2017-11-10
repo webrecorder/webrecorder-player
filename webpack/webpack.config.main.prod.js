@@ -22,10 +22,9 @@ export default merge.smart(baseConfig, {
 
   entry: 'main.dev',
 
-  // 'main.js' in root
   output: {
-    path: projectDir,
-    filename: 'app/main.prod.js'
+    path: path.join(projectDir, 'app'),
+    filename: 'main.prod.js'
   },
 
   plugins: [

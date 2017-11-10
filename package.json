@@ -5,10 +5,10 @@
   "description": "Webrecorder Player -- Standalone Web Archive Browser App",
   "scripts": {
     "build": "concurrently \"npm run build-main\" \"npm run build-renderer\"",
-    "build-main": "cross-env NODE_ENV=production node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack/webpack.config.main.prod.js --display-error-details --colors",
-    "build-renderer": "cross-env NODE_ENV=production node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack/webpack.config.renderer.prod.js --display-error-details --colors",
+    "build-main": "cross-env NODE_ENV=production DEBUG_PROD=false node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack/webpack.config.main.prod.js --display-error-details --colors",
+    "build-renderer": "cross-env NODE_ENV=production DEBUG_PROD=false node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack/webpack.config.renderer.prod.js --display-error-details --colors",
     "dev": "cross-env START_HOT=1 npm run start-renderer-dev",
-    "start": "node_modules/.bin/electron .",
+    "start": "cross-env NODE_ENV=production electron ./app",
     "pack": "build --dir",
     "package": "npm run build && build --publish never",
     "release": "build",
@@ -55,6 +55,10 @@
     },
     "win": {
       "target": "portable"
+    },
+    "directories": {
+      "buildResources": "resources",
+      "output": "release"
     }
   },
   "dependencies": {
@@ -62,7 +66,7 @@
     "electron-debug": "^1.4.0",
     "electron-devtools-installer": "^2.2.1",
     "electron-window-state": "^4.1.1",
-    "history": "^3.3.2",
+    "history": "^3.2.1",
     "immutable": "^3.8.1",
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
@@ -123,7 +127,7 @@
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-react": "^7.1.0",
     "express": "^4.16.1",
-    "extract-text-webpack-plugin": "^2.1.0",
+    "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^0.11.1",
     "jest": "^20.0.4",
     "node-sass": "^4.5.3",
