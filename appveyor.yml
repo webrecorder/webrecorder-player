@@ -50,6 +50,8 @@ build_script:
         }
   - ps: "move dist/webrecorderplayer-electron*.* $env:APPVEYOR_BUILD_FOLDER/"
 
+test: off
+
 artifacts:
   - path: "webrecorderplayer-electron*.*"
     name: webrecorderplayer-electron
