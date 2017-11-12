@@ -68,7 +68,7 @@ class Webview extends Component {
     this.socket.close();
     this.webviewHandle.removeEventListener('ipc-message', this.handleReplayEvent);
     window.removeEventListener('wr-go-back', this.goBack);
-    window.removeEventListener('wr-go-forward', this.goBack);
+    window.removeEventListener('wr-go-forward', this.goForward);
     window.removeEventListener('wr-refresh', this.refresh);
   }
 
