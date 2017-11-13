@@ -6,9 +6,11 @@ import { getBookmarkTitle } from 'redux/selectors';
 import { PlayerURLBarUI } from 'components/controls';
 
 
-const mapStateToProps = ({ app }) => {
+const mapStateToProps = (outerState) => {
+  const { app } = outerState;
+
   return {
-    bookmarkTitle: getBookmarkTitle(app),
+    bookmarkTitle: app.getIn(['controls', 'title']) || getBookmarkTitle(outerState),
     timestamp: app.getIn(['controls', 'timestamp']),
     url: app.getIn(['controls', 'url']),
   };

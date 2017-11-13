@@ -1,0 +1,123 @@
+
+.sidebar {
+    position: relative;
+    background: #FFF;
+    padding: 0 .8rem 0 .5rem;
+    display: flex;
+    flex-direction: column;
+    min-width: 3rem;
+
+    &.animate {
+        transition: width .4s ease-in-out;
+    }
+
+    .sidebar-toggle {
+        position: absolute;
+        right: 0;
+        background: transparent;
+        border: 0;
+        z-index: 20;
+        font-weight: 100;
+        font-size: 4.5rem;
+        line-height: 1.9rem;
+    }
+
+    $buffer: .8rem;
+    .sidebar-handle {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: -$buffer;
+        padding: 0 $buffer;
+        z-index: 10;
+
+        &:after {
+            content: '';
+            display: block;
+            width: .1rem;
+            height: 100%;
+            background-color: #CCC;
+        }
+    }
+
+    .search-box {
+        font-size: 1.2rem;
+    }
+
+    &.expanded {
+        .sidebar-handle {
+            cursor: ew-resize;
+        }
+    }
+
+    .bookmarks-list {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        margin-top: 3rem;
+        border: solid 0 rgb(179, 238, 101);
+        border-width: .4rem 0 0 0;
+        padding-top: 1rem;
+        user-select: none;
+
+        .bookmarks {
+            flex-grow: 1;
+        }
+
+        .ReactVirtualized__Table__headerColumn {
+            font-weight: 400;
+            font-size: 1.2rem;
+
+            em {
+                text-transform: lowercase;
+            }
+
+            .glyphicon {
+                color: rgb(125, 125, 125);
+            }
+        }
+
+        .ReactVirtualized__Table__row {
+            color: rgb(100, 100, 100);
+            cursor: pointer;
+            padding-left: 2rem;
+
+            &:focus {
+                outline-width: 0;
+            }
+
+            .bookmark-title {
+                h2 {
+                    transition: color 125ms ease-in-out;
+                    font-size: 1.3rem;
+                    font-weight: 400;
+                    margin: 0;
+                    line-height: 1rem;
+                }
+
+                span {
+                    font-size: 1rem;
+                }
+            }
+
+            &.selected {
+                color: #0232F5;
+
+                &:before {
+                    content: '';
+                    position: absolute;
+                    left: .9rem;
+                    top: .9rem;
+                    width: 1.4rem;
+                    height: 1.4rem;
+                    background: url('../../../images/active.png');
+                    background-size: cover;
+                }
+            }
+
+            &:not(.selected):hover {
+                color: #0232F5;
+            }
+        }
+    }
+}

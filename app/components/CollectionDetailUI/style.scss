@@ -90,27 +90,10 @@ $collTrigger: rgb(0, 57, 229);
                 }
 
                 .search-box {
-                    position: relative;
                     margin: 0 0 0 auto;
                     width: 20%;
                     max-width: 22.5rem;
                     min-width: 10rem;
-
-                    input {
-                        border-width: 0 0 .1rem 0;
-                        border-color: #8F9294;
-                        width: 100%;
-
-                        &:focus {
-                            outline-width: 0;
-                        }
-                    }
-
-                    .glyphicon {
-                        position: absolute;
-                        right: 0;
-                        color: #8F9294;
-                    }
                 }
             }
         }

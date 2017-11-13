@@ -7,3 +7,4 @@ export Landing from './Landing/Landing';
 export Nav from './Nav/Nav';
 export PlayerURLBar from './PlayerURLBar/PlayerURLBar';
 export Replay from './Replay/Replay';
+export Sidebar from './Sidebar/Sidebar';

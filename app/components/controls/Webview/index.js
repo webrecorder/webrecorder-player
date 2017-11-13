@@ -52,7 +52,6 @@ class Webview extends Component {
     if (nextProps.url !== url || nextProps.timestamp !== timestamp) {
       if (!this.internalUpdate) {
         const proxyUrl = `http://webrecorder.proxy/local/collection/${nextProps.timestamp}/${nextProps.url}`;
-        console.log('updating url', proxyUrl);
         this.webviewHandle.loadURL(proxyUrl);
       }
       this.internalUpdate = false;

@@ -1,120 +1,75 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
+import Column from 'react-virtualized/dist/commonjs/Table/Column';
+import Table from 'react-virtualized/dist/commonjs/Table';
 
-import { updateUrl } from 'redux/modules/controls';
+import { updateUrlAndTimestamp } from 'redux/modules/controls';
 
-import { InfoWidget } from 'containers';
+import Searchbox from 'components/Searchbox';
 
-import BookmarkListItem from 'components/controls/BookmarkListItem';
-import OutsideClick from 'components/OutsideClick';
-import TimeFormat from 'components/TimeFormat';
-
-import 'shared/scss/dropdown.scss';
+import { BookmarkRenderer, headerRenderer } from './renderers';
 
 
 class BookmarkList extends Component {
-  static propTypes = {
-    bookmarks: PropTypes.object,
-    dispatch: PropTypes.func,
-    params: PropTypes.object,
-    recordingIndex: PropTypes.number,
-    timestamp: PropTypes.string,
-    url: PropTypes.string
-  };
 
-  static contextTypes = {
-    router: PropTypes.object
-  }
-
-  constructor(props) {
-    super(props);
-
-    this.state = { showList: false, url: props.url };
-  }
-
-  componentDidMount() {
-    this.liHeight = Math.ceil(this.bookmarkList.querySelector('li').getBoundingClientRect().height);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if(nextProps.url !== this.props.url) {
-      this.setState({ url: nextProps.url });
+  shouldComponentUpdate(nextProps) {
+    if (nextProps.bookmarks.equals(this.props.bookmarks) &&
+        nextProps.searchText === this.props.searchText &&
+        nextProps.activeBookmark === this.props.activeBookmark) {
+      return false;
     }
+
+    return true;
   }
 
-  close = () => {
-    if(this.state.showList)
-      this.setState({ showList: false });
+  onSelectRow = ({ index, rowData }) => {
+    this.props.dispatch(updateUrlAndTimestamp(rowData.get('url'), rowData.get('timestamp'), rowData.get('title')));
   }
 
-  toggle = (evt) => {
-    evt.stopPropagation();
-    const nextState = !this.state.showList;
-    const { recordingIndex } = this.props;
+  search = (evt) => {
+    const { dispatch, searchBookmarks } = this.props;
 
-    this.setState({ showList: nextState });
-
-    if(nextState) {
-      this.bookmarkList.scrollTop = (recordingIndex > 2 ? recordingIndex - 2 : 0) * this.liHeight;
-    }
-  }
-
-  changeUrl = () => {
-    const { dispatch } = this.props;
-    const { url } = this.state;
-
-    this.close();
-    dispatch(updateUrl(url));
-  }
-
-  handleInput = (evt) => {
-    evt.preventDefault();
-    this.setState({ url: evt.target.value });
-  }
-
-  handleSubmit = (evt) => {
-    if (evt.key === 'Enter') {
-      this.changeUrl();
-    }
+    dispatch(searchBookmarks(evt.target.value));
   }
 
   render() {
-    const { bookmarks, dispatch, params, timestamp } = this.props;
-    const { url } = this.state;
-    const { showList } = this.state;
-
-    const listClasses = classNames('bookmark-list', { open: showList });
+    const { activeBookmark, bookmarks, collection, searchText } = this.props;
 
     return (
-      <OutsideClick handleClick={this.close}>
-        <div className={listClasses} title="Bookmark list">
-          <input type="text" onClick={this.toggle} onChange={this.handleInput} onKeyPress={this.handleSubmit} className="form-control dropdown-toggle" name="url" aria-haspopup="true" value={url} autoComplete="off" />
-
-          <ul ref={(obj) => { this.bookmarkList = obj; }} className="dropdown-menu">
+      <div className="bookmarks-list">
+        <Searchbox
+          search={this.search}
+          searchText={searchText}
+          placeholder="search for pages in index" />
+        <div className="bookmarks">
+          <AutoSizer>
             {
-              bookmarks.map((page, idx) =>
-                <BookmarkListItem
-                  key={`${page.get('timestamp')}${page.url}${idx}`}
-                  dispatch={dispatch}
-                  page={page}
-                  params={params}
-                  ts={timestamp}
-                  url={url}
-                  closeList={this.close} />
+              ({ height, width }) => (
+                <Table
+                  width={width}
+                  height={height}
+                  headerHeight={30}
+                  rowCount={bookmarks.size}
+                  rowHeight={50}
+                  rowGetter={({ index }) => bookmarks.get(index)}
+                  rowClassName={({ index }) => { return index === activeBookmark ? 'selected' : ''; }}
+                  onRowClick={this.onSelectRow}
+                  scrollToIndex={activeBookmark}>
+                  <Column
+                    label="collection bookmarks"
+                    dataKey="title"
+                    flexGrow={1}
+                    width={200}
+                    columnData={{ count: bookmarks.size, activeBookmark }}
+                    headerRenderer={headerRenderer}
+                    cellRenderer={BookmarkRenderer} />
+                </Table>
               )
             }
-          </ul>
-
-          <div className="wr-replay-info">
-            <InfoWidget />
-            <span className="replay-date main-replay-date hidden-xs" onClick={this.toggle}>
-              <TimeFormat dt={timestamp} />
-              <span className="glyphicon glyphicon-triangle-bottom" />
-            </span>
-          </div>
+          </AutoSizer>
         </div>
-      </OutsideClick>
+      </div>
     );
   }
 }

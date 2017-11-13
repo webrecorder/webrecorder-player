@@ -41,6 +41,10 @@ class InfoWidgetUI extends Component {
       visible: (stats && stats.length > 1) || (stats && stats.length === 1 && stats[0].id !== 'replay')
     });
 
+    if (!stats || (stats && stats.length === 0) || (stats && stats.length === 1 && stats[0].id === 'replay')) {
+      return null;
+    }
+
     return (
       <OutsideClick classes={widgetClass} handleClick={this.close}>
         <button className="dropdown-toggle" onClick={this.toggle} type="button" id="replayInfo" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">

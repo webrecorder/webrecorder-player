@@ -54,11 +54,15 @@ class PlaeryURLBarUI extends Component {
     return (
       <ul className="player-url" title="Bookmark list">
         <li>
-          <label htmlFor="url">{ bookmarkTitle }</label>
+          <div className="bookmark-title">
+            <input value={bookmarkTitle} readOnly />
+          </div>
           <span className="timestamp-label hidden-xs">Archived on</span>
         </li>
         <li>
-          <input id="url" type="text" onClick={this.toggle} onChange={this.handleInput} onKeyPress={this.handleSubmit} name="url" value={url} autoComplete="off" />
+          <div className="bookmark-url">
+            <input id="url" type="text" onClick={this.toggle} onChange={this.handleInput} onKeyPress={this.handleSubmit} name="url" value={url} autoComplete="off" />
+          </div>
           <div className="replay-date hidden-xs">
             <InfoWidget />
             <TimeFormat dt={timestamp} />

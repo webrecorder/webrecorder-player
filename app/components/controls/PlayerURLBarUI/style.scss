@@ -17,16 +17,34 @@
         input {
             border-width: 0;
             background: transparent;
-            color: #000;
             padding: 0;
-            flex-grow: 1;
+        }
 
-            &[type=text] {
-                height: 2.5rem;
+        .bookmark-url {
+            flex-grow: 1;
+            position: relative;
+
+            input {
+                color: #000;
+                width: 100%;
+
+                &[type=text] {
+                    height: 2.5rem;
+                }
+
+                &:focus {
+                    outline-width: 0;
+                }
             }
 
-            &:focus {
-                outline-width: 0;
+            &:after {
+                content: '';
+                position: absolute;
+                right: 0;
+                top: 0;
+                width: 4rem;
+                height: 100%;
+                background: linear-gradient(90deg, rgba(255,255,255,0), #FFF 80%);
             }
         }
 
@@ -35,11 +53,26 @@
             font-size: 1.4rem;
         }
 
-        label {
-            margin-bottom: 0;
+        .bookmark-title {
+            flex-grow: 1;
+            position: relative;
+
+            input {
+                width: 100%;
+            }
+
+            &:after {
+                content: '';
+                position: absolute;
+                right: 0;
+                top: 0;
+                width: 4rem;
+                height: 100%;
+                background: linear-gradient(90deg, rgba(255,255,255,0), #FFF 80%);
+            }
         }
 
-        label, .timestamp-label {
+        .bookmark-title, .timestamp-label {
             color: #0232F5;
         }
 

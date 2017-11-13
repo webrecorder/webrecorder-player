@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Toggle from 'react-toggle';
 
+import Searchbox from 'components/Searchbox';
+
 import 'shared/scss/toggle.scss';
 
 
@@ -35,10 +37,7 @@ function CollectionManagement(props, context) {
         groupDisplay &&
           <button className="open-all" onClick={toggleExpandAllSessions}>Open All Sessions</button>
       }
-      <span className="search-box">
-        <input type="text" onChange={search} value={searchText} name="filter" />
-        <span className="glyphicon glyphicon-search" />
-      </span>
+      <Searchbox search={search} searchText={searchText} />
     </nav>
   );
 }

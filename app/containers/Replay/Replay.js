@@ -5,7 +5,9 @@ import { asyncConnect } from 'redux-connect';
 import { isLoaded, load as loadColl } from 'redux/modules/collection';
 import { getArchives, updateUrlAndTimestamp } from 'redux/modules/controls';
 import { resetStats } from 'redux/modules/infoStats';
+import { getBookmarkTitle } from 'redux/selectors';
 
+import { Sidebar } from 'containers';
 import { Webview } from 'components/controls';
 
 
@@ -54,15 +56,18 @@ class Replay extends Component {
             host, params, timestamp, url } = this.props;
 
     return (
-      <Webview
-        key="webview"
-        host={host}
-        params={params}
-        dispatch={dispatch}
-        timestamp={timestamp}
-        canGoBackward={canGoBackward}
-        canGoForward={canGoForward}
-        url={url} />
+      <div className="webview-container">
+        <Sidebar />
+        <Webview
+          key="webview"
+          host={host}
+          params={params}
+          dispatch={dispatch}
+          timestamp={timestamp}
+          canGoBackward={canGoBackward}
+          canGoForward={canGoForward}
+          url={url} />
+      </div>
     );
   }
 }

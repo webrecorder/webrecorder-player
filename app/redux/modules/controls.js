@@ -8,6 +8,7 @@ const CTRLS_SET_ALL_SOURCES = 'wr/ctrls/SET_ALL_SOURCES';
 const CTRLS_SET_SOURCES = 'wr/ctrls/SET_SOURCES';
 const CTRLS_SET_URL = 'wr/ctrls/CTRLS_SET_URL';
 const CTRLS_SET_TS = 'wr/ctrls/CTRLS_SET_TS';
+const CTRLS_SET_TITLE = 'wr/ctrls/CTRLS_SET_TITLE';
 const CTRLS_SET_URL_TS = 'wr/ctrls/CTRLS_SET_URL_TS';
 const CTRLS_CONFIG_PROXY = 'wr/ctrls/CTRLS_CONFIG_PROXY';
 const CTRLS_CONFIG_PROXY_SUCCESS = 'wr/ctrls/CTRLS_CONFIG_PROXY_SUCCESS';
@@ -57,10 +58,13 @@ export default function controls(state = initialState, action = {}) {
       return state.set('url', action.url);
     case CTRLS_SET_TS:
       return state.set('timestamp', action.ts);
+    case CTRLS_SET_TITLE:
+      return state.set('title', action.title);
     case CTRLS_SET_URL_TS:
       return state.merge({
         url: action.url,
-        timestamp: action.ts
+        timestamp: action.ts,
+        title: action.title
       });
 
     default:
@@ -125,11 +129,19 @@ export function updateTimestamp(ts) {
   };
 }
 
-export function updateUrlAndTimestamp(url, ts) {
+export function updateTitle(title) {
+  return {
+    type: CTRLS_SET_TITLE,
+    title
+  };
+}
+
+export function updateUrlAndTimestamp(url, ts, title) {
   return {
     type: CTRLS_SET_URL_TS,
     url,
-    ts
+    ts,
+    title
   };
 }
 

@@ -16,8 +16,7 @@ import TimeFormat from 'components/TimeFormat';
 import 'react-virtualized/styles.css';
 
 import CollectionManagement from './management';
-import { BrowserRenderer, LinkRenderer, TagRenderer,
-         TimestampRenderer } from './columns';
+import { LinkRenderer, TimestampRenderer } from './columns';
 
 import './style.scss';
 
