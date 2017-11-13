@@ -19,3 +19,20 @@ document.addEventListener('hashchange', (evt) => {
 
   ipcRenderer.sendToHost('hashchange', state);
 });
+
+document.addEventListener('drop', (evt) => {
+  evt.preventDefault();
+
+  const filename = evt.dataTransfer.files[0].path;
+  const state = {
+    wb_type: 'open',
+    filename
+  };
+
+  ipcRenderer.sendToHost('open', state);
+});
+
+document.addEventListener('dragover', (evt) => {
+  evt.preventDefault();
+  evt.stopPropagation();
+});

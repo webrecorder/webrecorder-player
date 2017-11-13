@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import WebSocketHandler from 'helpers/ws';
 import path from 'path';
+import { ipcRenderer } from 'electron';
+
+import { openDroppedFile } from 'helpers/utils';
 
 import { setBrowserHistory } from 'redux/modules/appSettings';
 import { updateUrlAndTimestamp, updateTimestamp } from 'redux/modules/controls';
@@ -21,7 +24,8 @@ class Webview extends Component {
   };
 
   static contextTypes = {
-    currMode: PropTypes.string
+    currMode: PropTypes.string,
+    router: PropTypes.object
   };
 
   constructor(props) {
@@ -71,6 +75,15 @@ class Webview extends Component {
     window.removeEventListener('wr-refresh', this.refresh);
   }
 
+  openDroppedFile = (filename) => {
+    if (filename && filename.match(/\.w?arc(\.gz)?|\.har$/)) {
+      this.context.router.push('/');
+      ipcRenderer.send('open-warc', filename);
+    } else if (filename) {
+      window.alert('Sorry, only WARC or ARC files (.warc, .warc.gz, .arc, .arc.gz) or HAR (.har) can be opened');
+    }
+  }
+
   handleReplayEvent = (evt) => {
     const { canGoBackward, canGoForward, dispatch } = this.props;
     const state = evt.args[0];
@@ -84,6 +97,9 @@ class Webview extends Component {
     }
 
     switch(state.wb_type) {
+      case 'open':
+        this.openDroppedFile(state.filename);
+        break;
       case 'load':
         this.addNewPage(state);
         break;

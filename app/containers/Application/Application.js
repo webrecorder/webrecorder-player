@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ipcRenderer } from 'electron';
 
+import { openDroppedFile } from 'helpers/utils';
+
 import { Nav } from 'containers';
 
 import 'shared/css/bootstrap-theme.min.css';
@@ -43,10 +45,14 @@ class Application extends Component {
   openDroppedFile = (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
+    const { router } = this.context;
     const filename = evt.dataTransfer.files[0].path;
 
     if (filename && filename.toString().match(/\.w?arc(\.gz)?|\.har$/)) {
-      this.context.router.push('/');
+      if (router.routes[router.routes.length - 1].name !== 'landing') {
+        router.push('/');
+      }
+
       ipcRenderer.send('open-warc', filename.toString());
     } else if (filename) {
       window.alert('Sorry, only WARC or ARC files (.warc, .warc.gz, .arc, .arc.gz) or HAR (.har) can be opened');

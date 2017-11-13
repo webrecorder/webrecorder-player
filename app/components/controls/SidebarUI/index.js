@@ -41,8 +41,6 @@ class SidebarUI extends Component {
       }
     }
 
-    console.log(expanded);
-
     this.setState({
       defaultWidth: this.sidebarHandle.getBoundingClientRect().width,
       expanded
