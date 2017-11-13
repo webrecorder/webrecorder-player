@@ -44,6 +44,15 @@ nav.topBar {
     }
   }
 
+  .logos {
+    display: flex;
+    align-items: center;
+
+    & > a:last-of-type {
+      margin-left: 1.5rem;
+    }
+  }
+
   .arrow {
     transition: all .1s ease-in-out;
 
@@ -74,7 +83,6 @@ nav.topBar {
     background-repeat: no-repeat;
     border: none;
     outline: none;
-    // padding: 0px 8px 0px 8px;
     vertical-align: middle;
     animation: fadeIn 1s 1 normal;
     cursor: pointer;
