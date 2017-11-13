@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
+import { inStorage, getStorage, setStorage } from 'helpers/utils';
+
 import { BookmarkList } from 'components/controls';
 
 import './style.scss';
@@ -29,15 +31,28 @@ class SidebarUI extends Component {
   }
 
   componentDidMount() {
+    // expanded by default
+    let expanded = true;
+    if (inStorage('sidebarDisplay')) {
+      try {
+        expanded = JSON.parse(getStorage('sidebarDisplay'));
+      } catch (e) {
+        console.log('Wrong `sidebarDisplay` storage value');
+      }
+    }
+
+    console.log(expanded);
+
     this.setState({
       defaultWidth: this.sidebarHandle.getBoundingClientRect().width,
-      expanded: true // TODO: grab form local settings
+      expanded
     });
   }
 
   onToggle = () => {
     const { expanded } = this.state;
 
+    setStorage('sidebarDisplay', !expanded);
     this.setState({
       expanded: !expanded
     });
