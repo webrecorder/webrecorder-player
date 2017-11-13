@@ -4,6 +4,7 @@ import classNames from 'classnames';
 
 import { inStorage, getStorage, setStorage } from 'helpers/utils';
 
+import { SidebarToggle } from 'components/icons';
 import { BookmarkList } from 'components/controls';
 
 import './style.scss';
@@ -98,8 +99,9 @@ class SidebarUI extends Component {
         style={{ width }}>
         <button
           className="sidebar-toggle"
-          onClick={this.onToggle}
-          dangerouslySetInnerHTML={{ __html: expanded ? '&laquo;' : '&raquo;' }} />
+          onClick={this.onToggle}>
+          <SidebarToggle flip={!expanded} />
+        </button>
         <div className="sidebar-handle" onMouseDown={this.startResize} />
         {
           expanded &&

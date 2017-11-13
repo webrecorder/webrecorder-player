@@ -1,2 +1,2 @@
 
-export Refresh from './Refresh';
+export SidebarToggle from './SidebarToggle';

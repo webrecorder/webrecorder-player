@@ -1,25 +1,35 @@
 
+$collapsedWidth: 3rem;
+
 .sidebar {
     position: relative;
     background: #FFF;
     padding: 0 .8rem 0 .5rem;
     display: flex;
     flex-direction: column;
-    min-width: 3rem;
+    min-width: $collapsedWidth;
 
     &.animate {
         transition: width .4s ease-in-out;
     }
 
     .sidebar-toggle {
+        transition: background-color 175ms ease-in-out;
         position: absolute;
-        right: 0;
+        right: .1rem;
+        top: 0;
         background: transparent;
         border: 0;
         z-index: 20;
-        font-weight: 100;
-        font-size: 4.5rem;
-        line-height: 1.9rem;
+        width: $collapsedWidth;
+
+        &:focus {
+            outline-width: 0;
+        }
+
+        &:hover {
+            background-color: rgb(179, 238, 101);
+        }
     }
 
     $buffer: .8rem;
