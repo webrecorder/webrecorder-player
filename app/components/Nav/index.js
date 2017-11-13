@@ -5,6 +5,7 @@ import { Link } from 'react-router';
 
 import { openFile } from 'helpers/utils';
 
+import { Close, FileOpen, Help } from 'components/icons';
 import { PlayerURLBar } from 'containers';
 
 import './style.scss';
@@ -36,6 +37,10 @@ export default class Nav extends Component {
 
   sendOpenFile = () => {
     openFile(this.props.router);
+  }
+
+  goToHelp = () => {
+    this.props.router.push('/help');
   }
 
   render() {
@@ -90,19 +95,17 @@ export default class Nav extends Component {
 
         <div className="player-functions">
           <button onClick={this.sendOpenFile} className="button grow" title="Open file">
-            <img className="openFile" src={require('images/OpenFileICO.png')} alt="open file" />
+            <FileOpen />
           </button>
 
           {
             isHelp ?
               <button id="help" onClick={router.goBack} className="button grow" title="Help">
-                <img className="halp" src={require('images/close.png')} alt="help page" />
+                <Close />
               </button> :
-              <Link to="/help">
-                <button id="help" className="button grow" title="Help">
-                  <img className="halp" src={require('images/halp.png')} alt="help page" />
-                </button>
-              </Link>
+              <button id="help" onClick={this.goToHelp} className="button grow" title="Help">
+                <Help />
+              </button>
           }
         </div>
       </nav>

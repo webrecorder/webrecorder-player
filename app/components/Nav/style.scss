@@ -156,5 +156,18 @@ nav.topBar {
   .player-functions {
     display: flex;
     align-items: center;
+
+    & > button {
+
+      circle, polygon {
+        transition: stroke 175ms ease-in-out;
+      }
+
+      &:hover {
+        circle, polygon {
+          stroke: blue;
+        }
+      }
+    }
   }
 }
