@@ -1,4 +1,4 @@
-import { app, Menu, shell, BrowserWindow } from 'electron';
+import { app, ipcMain, Menu, shell, BrowserWindow } from 'electron';
 
 export default class MenuBuilder {
   mainWindow: BrowserWindow;
@@ -44,17 +44,24 @@ export default class MenuBuilder {
 
   buildDarwinTemplate() {
     const subMenuAbout = {
-      label: 'Electron',
+      label: 'Webrecorder Player',
       submenu: [
-        { label: 'About ElectronReact', selector: 'orderFrontStandardAboutPanel:' },
+        { label: 'Webrecorder Player', click: () => { this.mainWindow.webContents.send('change-location', '/help'); } },
         { type: 'separator' },
         { label: 'Services', submenu: [] },
         { type: 'separator' },
-        { label: 'Hide ElectronReact', accelerator: 'Command+H', selector: 'hide:' },
+        { label: 'Hide Webrecorder Player', accelerator: 'Command+H', selector: 'hide:' },
         { label: 'Hide Others', accelerator: 'Command+Shift+H', selector: 'hideOtherApplications:' },
         { label: 'Show All', selector: 'unhideAllApplications:' },
         { type: 'separator' },
         { label: 'Quit', accelerator: 'Command+Q', click: () => { app.quit(); } }
+      ]
+    };
+
+    const subMenuFile = {
+      label: 'File',
+      submenu: [
+        { label: 'Open', click: () => { this.mainWindow.webContents.send('open-warc-dialog'); }}
       ]
     };
     const subMenuEdit = {
@@ -73,8 +80,7 @@ export default class MenuBuilder {
       label: 'View',
       submenu: [
         { label: 'Reload', accelerator: 'Command+R', click: () => { this.mainWindow.webContents.reload(); } },
-        { label: 'Toggle Full Screen', accelerator: 'Ctrl+Command+F', click: () => { this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen()); } },
-        { label: 'Toggle Developer Tools', accelerator: 'Alt+Command+I', click: () => { this.mainWindow.toggleDevTools(); } }
+        { label: 'Toggle Full Screen', accelerator: 'Ctrl+Command+F', click: () => { this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen()); } }
       ]
     };
     const subMenuViewProd = {
@@ -95,10 +101,8 @@ export default class MenuBuilder {
     const subMenuHelp = {
       label: 'Help',
       submenu: [
-        { label: 'Learn More', click() { shell.openExternal('http://electron.atom.io'); } },
-        { label: 'Documentation', click() { shell.openExternal('https://github.com/atom/electron/tree/master/docs#readme'); } },
-        { label: 'Community Discussions', click() { shell.openExternal('https://discuss.atom.io/c/electron'); } },
-        { label: 'Search Issues', click() { shell.openExternal('https://github.com/atom/electron/issues'); } }
+        { label: 'More Info', click: () => { this.mainWindow.webContents.send('change-location', '/help'); } },
+        { label: 'Webrecorder.io', click() { shell.openExternal('https://webrecorder.io'); } },
       ]
     };
 
@@ -108,6 +112,7 @@ export default class MenuBuilder {
 
     return [
       subMenuAbout,
+      subMenuFile,
       subMenuEdit,
       subMenuView,
       subMenuWindow,
@@ -120,7 +125,7 @@ export default class MenuBuilder {
       label: '&File',
       submenu: [{
         label: '&Open',
-        accelerator: 'Ctrl+O'
+        click: () => { this.mainWindow.webContents.send('open-warc-dialog'); }
       }, {
         label: '&Close',
         accelerator: 'Ctrl+W',
@@ -159,23 +164,11 @@ export default class MenuBuilder {
       label: 'Help',
       submenu: [{
         label: 'Learn More',
-        click() {
-          shell.openExternal('http://electron.atom.io');
-        }
+        click: () => { this.mainWindow.webContents.send('change-location', '/help'); }
       }, {
-        label: 'Documentation',
+        label: 'Webrecorder.io',
         click() {
-          shell.openExternal('https://github.com/atom/electron/tree/master/docs#readme');
-        }
-      }, {
-        label: 'Community Discussions',
-        click() {
-          shell.openExternal('https://discuss.atom.io/c/electron');
-        }
-      }, {
-        label: 'Search Issues',
-        click() {
-          shell.openExternal('https://github.com/atom/electron/issues');
+          shell.openExternal('https://webrecorder.io');
         }
       }]
     }];

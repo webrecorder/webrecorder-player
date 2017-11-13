@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ipcRenderer } from 'electron';
 
-import { openDroppedFile } from 'helpers/utils';
+import { setHost } from 'redux/modules/appSettings';
+import { openFile } from 'helpers/utils';
 
 import { Nav } from 'containers';
 
@@ -32,6 +33,12 @@ class Application extends Component {
       evt.preventDefault();
       evt.stopPropagation();
     });
+
+    ipcRenderer.on('change-location', (evt, path) => {
+      this.context.router.push(path);
+    });
+
+    ipcRenderer.on('open-warc-dialog', openFile.bind(this, this.context.router));
   }
 
   componentWillUnmount() {

@@ -95,7 +95,7 @@ export function stripProtocol(url) {
 button #open
 display a file selector and call ipc "open-warc" on main
 */
-export function openFile() {
+export function openFile(router) {
   remote.dialog.showOpenDialog(
     {
       properties: ['openFile'],
@@ -103,6 +103,10 @@ export function openFile() {
     },
     (filename) => {
       if (filename && filename.toString().match(/\.w?arc(\.gz)?|\.har$/)) {
+        if (router && router.push) {
+          router.push('/');
+        }
+
         ipcRenderer.send('open-warc', filename.toString());
       } else if (filename) {
         window.alert('Sorry, only WARC or ARC files (.warc, .warc.gz, .arc, .arc.gz) or HAR (.har) can be opened');

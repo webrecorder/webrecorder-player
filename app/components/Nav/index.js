@@ -34,6 +34,10 @@ export default class Nav extends Component {
     window.dispatchEvent(new Event('wr-refresh'));
   }
 
+  sendOpenFile = () => {
+    openFile(this.props.router);
+  }
+
   render() {
     const { canGoBackward, canGoForward, collectionLoaded, router } = this.props;
 
@@ -83,7 +87,7 @@ export default class Nav extends Component {
         }
 
         <div className="player-functions">
-          <button onClick={openFile} className="button grow" title="Open file">
+          <button onClick={this.sendOpenFile} className="button grow" title="Open file">
             <img className="openFile" src={require('images/OpenFileICO.png')} alt="open file" />
           </button>
 
