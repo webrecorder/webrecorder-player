@@ -76,8 +76,12 @@ class Application extends Component {
 
     if (error) {
       return (
-        <div>
-          <h1><a onClick={this.appReset}>Error Encountered, please try again.</a></h1>
+        <div id="landingContainer">
+          <Nav />
+          <div style={{ paddingLeft: '20px' }}>
+            <h3><a onClick={this.appReset}>Error Encountered, please try again.</a></h3>
+            <p>{ this.state.info }</p>
+          </div>
         </div>
       );
     }
