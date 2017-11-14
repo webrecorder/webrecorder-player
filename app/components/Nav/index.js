@@ -80,13 +80,13 @@ export default class Nav extends Component {
           isReplay &&
             <div className="browser-nav">
               <button id="back" onClick={this.triggerBack} className={backClass} title="Click to go back">
-                <object data="images/Back_Arrow.svg" type="image/svg+xml" aria-label="navigate back" />
+                <object data={require('images/Back_Arrow.svg')} type="image/svg+xml" aria-label="navigate back" />
               </button>
               <button id="forward" onClick={this.triggerForward} className={fwdClass} title="Click to go forward">
-                <object id="forwardArrow" data="images/Back_Arrow.svg" type="image/svg+xml" aria-label="navigate forward" />
+                <object id="forwardArrow" data={require('images/Back_Arrow.svg')} type="image/svg+xml" aria-label="navigate forward" />
               </button>
               <button id="refresh" onClick={this.triggerRefresh} className="button arrow" title="Refresh replay window">
-                <object data="images/Refresh.svg" type="image/svg+xml" aria-label="refresh" />
+                <object data={require('images/Refresh.svg')} type="image/svg+xml" aria-label="refresh" />
               </button>
 
               <PlayerURLBar />
