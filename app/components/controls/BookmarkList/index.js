@@ -6,9 +6,12 @@ import Table from 'react-virtualized/dist/commonjs/Table';
 
 import { updateUrlAndTimestamp } from 'redux/modules/controls';
 
+import { Collection } from 'components/icons';
 import Searchbox from 'components/Searchbox';
 
 import { BookmarkRenderer, headerRenderer } from './renderers';
+
+import './style.scss';
 
 
 class BookmarkList extends Component {
@@ -38,6 +41,10 @@ class BookmarkList extends Component {
 
     return (
       <div className="bookmarks-list">
+        <header>
+          <Collection />
+          <span dangerouslySetInnerHTML={{ __html: ` Collection Bookmarks (${activeBookmark + 1} <em>of</em> ${bookmarks.size})` }} />
+        </header>
         <Searchbox
           search={this.search}
           searchText={searchText}
@@ -49,7 +56,6 @@ class BookmarkList extends Component {
                 <Table
                   width={width}
                   height={height}
-                  headerHeight={30}
                   rowCount={bookmarks.size}
                   rowHeight={50}
                   rowGetter={({ index }) => bookmarks.get(index)}

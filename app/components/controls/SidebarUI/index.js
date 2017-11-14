@@ -58,7 +58,6 @@ class SidebarUI extends Component {
   }
 
   startResize = (evt) => {
-    console.log('resize');
     this.setState({
       xPos: evt.clientX
     });

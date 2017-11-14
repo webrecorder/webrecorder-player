@@ -1,9 +1,10 @@
+@import 'app/shared/scss/vars.scss';
 
 $collapsedWidth: 3rem;
 
 .sidebar {
     position: relative;
-    background: #FFF;
+    background: $sidebarBg;
     padding: 0 .8rem 0 .5rem;
     display: flex;
     flex-direction: column;
@@ -28,7 +29,7 @@ $collapsedWidth: 3rem;
         }
 
         &:hover {
-            background-color: rgb(179, 238, 101);
+            background-color: $brightGreen;
         }
     }
 
@@ -57,77 +58,6 @@ $collapsedWidth: 3rem;
     &.expanded {
         .sidebar-handle {
             cursor: ew-resize;
-        }
-    }
-
-    .bookmarks-list {
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-        margin-top: 3rem;
-        border: solid 0 rgb(179, 238, 101);
-        border-width: .4rem 0 0 0;
-        padding-top: 1rem;
-        user-select: none;
-
-        .bookmarks {
-            flex-grow: 1;
-        }
-
-        .ReactVirtualized__Table__headerColumn {
-            font-weight: 400;
-            font-size: 1.2rem;
-
-            em {
-                text-transform: lowercase;
-            }
-
-            .glyphicon {
-                color: rgb(125, 125, 125);
-            }
-        }
-
-        .ReactVirtualized__Table__row {
-            color: rgb(100, 100, 100);
-            cursor: pointer;
-            padding-left: 2rem;
-
-            &:focus {
-                outline-width: 0;
-            }
-
-            .bookmark-title {
-                h2 {
-                    transition: color 125ms ease-in-out;
-                    font-size: 1.3rem;
-                    font-weight: 400;
-                    margin: 0;
-                    line-height: 1rem;
-                }
-
-                span {
-                    font-size: 1rem;
-                }
-            }
-
-            &.selected {
-                color: #0232F5;
-
-                &:before {
-                    content: '';
-                    position: absolute;
-                    left: .9rem;
-                    top: .9rem;
-                    width: 1.4rem;
-                    height: 1.4rem;
-                    background: url('../../../images/active_bookmark_ico.svg');
-                    background-size: cover;
-                }
-            }
-
-            &:not(.selected):hover {
-                color: #0232F5;
-            }
         }
     }
 }

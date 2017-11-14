@@ -40,7 +40,7 @@ class CollectionDetailUI extends Component {
     super(props);
 
     this.initialState = {
-      groupDisplay: true,
+      groupDisplay: false,
       expandAll: false,
       selectedSession: null,
       selectedBookmark: null,
@@ -227,7 +227,7 @@ class CollectionDetailUI extends Component {
                           hasActiveBookmark={selectedSession === rec && selectedGroupedBookmarkIdx !== null}
                           collection={collection}
                           browsers={browsers}
-                          expandAll={expandAll}
+                          expand={expandAll}
                           onExpand={this.onExpandSession}
                           onCollapse={this.onCollapseSession}
                           recording={rec}

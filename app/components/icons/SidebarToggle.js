@@ -1,10 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 
 function SidebarToggle(props) {
   const { flip } = props;
   const styleProp = flip ? { transform: 'rotateZ(180deg)' } : {};
-  console.log(styleProp);
 
   return (
     <svg width="11px" height="11px" viewBox="0 0 11 11" version="1.1" xmlns="http://www.w3.org/2000/svg" style={styleProp}>
@@ -16,5 +16,9 @@ function SidebarToggle(props) {
     </svg>
   );
 }
+
+SidebarToggle.propTypes = {
+  flip: PropTypes.bool
+};
 
 export default SidebarToggle;

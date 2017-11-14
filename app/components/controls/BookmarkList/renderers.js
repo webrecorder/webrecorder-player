@@ -2,6 +2,8 @@ import React from 'react';
 
 import { buildDate } from 'helpers/utils';
 
+import { Collection } from 'components/icons';
+
 
 export function BookmarkRenderer({ cellData, rowData }) {
   return (
@@ -18,7 +20,7 @@ export function headerRenderer({dataKey, label, sortBy, sortDirection, columnDat
       className="ReactVirtualized__Table__headerTruncatedText"
       key="label"
       title={label}>
-      <span className="glyphicon glyphicon-list" />
+      <Collection />
       <span dangerouslySetInnerHTML={{ __html: ` ${label} (${activeBookmark + 1} <em>of</em> ${count})` }} />
     </div>
   );

@@ -1,3 +1,5 @@
+@import 'app/shared/scss/vars.scss';
+
 .help-container {
   background-image: url('../../images/Bg.png');
   background-repeat: repeat;
@@ -24,7 +26,7 @@
   .help h5 {
     font-size: 1.9rem;
     margin: 3rem 0 0.3rem 0;
-    color: #0232F5;
+    color: $blue;
   }
   .help h5:first-child {
     margin: 0 0 0.3rem 0;
@@ -46,12 +48,12 @@
     text-decoration: none;
   }
   .help a:hover{
-    color: #0232F5 !important;
-    box-shadow: 0 3px 0 #0232F5;
+    color: $blue !important;
+    box-shadow: 0 3px 0 $blue;
   }
   .help a:active{
-    color: #0232F5;
-    box-shadow: 0 4px 0 #0232F5;
+    color: $blue;
+    box-shadow: 0 4px 0 $blue;
   }
   .help a:visited{
     color: #4D6AE1;

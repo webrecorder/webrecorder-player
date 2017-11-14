@@ -1,3 +1,5 @@
+@import 'app/shared/scss/vars.scss';
+
 
 #landingContainer {
   padding-top: 90px;
@@ -23,7 +25,7 @@
   margin-top: 20vh;
 
   button {
-    background-color: #0232F5;
+    background-color: $blue;
     position: relative;
     cursor: pointer;
 

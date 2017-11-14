@@ -1,3 +1,5 @@
+@import 'app/shared/scss/vars.scss';
+
 nav.topBar {
   transition: height 1s ease;
   animation: fadeIn 0.2s 1 normal;
@@ -13,9 +15,9 @@ nav.topBar {
   z-index: 1024;
   padding: 0 .8rem;
 
-  background: #FFF;
+  background: $sidebarBg;
   color: #e8e8e8;
-  border-bottom: .4rem solid #0232F5;
+  border-bottom: .4rem solid $blue;
 
   &.replay {
 
@@ -56,8 +58,6 @@ nav.topBar {
   .arrow {
     transition: all .1s ease-in-out;
 
-    //&:not(.inactive):hover { transform: scale(1.1); }
-    //&:not(.inactive):active { transform: scale(1) translate(0, 3px);}
     &.inactive { opacity: .5; }
     &.off {
       opacity: 0;
@@ -73,7 +73,7 @@ nav.topBar {
 
     &:not(.inactive):hover {
       object {
-        background: #ececec;
+        background: $buttonHover;
       }
     }
   }
@@ -165,7 +165,7 @@ nav.topBar {
 
       &:hover {
         circle, polygon {
-          stroke: blue;
+          stroke: $blue;
         }
       }
     }
