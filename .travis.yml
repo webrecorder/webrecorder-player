@@ -16,7 +16,7 @@ env:
 addons:
   artifacts:
     paths:
-      - $(ls webrecorderplayer-electron-*{dmg,AppImage})
+      - $(ls webrecorder-player-*{dmg,AppImage})
 
 before_install:
   - |
@@ -63,5 +63,5 @@ script:
     else
       npm run dist
     fi
-  - mv ./dist/webrecorderplayer-electron-* $TRAVIS_BUILD_DIR/
+  - mv ./dist/webrecorder-player-* $TRAVIS_BUILD_DIR/
 

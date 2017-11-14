@@ -48,13 +48,13 @@ build_script:
         else {
           npm run dist -- $env:ARCH_ARG
         }
-  - ps: "move dist/webrecorderplayer-electron*.* $env:APPVEYOR_BUILD_FOLDER/"
+  - ps: "move dist/webrecorder-player*.* $env:APPVEYOR_BUILD_FOLDER/"
 
 test: off
 
 artifacts:
-  - path: "webrecorderplayer-electron*.*"
-    name: webrecorderplayer-electron
+  - path: "webrecorder-player*.*"
+    name: webrecorder-player
     
 deploy:
   provider: S3
@@ -63,4 +63,4 @@ deploy:
   access_key_id: $(aws_access_key_id)
   secret_access_key: $(aws_secret_access_key)
   folder: electron-player/$(APPVEYOR_REPO_BRANCH)
-  artifact: webrecorderplayer-electron
+  artifact: webrecorder-player
