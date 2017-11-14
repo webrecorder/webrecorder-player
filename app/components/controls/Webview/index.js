@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import WebSocketHandler from 'helpers/ws';
 import path from 'path';
+import classNames from 'classnames';
 import { ipcRenderer } from 'electron';
 
 import { openDroppedFile } from 'helpers/utils';
@@ -35,6 +36,7 @@ class Webview extends Component {
     this.socket = null;
     this.webviewHandle = null;
     this.internalUpdate = false;
+    this.state = { loading: false };
   }
 
   componentDidMount() {
@@ -56,14 +58,18 @@ class Webview extends Component {
     if (nextProps.url !== url || nextProps.timestamp !== timestamp) {
       if (!this.internalUpdate) {
         const proxyUrl = `http://webrecorder.proxy/local/collection/${nextProps.timestamp}/${nextProps.url}`;
+        this.setState({ loading: true });
         this.webviewHandle.loadURL(proxyUrl);
       }
       this.internalUpdate = false;
     }
   }
 
-  shouldComponentUpdate() {
-    // never rerender
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextState.loading !== this.state.loading) {
+      return true;
+    }
+
     return false;
   }
 
@@ -101,6 +107,7 @@ class Webview extends Component {
         this.openDroppedFile(state.filename);
         break;
       case 'load':
+        this.setState({ loading: false });
         this.addNewPage(state);
         break;
       case 'hashchange': {
@@ -153,18 +160,22 @@ class Webview extends Component {
   }
 
   render() {
+    const { loading } = this.state;
     const { timestamp, url } = this.props;
     const proxyUrl = `http://webrecorder.proxy/local/collection/${timestamp}/${url}`;
+    const classes = classNames('webview-wrapper', { loading });
 
     return (
-      <webview
-        id="replay"
-        ref={(obj) => { this.webviewHandle = obj; }}
-        src={proxyUrl}
-        autosize="on"
-        plugins="true"
-        preload={`file://${path.join(__dirname, 'helpers/preload.js')}`}
-        partition="persist:wr" />
+      <div className={classes}>
+        <webview
+          id="replay"
+          ref={(obj) => { this.webviewHandle = obj; }}
+          src={proxyUrl}
+          autosize="on"
+          plugins="true"
+          preload={`file://${path.join(__dirname, 'helpers/preload.js')}`}
+          partition="persist:wr" />
+      </div>
     );
   }
 }
