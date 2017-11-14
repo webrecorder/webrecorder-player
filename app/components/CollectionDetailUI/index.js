@@ -15,6 +15,7 @@ import TimeFormat from 'components/TimeFormat';
 
 import 'react-virtualized/styles.css';
 
+import { RecordingSession } from './sidebar';
 import CollectionManagement from './management';
 import { LinkRenderer, TimestampRenderer } from './columns';
 
@@ -46,7 +47,8 @@ class CollectionDetailUI extends Component {
       selectedBookmark: null,
       selectedBookmarkIdx: null,
       selectedGroupedBookmark: null,
-      selectedGroupedBookmarkIdx: null
+      selectedGroupedBookmarkIdx: null,
+      selectedRec: null
     };
 
     this.state = this.initialState;
@@ -59,6 +61,13 @@ class CollectionDetailUI extends Component {
       } catch (e) {
         console.log('Wrong `groupDisplay` storage value');
       }
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    // detect whether this was a state change to expanded recording session view
+    if(!prevState.gourpedDisplay && this.state.groupDisplay && this.state.scrollToRec) {
+      this.openAndScroll(this.state.scrollToRec);
     }
   }
 
@@ -77,19 +86,35 @@ class CollectionDetailUI extends Component {
   }
 
   onSelectRow = ({ index, rowData }) => {
-    this.setState({
-      selectedBookmarkIdx: index,
-      selectedBookmark: rowData,
-      selectedSession: null
-    });
+    if (this.state.selectedBookmarkIdx === index) {
+      // clear selection
+      this.setState({
+        selectedBookmarkIdx: null,
+        selectedBookmark: null,
+      });
+    } else {
+      this.setState({
+        selectedBookmarkIdx: index,
+        selectedBookmark: rowData,
+        selectedSession: null
+      });
+    }
   }
 
   onSelectGroupedRow = ({ rec, index }) => {
-    this.setState({
-      selectedSession: rec,
-      selectedGroupedBookmark: rec.getIn(['pages', index]),
-      selectedGroupedBookmarkIdx: index
-    });
+    if (this.state.selectedGroupedBookmarkIdx === index) {
+      this.setState({
+        selectedSession: rec,
+        selectedGroupedBookmark: null,
+        selectedGroupedBookmarkIdx: null
+      });
+    } else {
+      this.setState({
+        selectedSession: rec,
+        selectedGroupedBookmark: rec.getIn(['pages', index]),
+        selectedGroupedBookmarkIdx: index
+      });
+    }
   }
 
   onExpandSession = (sesh) => {
@@ -105,7 +130,8 @@ class CollectionDetailUI extends Component {
     this.setState({
       selectedSession: null,
       selectedGroupedBookmark: null,
-      selectedGroupedBookmarkIdx: null
+      selectedGroupedBookmarkIdx: null,
+      selectedRec: null
     });
   }
 
@@ -120,11 +146,30 @@ class CollectionDetailUI extends Component {
     dispatch(searchBookmarks(evt.target.value));
   }
 
+  openAndScroll = (sesh) => {
+    const index = this.props.recordings.findIndex(o => o.get('id') === sesh.get('id'));
+    const top = this.sessionContainer.querySelectorAll('.wr-coll-session')[index].offsetTop;
+    this.sessionContainer.scrollTop = top;
+
+    this.setState({
+      selectedSession: sesh,
+      selectedRec: sesh.get('id'),
+      scrollToRec: null
+    });
+  }
+
+  selectRecording = (sesh) => {
+    if (!this.state.groupDisplay) {
+      this.setState({ groupDisplay: true, scrollToRec: sesh });
+    } else {
+      this.openAndScroll(sesh);
+    }
+  }
+
   sort = ({ sortBy, sortDirection }) => {
     const { collection, dispatch } = this.props;
     const prevSort = collection.getIn(['sortBy', 'sort']);
     const prevDir = collection.getIn(['sortBy', 'dir']);
-    console.log(sortBy, sortDirection);
 
     if (prevSort !== sortBy) {
       dispatch(setSort({ sort: sortBy, dir: sortDirection }));
@@ -141,7 +186,8 @@ class CollectionDetailUI extends Component {
     const { canAdmin } = this.context;
     const { bookmarks, browsers, collection, recordings, searchText } = this.props;
     const { groupDisplay, expandAll, selectedBookmark, selectedBookmarkIdx,
-            selectedSession, selectedGroupedBookmark, selectedGroupedBookmarkIdx } = this.state;
+            selectedSession, selectedGroupedBookmark, selectedGroupedBookmarkIdx,
+            selectedRec } = this.state;
 
     return (
       <div className="wr-coll-outer-container">
@@ -202,7 +248,14 @@ class CollectionDetailUI extends Component {
                     <div>
                       <b>{recordings.size} Recording{ recordings.size === 1 ? '' : 's'}:</b>
                       {
-                        recordings.map(rec => <div key={rec.get('id')}>{ rec.get('title')}</div>)
+                        recordings.map((rec) => {
+                          return (
+                            <RecordingSession
+                              key={rec.get('id')}
+                              rec={rec}
+                              select={this.selectRecording} />
+                          );
+                        })
                       }
                     </div>
                 }
@@ -219,21 +272,23 @@ class CollectionDetailUI extends Component {
             <div className="wr-coll-detail-table">
               {
                 groupDisplay ?
-                  <div className="wr-coll-session-container">
+                  <div className="wr-coll-session-container" ref={(obj) => { this.sessionContainer = obj; }}>
                     {
-                      recordings.map(rec =>
-                        <SessionCollapsible
-                          key={rec.get('id')}
-                          hasActiveBookmark={selectedSession === rec && selectedGroupedBookmarkIdx !== null}
-                          collection={collection}
-                          browsers={browsers}
-                          expand={expandAll}
-                          onExpand={this.onExpandSession}
-                          onCollapse={this.onCollapseSession}
-                          recording={rec}
-                          onSelectRow={this.onSelectGroupedRow}
-                          selectedGroupedBookmarkIdx={selectedGroupedBookmarkIdx} />
-                      )
+                      recordings.map((rec) => {
+                        return (
+                          <SessionCollapsible
+                            key={rec.get('id')}
+                            hasActiveBookmark={selectedSession === rec && selectedGroupedBookmarkIdx !== null}
+                            collection={collection}
+                            browsers={browsers}
+                            expand={expandAll || rec.get('id') === selectedRec}
+                            onExpand={this.onExpandSession}
+                            onCollapse={this.onCollapseSession}
+                            recording={rec}
+                            onSelectRow={this.onSelectGroupedRow}
+                            selectedGroupedBookmarkIdx={selectedGroupedBookmarkIdx} />
+                        );
+                      })
                     }
                   </div> :
                   <AutoSizer>

@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import Collapsible from 'react-collapsible';
+
+import Collapsible from 'shared/js/Collapsible';
 
 import PageList from 'components/PageList';
 import TimeFormat from 'components/TimeFormat';
@@ -13,7 +14,7 @@ class SessionCollapsible extends PureComponent {
   static propTypes = {
     collection: PropTypes.object,
     browsers: PropTypes.object,
-    expandAll: PropTypes.bool,
+    expand: PropTypes.bool,
     hasActiveBookmark: PropTypes.bool,
     onCollapse: PropTypes.func,
     onExpand: PropTypes.func,
@@ -27,7 +28,7 @@ class SessionCollapsible extends PureComponent {
   }
 
   render() {
-    const { collection, browsers, expandAll, hasActiveBookmark, onCollapse,
+    const { collection, browsers, expand, hasActiveBookmark, onCollapse,
             onSelectRow, recording, selectedGroupedBookmarkIdx } = this.props;
     const pageCount = recording.get('pages').size;
 
@@ -44,7 +45,7 @@ class SessionCollapsible extends PureComponent {
       <div className="wr-coll-session">
         <Collapsible
           lazyRender
-          open={expandAll}
+          open={expand}
           transitionTime={Math.max(150, Math.min(700, pageCount * 60))}
           onOpen={this.expandCallback}
           onClose={onCollapse}

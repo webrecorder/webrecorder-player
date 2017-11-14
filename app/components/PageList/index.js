@@ -24,7 +24,6 @@ class PageList extends Component {
         <tbody>
           {
             pages.map((page, idx) => {
-
               let browser = null;
               let browserObj = null;
 

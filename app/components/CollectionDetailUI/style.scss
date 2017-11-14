@@ -39,10 +39,35 @@ $collTrigger: rgb(0, 57, 229);
             "sidebar utilities"
             "sidebar table";
 
+
         .wr-coll-sidebar-container {
-            word-break: break-all;
             grid-area: sidebar;
-            display: grid;
+            position: relative;
+
+            .wr-coll-sidebar {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                width: 100%;
+                overflow: auto;
+
+                .recording-session {
+                    transition: color 175ms ease-in-out;
+                    display: block;
+                    background: transparent;
+                    border: none;
+                    text-align: left;
+                    font-weight: 600;
+
+                    &:disabled {
+                        font-weight: 400;
+                    }
+
+                    &:not(:disabled):hover {
+                        color: $blue;
+                    }
+                }
+            }
 
             & > .wr-coll-sidebar:not(:first-of-type) {
                 border: solid .4rem $brightGreen;
@@ -109,6 +134,7 @@ $collTrigger: rgb(0, 57, 229);
                 transition: background 150ms ease-in-out;
                 border: solid 0 #CCCFD5;
                 border-width: 0 0 .1rem 0;
+                cursor: context-menu;
 
                 &.selected {
                     background-color: rgb(54, 54, 54);
@@ -135,6 +161,7 @@ $collTrigger: rgb(0, 57, 229);
                         transition: background 150ms ease-in-out;
                         border: solid 0 #CCCFD5;
                         border-width: 0 0 .1rem 0;
+                        cursor: context-menu;
 
                         &.selected {
                             background-color: rgb(54, 54, 54);
@@ -149,7 +176,7 @@ $collTrigger: rgb(0, 57, 229);
                         }
 
                         td {
-                            text-align: center;
+                            text-align: left;
 
                             &.timestamp {
                                 width: 20rem;

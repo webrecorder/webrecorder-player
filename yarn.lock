@@ -6020,10 +6020,6 @@ rc@^1.0.1, rc@^1.1.2, rc@^1.1.6, rc@^1.1.7, rc@^1.2.1:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-collapsible@^2.0.3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/react-collapsible/-/react-collapsible-2.0.3.tgz#b7228b002428a6e0a9f41646ea61ba28aacfcb00"
-
 react-deep-force-update@^1.0.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/react-deep-force-update/-/react-deep-force-update-1.1.1.tgz#bcd31478027b64b3339f108921ab520b4313dc2c"

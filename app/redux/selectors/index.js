@@ -72,7 +72,7 @@ export const bookmarkSearchResults = createSelector(
 export const getOrderedRecordings = createSelector(
   [getRecordings],
   (recordings) => {
-    const sortedRecordings = recordings.sortBy(o => o.get('created_at')).toOrderedSet();
+    const sortedRecordings = recordings.sortBy(o => o.get('created_at'));
 
     return sortedRecordings;
   }

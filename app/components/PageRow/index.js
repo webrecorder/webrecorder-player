@@ -44,7 +44,6 @@ class PageRow extends Component {
       <tr
         className={classNames({ selected })}
         onClick={this.selectRow}
-        onTransitionEnd={e => e.stopPropagation()}
         role="button">
         {
           canAdmin &&

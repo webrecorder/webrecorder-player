@@ -28,7 +28,9 @@ export function BrowserRenderer({ cellData, columnData: { browsers } }) {
 
 export function LinkRenderer({ cellData, rowData, columnData: { collection } }) {
   return (
-    <Link to={`/${collection.get('user')}/${collection.get('id')}/${remoteBrowserMod(rowData.get('browser'), rowData.get('timestamp'))}/${rowData.get('url')}`}>
+    <Link
+      to={`/${collection.get('user')}/${collection.get('id')}/${remoteBrowserMod(rowData.get('browser'), rowData.get('timestamp'))}/${rowData.get('url')}`}
+      title={rowData.get('title')}>
       <EditableString
         string={cellData || 'Untitled document'}
         className="edit-coll-title" />

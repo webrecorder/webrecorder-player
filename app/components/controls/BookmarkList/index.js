@@ -9,12 +9,20 @@ import { updateUrlAndTimestamp } from 'redux/modules/controls';
 import { Collection } from 'components/icons';
 import Searchbox from 'components/Searchbox';
 
-import { BookmarkRenderer, headerRenderer } from './renderers';
+import { BookmarkRenderer } from './renderers';
 
 import './style.scss';
 
 
 class BookmarkList extends Component {
+
+  static propTypes = {
+    activeBookmark: PropTypes.number,
+    bookmarks: PropTypes.object,
+    dispatch: PropTypes.func,
+    searchBookmarks: PropTypes.object,
+    searchText: PropTypes.string
+  }
 
   shouldComponentUpdate(nextProps) {
     if (nextProps.bookmarks.equals(this.props.bookmarks) &&
@@ -37,7 +45,7 @@ class BookmarkList extends Component {
   }
 
   render() {
-    const { activeBookmark, bookmarks, collection, searchText } = this.props;
+    const { activeBookmark, bookmarks, searchText } = this.props;
 
     return (
       <div className="bookmarks-list">
@@ -68,7 +76,6 @@ class BookmarkList extends Component {
                     flexGrow={1}
                     width={200}
                     columnData={{ count: bookmarks.size, activeBookmark }}
-                    headerRenderer={headerRenderer}
                     cellRenderer={BookmarkRenderer} />
                 </Table>
               )

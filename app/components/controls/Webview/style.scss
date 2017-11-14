@@ -9,12 +9,19 @@
         height: 100%;
     }
 
-    &.loading:after {
+    &:after {
+        transition: opacity 500ms ease-in-out;
         content: 'loading...';
         position: absolute;
         left: 0;
         bottom: 0;
         background: $brightGreen;
         padding: .2rem .5rem;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    &.loading:after {
+        opacity: 1;
     }
 }
