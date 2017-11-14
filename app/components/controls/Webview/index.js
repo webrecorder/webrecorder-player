@@ -36,7 +36,7 @@ class Webview extends Component {
     this.socket = null;
     this.webviewHandle = null;
     this.internalUpdate = false;
-    this.state = { loading: false };
+    this.state = { loading: true };
   }
 
   componentDidMount() {
