@@ -58,7 +58,7 @@ install:
 
 script:
   - |
-    if [[ $TRAVIS_BRANCH == 'master' ]]; then
+    if [[ $TRAVIS_BRANCH == 'master' || $TRAVIS_BRANCH == 'prerelease' ]]; then
       npm run release
     else
       npm run dist
