@@ -48,7 +48,8 @@
     ],
     "extraResources": [
       "python-binaries/",
-      "plugins"
+      "plugins",
+      "preload.js"
     ],
     "mac": {
       "category": "public.app-category.utilities",

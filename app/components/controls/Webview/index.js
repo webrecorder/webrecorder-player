@@ -12,6 +12,8 @@ import { updateUrlAndTimestamp, updateTimestamp } from 'redux/modules/controls';
 
 import './style.scss';
 
+const { app } = require('electron').remote;
+
 
 class Webview extends Component {
   static propTypes = {
@@ -170,6 +172,14 @@ class Webview extends Component {
     const proxyUrl = `http://webrecorder.proxy/local/collection/${timestamp}/${url}`;
     const classes = classNames('webview-wrapper', { loading });
 
+    const appPath = app.getAppPath();
+    let preloadPath;
+    if (process.env.NODE_ENV === 'production') {
+      preloadPath = path.resolve(appPath, '..', 'preload.js');
+    } else {
+      preloadPath = path.resolve(__dirname, '..', 'preload.js');
+    }
+
     return (
       <div className={classes}>
         <webview
@@ -178,7 +188,7 @@ class Webview extends Component {
           src={proxyUrl}
           autosize="on"
           plugins="true"
-          preload={`file://${path.join(__dirname, 'helpers/preload.js')}`}
+          preload={preloadPath}
           partition="persist:wr" />
       </div>
     );
