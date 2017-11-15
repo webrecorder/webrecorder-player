@@ -19,12 +19,16 @@ $collTrigger: rgb(0, 57, 229);
         margin-bottom: 4rem;
 
         h1 {
-            font-family: serif;
+            font-family: $serif;
             margin-top: 0;
         }
 
         hr {
             border-top: solid .3rem $yellow;
+        }
+
+        .coll-desc {
+            font-family: $sans;
         }
     }
 
@@ -38,6 +42,8 @@ $collTrigger: rgb(0, 57, 229);
         grid-template-areas:
             "sidebar utilities"
             "sidebar table";
+
+        font-family: $sans;
 
 
         .wr-coll-sidebar-container {

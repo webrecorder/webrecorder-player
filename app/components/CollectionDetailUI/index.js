@@ -195,7 +195,7 @@ class CollectionDetailUI extends Component {
           <header>
             <h1>{collection.get('title')}</h1>
             <hr />
-            <ReactMarkdown source={collection.get('desc')} />
+            <ReactMarkdown className="coll-desc" source={collection.get('desc')} />
           </header>
 
           <div className="wr-coll-container">

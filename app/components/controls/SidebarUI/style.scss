@@ -9,6 +9,7 @@ $collapsedWidth: 3rem;
     display: flex;
     flex-direction: column;
     min-width: $collapsedWidth;
+    font-family: $sans;
 
     &.animate {
         transition: width .4s ease-in-out;
