@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { asyncConnect } from 'redux-connect';
 
 import { isLoaded, load as loadColl } from 'redux/modules/collection';
@@ -22,7 +23,8 @@ class Replay extends Component {
     params: PropTypes.object,
     recordingIndex: PropTypes.number,
     timestamp: PropTypes.string,
-    url: PropTypes.string
+    url: PropTypes.string,
+    webviewLoading: PropTypes.bool
   };
 
   // TODO move to HOC
@@ -53,20 +55,24 @@ class Replay extends Component {
 
   render() {
     const { canGoBackward, canGoForward, dispatch,
-            host, params, timestamp, url } = this.props;
+            host, params, timestamp, url, webviewLoading } = this.props;
+
+    const classes = classNames('webview-wrapper', { loading: webviewLoading });
 
     return (
       <div className="webview-container">
         <Sidebar />
-        <Webview
-          key="webview"
-          host={host}
-          params={params}
-          dispatch={dispatch}
-          timestamp={timestamp}
-          canGoBackward={canGoBackward}
-          canGoForward={canGoForward}
-          url={url} />
+        <div className={classes}>
+          <Webview
+            key="webview"
+            host={host}
+            params={params}
+            dispatch={dispatch}
+            timestamp={timestamp}
+            canGoBackward={canGoBackward}
+            canGoForward={canGoForward}
+            url={url} />
+        </div>
       </div>
     );
   }
@@ -115,7 +121,8 @@ const mapStateToProps = ({ app }) => {
     timestamp: app.getIn(['controls', 'timestamp']),
     url: app.getIn(['controls', 'url']),
     canGoBackward: app.getIn(['appSettings', 'canGoBackward']),
-    canGoForward: app.getIn(['appSettings', 'canGoForward'])
+    canGoForward: app.getIn(['appSettings', 'canGoForward']),
+    webviewLoading: app.getIn(['controls','webviewLoading'])
   };
 };
 

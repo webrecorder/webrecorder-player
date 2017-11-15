@@ -10,6 +10,7 @@ const CTRLS_SET_URL = 'wr/ctrls/CTRLS_SET_URL';
 const CTRLS_SET_TS = 'wr/ctrls/CTRLS_SET_TS';
 const CTRLS_SET_TITLE = 'wr/ctrls/CTRLS_SET_TITLE';
 const CTRLS_SET_URL_TS = 'wr/ctrls/CTRLS_SET_URL_TS';
+const CTRLS_SET_WEBVIEW_LOADING = 'wr/ctrls/CTRLS_SET_WEBVIEW_LOADING';
 const CTRLS_CONFIG_PROXY = 'wr/ctrls/CTRLS_CONFIG_PROXY';
 const CTRLS_CONFIG_PROXY_SUCCESS = 'wr/ctrls/CTRLS_CONFIG_PROXY_SUCCESS';
 const CTRLS_CONFIG_PROXY_FAIL = 'wr/ctrls/CTRLS_CONFIG_PROXY_FAIL';
@@ -25,7 +26,8 @@ const initialState = fromJS({
   archivesLoading: false,
   archivesAccessed: null,
   archives: [],
-  archiveSources: []
+  archiveSources: [],
+  webviewLoading: true
 });
 
 export default function controls(state = initialState, action = {}) {
@@ -66,6 +68,8 @@ export default function controls(state = initialState, action = {}) {
         timestamp: action.ts,
         title: action.title
       });
+    case CTRLS_SET_WEBVIEW_LOADING:
+      return state.set('webviewLoading', action.bool);
 
     default:
       return state;
@@ -145,3 +149,9 @@ export function updateUrlAndTimestamp(url, ts, title) {
   };
 }
 
+export function webviewLoading(bool) {
+  return {
+    type: CTRLS_SET_WEBVIEW_LOADING,
+    bool
+  }
+}

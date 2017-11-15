@@ -8,7 +8,7 @@ import { ipcRenderer } from 'electron';
 import { openDroppedFile } from 'helpers/utils';
 
 import { setBrowserHistory } from 'redux/modules/appSettings';
-import { updateUrlAndTimestamp, updateTimestamp } from 'redux/modules/controls';
+import { updateUrlAndTimestamp, updateTimestamp, webviewLoading } from 'redux/modules/controls';
 
 import './style.scss';
 
@@ -38,7 +38,6 @@ class Webview extends Component {
     this.socket = null;
     this.webviewHandle = null;
     this.internalUpdate = false;
-    this.state = { loading: true };
   }
 
   componentDidMount() {
@@ -54,14 +53,14 @@ class Webview extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { timestamp, url } = this.props;
+    const { dispatch, timestamp, url } = this.props;
     // console.log(nextProps.url, url, nextProps.url === url, nextProps.timestamp, timestamp, nextProps.timestamp === timestamp)
 
     if (nextProps.url !== url || nextProps.timestamp !== timestamp) {
       if (!this.internalUpdate) {
         const proxyUrl = `http://webrecorder.proxy/local/collection/${nextProps.timestamp}/${nextProps.url}`;
         this.loadingTimeout();
-        this.setState({ loading: true });
+        dispatch(webviewLoading(true));
 
         this.webviewHandle.loadURL(proxyUrl);
       }
@@ -70,10 +69,7 @@ class Webview extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (nextState.loading !== this.state.loading) {
-      return true;
-    }
-
+    // never rerender to preserve browser history
     return false;
   }
 
@@ -88,7 +84,7 @@ class Webview extends Component {
   loadingTimeout = () => {
         // set a timeout in case loading never finishes
     clearTimeout(this.timeoutHandle);
-    this.timeoutHandle = setTimeout(() => { this.setState({loading: false})}, 15000);
+    this.timeoutHandle = setTimeout(() => { this.props.dispatch(webviewLoading(false)); }, 15000);
   }
 
   openDroppedFile = (filename) => {
@@ -117,7 +113,7 @@ class Webview extends Component {
         this.openDroppedFile(state.filename);
         break;
       case 'load':
-        this.setState({ loading: false });
+        dispatch(webviewLoading(false));
         this.addNewPage(state);
         break;
       case 'hashchange': {
@@ -156,7 +152,7 @@ class Webview extends Component {
   goBack = () => {
     if (this.webviewHandle.canGoBack()) {
       this.loadingTimeout();
-      this.setState({ loading: true});
+      this.props.dispatch(webviewLoading(true));
       this.webviewHandle.goToIndex(this.webviewHandle.getWebContents().getActiveIndex() - 1);
     }
   }
@@ -164,7 +160,7 @@ class Webview extends Component {
   goForward = () => {
     if (this.webviewHandle.canGoForward()) {
       this.loadingTimeout();
-      this.setState({ loading: true});
+      this.props.dispatch(webviewLoading(true));
       this.webviewHandle.goToIndex(this.webviewHandle.getWebContents().getActiveIndex() + 1);
     }
   }
@@ -174,10 +170,8 @@ class Webview extends Component {
   }
 
   render() {
-    const { loading } = this.state;
     const { timestamp, url } = this.props;
     const proxyUrl = `http://webrecorder.proxy/local/collection/${timestamp}/${url}`;
-    const classes = classNames('webview-wrapper', { loading });
 
     const appPath = app.getAppPath();
     let preloadPath;
@@ -188,16 +182,14 @@ class Webview extends Component {
     }
 
     return (
-      <div className={classes}>
-        <webview
-          id="replay"
-          ref={(obj) => { this.webviewHandle = obj; }}
-          src={proxyUrl}
-          autosize="on"
-          plugins="true"
-          preload={preloadPath}
-          partition="persist:wr" />
-      </div>
+      <webview
+        id="replay"
+        ref={(obj) => { this.webviewHandle = obj; }}
+        src={proxyUrl}
+        autosize="on"
+        plugins="true"
+        preload={preloadPath}
+        partition="persist:wr" />
     );
   }
 }
