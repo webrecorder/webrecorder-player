@@ -205,13 +205,10 @@ class CollectionDetailUI extends Component {
                   // selected flat bookmark
                   selectedBookmark &&
                     <div>
-                      Bookmark { selectedBookmarkIdx } selected.<br />
+                      <h4>Bookmark { selectedBookmarkIdx + 1 } of {collection.get('bookmarks').size } selected.</h4>
                       <div>
-                        {
-                          selectedBookmark.entrySeq().map((k) => {
-                            return <div key={k[0]}>{ k[0] }: { k[1] }</div>;
-                          })
-                        }
+                        <h5>{selectedBookmark.get('title')}</h5>
+                        <TimeFormat dt={selectedBookmark.get('timestamp')} />
                       </div>
                     </div>
                 }
@@ -219,26 +216,23 @@ class CollectionDetailUI extends Component {
                   // selected session
                   selectedSession && !selectedGroupedBookmark && !expandAll &&
                     <div>
-                      <b>{selectedSession.get('title')}</b>
+                      <h4>{selectedSession.get('title')}</h4>
                       <div>
                         {`${selectedSession.get('pages').size} bookmark${selectedSession.get('pages').size === 1 ? '' : 's'}`}
-                        <SizeFormat bytes={selectedSession.get('size')} />
+                        &nbsp;&ndash;&nbsp;<SizeFormat bytes={selectedSession.get('size')} />
                       </div>
                       <TimeFormat epoch={selectedSession.get('updated_at')} />
-                      <DurationFormat duration={parseInt(selectedSession.get('updated_at'), 10) - parseInt(selectedSession.get('created_at'), 10)} />
+                      <div>Dur. <DurationFormat duration={parseInt(selectedSession.get('updated_at'), 10) - parseInt(selectedSession.get('created_at'), 10)} /></div>
                     </div>
                 }
                 {
                   // selected grouped bookmark
                   selectedGroupedBookmark &&
                     <div>
-                      Bookmark { selectedGroupedBookmarkIdx } selected.<br />
+                      <h4>Bookmark { selectedGroupedBookmarkIdx + 1} of {selectedSession.size} selected.</h4>
                       <div>
-                        {
-                          selectedGroupedBookmark.entrySeq().map((k) => {
-                            return <div key={k[0]}>{ k[0] }: { k[1] }</div>;
-                          })
-                        }
+                        <h5>{selectedGroupedBookmark.get('title')}</h5>
+                        <TimeFormat dt={selectedGroupedBookmark.get('timestamp')} />
                       </div>
                     </div>
                 }

@@ -57,6 +57,14 @@ $collTrigger: rgb(0, 57, 229);
                 width: 100%;
                 overflow: auto;
 
+                h4 {
+                    margin: .7rem 0;
+                }
+
+                .recording-time-info {
+                    display: inline-block;
+                }
+
                 .recording-session {
                     transition: color 175ms ease-in-out;
                     display: block;
