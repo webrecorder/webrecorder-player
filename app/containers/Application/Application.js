@@ -7,6 +7,8 @@ import { openFile } from 'helpers/utils';
 
 import { Nav } from 'containers';
 
+import pkg from 'package.json';
+
 import 'shared/css/bootstrap-theme.min.css';
 import 'shared/css/bootstrap.min.css';
 
@@ -24,6 +26,10 @@ class Application extends Component {
     super(props);
 
     this.state = { error: false };
+  }
+
+  componentWillMount() {
+      document.title = `Webrecorder Player v${pkg.version}`;
   }
 
   componentDidMount() {
