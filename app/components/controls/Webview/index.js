@@ -60,11 +60,8 @@ class Webview extends Component {
     if (nextProps.url !== url || nextProps.timestamp !== timestamp) {
       if (!this.internalUpdate) {
         const proxyUrl = `http://webrecorder.proxy/local/collection/${nextProps.timestamp}/${nextProps.url}`;
+        this.loadingTimeout();
         this.setState({ loading: true });
-
-        // set a timeout in case loading never finishes
-        clearTimeout(this.loadingTimeout);
-        this.loadingTimeout = setTimeout(() => { this.setState({loading: false})}, 10000);
 
         this.webviewHandle.loadURL(proxyUrl);
       }
@@ -86,6 +83,12 @@ class Webview extends Component {
     window.removeEventListener('wr-go-back', this.goBack);
     window.removeEventListener('wr-go-forward', this.goForward);
     window.removeEventListener('wr-refresh', this.refresh);
+  }
+
+  loadingTimeout = () => {
+        // set a timeout in case loading never finishes
+    clearTimeout(this.timeoutHandle);
+    this.timeoutHandle = setTimeout(() => { this.setState({loading: false})}, 15000);
   }
 
   openDroppedFile = (filename) => {
@@ -152,12 +155,16 @@ class Webview extends Component {
 
   goBack = () => {
     if (this.webviewHandle.canGoBack()) {
+      this.loadingTimeout();
+      this.setState({ loading: true});
       this.webviewHandle.goToIndex(this.webviewHandle.getWebContents().getActiveIndex() - 1);
     }
   }
 
   goForward = () => {
     if (this.webviewHandle.canGoForward()) {
+      this.loadingTimeout();
+      this.setState({ loading: true});
       this.webviewHandle.goToIndex(this.webviewHandle.getWebContents().getActiveIndex() + 1);
     }
   }
