@@ -42,9 +42,19 @@ class SidebarUI extends Component {
       }
     }
 
+    let userWidth = 275;
+    if (inStorage('userSidebarWidth')) {
+      try {
+        userWidth = JSON.parse(getStorage('userSidebarWidth'));
+      } catch (e) {
+        console.log('Error retrieving userWidth', e);
+      }
+    }
+
     this.setState({
       defaultWidth: this.sidebarHandle.getBoundingClientRect().width,
-      expanded
+      expanded,
+      userWidth
     });
   }
 
@@ -79,6 +89,7 @@ class SidebarUI extends Component {
 
   endResize = () => {
     document.removeEventListener('mousemove', this.sidebarPosition);
+    setStorage('userSidebarWidth', this.state.userWidth);
     this.setState({ xPos: null });
   }
 

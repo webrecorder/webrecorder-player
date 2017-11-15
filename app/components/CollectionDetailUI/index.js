@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 import Column from 'react-virtualized/dist/commonjs/Table/Column';
 import Table from 'react-virtualized/dist/commonjs/Table';
+import ReactMarkdown from 'react-markdown';
 
 import { setSort } from 'redux/modules/collection';
 import { getStorage, inStorage, setStorage } from 'helpers/utils';
@@ -195,7 +195,7 @@ class CollectionDetailUI extends Component {
           <header>
             <h1>{collection.get('title')}</h1>
             <hr />
-            <p>{collection.get('desc')}</p>
+            <ReactMarkdown source={collection.get('desc')} />
           </header>
 
           <div className="wr-coll-container">

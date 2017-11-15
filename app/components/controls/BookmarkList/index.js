@@ -20,7 +20,7 @@ class BookmarkList extends Component {
     activeBookmark: PropTypes.number,
     bookmarks: PropTypes.object,
     dispatch: PropTypes.func,
-    searchBookmarks: PropTypes.object,
+    searchBookmarks: PropTypes.func,
     searchText: PropTypes.string
   }
 

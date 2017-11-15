@@ -59,6 +59,11 @@ class Webview extends Component {
       if (!this.internalUpdate) {
         const proxyUrl = `http://webrecorder.proxy/local/collection/${nextProps.timestamp}/${nextProps.url}`;
         this.setState({ loading: true });
+
+        // set a timeout in case loading never finishes
+        clearTimeout(this.loadingTimeout);
+        this.loadingTimeout = setTimeout(() => { this.setState({loading: false})}, 10000);
+
         this.webviewHandle.loadURL(proxyUrl);
       }
       this.internalUpdate = false;
