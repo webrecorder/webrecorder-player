@@ -94,7 +94,7 @@ export default class Nav extends Component {
         }
 
         <div className="player-functions">
-          <button onClick={this.sendOpenFile} className="button grow" title="Open file">
+          <button onClick={this.sendOpenFile} className="button grow openFile" title="Open file">
             <FileOpen />
           </button>
 

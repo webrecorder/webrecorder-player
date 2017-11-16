@@ -74,7 +74,9 @@ $collTrigger: rgb(0, 57, 229);
                     font-weight: 600;
 
                     &:disabled {
+                        font-style: italic;
                         font-weight: 400;
+                        opacity: 0.6;
                     }
 
                     &:not(:disabled):hover {

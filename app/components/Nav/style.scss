@@ -117,11 +117,14 @@ nav.topBar {
     opacity: 0;
   }
   .openFile {
-    transition: all 0.5s ease;
+    transition: rotation 0 none;
     height: 30px;
+    &:hover {
+      transform: rotate(-3deg);
+    }
   }
-  .halp {
-    height: 20px;
+  #help {
+    height: 24px;
   }
 
   #back {
