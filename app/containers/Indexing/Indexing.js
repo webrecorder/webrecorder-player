@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { basename } from 'path';
+import { createSearchAction } from 'redux-search';
 
 import { clearColl } from 'redux/modules/collection';
 
@@ -16,7 +17,8 @@ class Indexing extends Component {
 
   static propTypes = {
     host: PropTypes.string,
-    dispatch: PropTypes.func
+    dispatch: PropTypes.func,
+    searchBookmarks: PropTypes.func
   }
 
   constructor(props) {
@@ -29,7 +31,11 @@ class Indexing extends Component {
   }
 
   componentWillMount() {
-    this.props.dispatch(clearColl());
+    const { dispatch, searchBookmarks } = this.props;
+    dispatch(clearColl());
+
+    // clear search
+    dispatch(searchBookmarks(''));
   }
 
   componentDidMount() {
@@ -83,4 +89,14 @@ const mapStateToProps = ({ app }) => {
   };
 };
 
-export default connect(mapStateToProps)(Indexing);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    searchBookmarks: createSearchAction('bookmarks'),
+    dispatch
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Indexing);
