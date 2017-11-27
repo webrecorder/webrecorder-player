@@ -24,7 +24,7 @@ $collTrigger: rgb(0, 57, 229);
         }
 
         hr {
-            border-top: solid .3rem $brightGreen;
+            border-top: solid .3rem $yellow;
         }
 
         .coll-desc {
@@ -54,6 +54,8 @@ $collTrigger: rgb(0, 57, 229);
                 position: absolute;
                 top: 0;
                 bottom: 0;
+                border-right: 1px solid $slate;
+                padding-right: 1rem;
                 width: 100%;
                 overflow: auto;
 
@@ -64,6 +66,19 @@ $collTrigger: rgb(0, 57, 229);
                 .recording-time-info {
                     display: inline-block;
                 }
+
+                .recording-session-count {
+                  color: black;
+                  width: 100%;
+                  border-top: solid 4px $brightGreen;
+                  border-bottom: solid 1px $brightGreen;
+                  padding: 1rem 0 1rem 0;
+                  margin: 0 0 1.2rem 0;
+                }
+                  &:after {
+                    content :"";
+                    clear: both;
+                  }
 
                 .recording-session {
                     transition: color 175ms ease-in-out;
@@ -121,6 +136,16 @@ $collTrigger: rgb(0, 57, 229);
                     }
                 }
 
+                .react-toggle--checked {
+                  & .react-toggle-track{
+                    background-color: $brightGreen;
+                  }
+                  & .react-toggle-thumb {
+                    border-color: $brightGreen;
+
+                  }
+                }
+
                 .open-all {
                     transition: border-color 125ms ease-in-out;
                     border: solid .2rem #ccc;
@@ -152,6 +177,8 @@ $collTrigger: rgb(0, 57, 229);
                 border-width: 0 0 .1rem 0;
                 cursor: context-menu;
 
+                a { color: $blue; }
+
                 &.selected {
                     background-color: rgb(54, 54, 54);
                     color: #FFF;
@@ -161,7 +188,7 @@ $collTrigger: rgb(0, 57, 229);
                 }
 
                 &:not(.selected):hover {
-                    background: rgb(197, 197, 197);
+                    background: #eee;
                 }
             }
 
@@ -178,6 +205,8 @@ $collTrigger: rgb(0, 57, 229);
                         border: solid 0 #CCCFD5;
                         border-width: 0 0 .1rem 0;
                         cursor: context-menu;
+
+                        a { color: $blue }
 
                         &.selected {
                             background-color: rgb(54, 54, 54);

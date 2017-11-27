@@ -240,7 +240,7 @@ class CollectionDetailUI extends Component {
                   // collection info
                   !selectedBookmark && (!selectedSession || (expandAll && !selectedGroupedBookmark)) &&
                     <div>
-                      <b>{recordings.size} Recording{ recordings.size === 1 ? '' : 's'}:</b>
+                      <div className="recording-session-count">{recordings.size} Recording{ recordings.size === 1 ? '' : 's'}:</div>
                       {
                         recordings.map((rec) => {
                           return (
