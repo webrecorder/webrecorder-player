@@ -229,7 +229,7 @@ class CollectionDetailUI extends Component {
                   // selected grouped bookmark
                   selectedGroupedBookmark &&
                     <div>
-                      <h4>Bookmark { selectedGroupedBookmarkIdx + 1} of {selectedSession.size} selected.</h4>
+                      <h4>Bookmark #{ selectedGroupedBookmarkIdx + 1} of {selectedSession.size} selected.</h4>
                       <div>
                         <h5>{selectedGroupedBookmark.get('title')}</h5>
                         <TimeFormat dt={selectedGroupedBookmark.get('timestamp')} />
