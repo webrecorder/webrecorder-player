@@ -257,6 +257,7 @@ class CollectionDetailUI extends Component {
             </aside>
             <div className="wr-coll-utilities">
               <CollectionManagement
+                expandAll={expandAll}
                 groupDisplay={groupDisplay}
                 onToggle={this.onToggle}
                 toggleExpandAllSessions={this.toggleExpandAllSessions}
