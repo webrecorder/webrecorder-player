@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 import { List } from 'immutable';
 import { getSearchSelectors } from 'redux-search';
 
+import { untitledEntry } from 'config';
 import { rts } from 'helpers/utils';
 
 
@@ -163,7 +164,7 @@ export const getBookmarkTitle = createSelector(
   [timestampOrderedBookmarks, getTimestamp, getUrl],
   (bookmarks, ts, url) => {
     const idx = bkmSearch(bookmarks, ts, url);
-    return idx === -1 ? 'Untitled Document' : bookmarks.getIn([idx, 'title']);
+    return idx === -1 ? untitledEntry : bookmarks.getIn([idx, 'title']);
   }
 );
 

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router';
 
+import { untitledEntry } from 'config';
+
 import EditableString from 'components/EditableString';
 import TimeFormat from 'components/TimeFormat';
 import { capitalize, remoteBrowserMod } from 'helpers/utils';
@@ -32,7 +34,7 @@ export function LinkRenderer({ cellData, rowData, columnData: { collection } }) 
       to={`/${collection.get('user')}/${collection.get('id')}/${remoteBrowserMod(rowData.get('browser'), rowData.get('timestamp'))}/${rowData.get('url')}`}
       title={rowData.get('title')}>
       <EditableString
-        string={cellData || 'Untitled document'}
+        string={cellData || untitledEntry}
         className="edit-coll-title" />
     </Link>
   );

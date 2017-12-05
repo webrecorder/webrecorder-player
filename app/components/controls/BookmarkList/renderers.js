@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { untitledEntry } from 'config';
 import { buildDate } from 'helpers/utils';
 
 import { Collection } from 'components/icons';
@@ -8,7 +9,7 @@ import { Collection } from 'components/icons';
 export function BookmarkRenderer({ cellData, rowData }) {
   return (
     <div className="bookmark-title" title={buildDate(rowData.get('timestamp'))}>
-      <h2>{ cellData || 'Untitled document' }</h2>
+      <h2>{ cellData || untitledEntry }</h2>
       <span>{ rowData.get('url') }</span>
     </div>
   );

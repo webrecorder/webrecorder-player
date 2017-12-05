@@ -9,7 +9,7 @@ import TimeFormat from 'components/TimeFormat';
 import './style.scss';
 
 
-class PlaeryURLBarUI extends Component {
+class PlayerURLBarUI extends Component {
   static propTypes = {
     bookmarkTitle: PropTypes.string,
     dispatch: PropTypes.func,
@@ -73,4 +73,4 @@ class PlaeryURLBarUI extends Component {
   }
 }
 
-export default PlaeryURLBarUI;
+export default PlayerURLBarUI;
