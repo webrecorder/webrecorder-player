@@ -1,13 +1,18 @@
 const { ipcRenderer } = require('electron');
 
 document.addEventListener('DOMContentLoaded', (evt) => {
-  const state = {
-    wb_type: 'load',
-    url: window.wbinfo.url,
-    ts: window.wbinfo.timestamp
-  };
+  // if wbinfo is not present assume 404
+  if (typeof window.wbinfo !== 'undefined') {
+    const state = {
+      wb_type: 'load',
+      url: window.wbinfo.url,
+      ts: window.wbinfo.timestamp
+    };
 
-  ipcRenderer.sendToHost('load', state);
+    ipcRenderer.sendToHost('load', state);
+  } else {
+    ipcRenderer.sendToHost('not-found', {wb_type: 'not-found'});
+  }
 });
 
 document.addEventListener('hashchange', (evt) => {

@@ -116,6 +116,9 @@ class Webview extends Component {
         dispatch(webviewLoading(false));
         this.addNewPage(state);
         break;
+      case 'not-found':
+        dispatch(webviewLoading(false));
+        break;
       case 'hashchange': {
         let url = this.props.url.split('#', 1)[0];
         if (state.hash) {
