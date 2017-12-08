@@ -285,6 +285,12 @@ $collTrigger: rgb(0, 57, 229);
                     }
                 }
 
+                .badge {
+                    background-color: #0039e5;
+                    font-family: sans-serif;
+                    margin-left: .5rem;
+                }
+
                 h2 {
                     transition: color 200ms ease-in-out;
                     font-size: 1.4rem;
