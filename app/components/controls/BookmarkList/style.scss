@@ -14,16 +14,24 @@
         position: relative;
         flex-grow: 1;
 
-        &:before {
+        &:before, &:after {
             content: '';
             position: absolute;
-            top: 0;
             left: 0;
             width: calc(100% - 1rem);
             height: 3rem;
-            background: linear-gradient(0deg, rgba(255,255,255,0), #FFF 85%);
             z-index: 20;
             pointer-events: none;
+        }
+
+        &:before {
+            top: 0;
+            background: linear-gradient(0deg, rgba(255,255,255,0), #FFF 85%);
+        }
+
+        &:after {
+            bottom: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0), #FFF 85%);
         }
     }
 
