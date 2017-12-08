@@ -118,21 +118,25 @@ class CollectionDetailUI extends Component {
   }
 
   onExpandSession = (sesh) => {
-    this.setState({
-      selectedBookmark: null,
-      selectedGroupedBookmark: null,
-      selectedGroupedBookmarkIdx: null,
-      selectedSession: sesh
-    });
+    if (!this.state.expandAll) {
+      this.setState({
+        selectedBookmark: null,
+        selectedGroupedBookmark: null,
+        selectedGroupedBookmarkIdx: null,
+        selectedSession: sesh
+      });
+    }
   }
 
   onCollapseSession = () => {
-    this.setState({
-      selectedSession: null,
-      selectedGroupedBookmark: null,
-      selectedGroupedBookmarkIdx: null,
-      selectedRec: null
-    });
+    if (this.state.selectedSession) {
+      this.setState({
+        selectedSession: null,
+        selectedGroupedBookmark: null,
+        selectedGroupedBookmarkIdx: null,
+        selectedRec: null
+      });
+    }
   }
 
   search = (evt) => {
