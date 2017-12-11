@@ -54,7 +54,7 @@ $collTrigger: rgb(0, 57, 229);
                 content: '';
                 position: absolute;
                 left: 0;
-                width: calc(100% - 1rem);
+                width: calc(100% - 1.5rem);
                 height: 3rem;
                 z-index: 20;
                 pointer-events: none;
@@ -75,7 +75,7 @@ $collTrigger: rgb(0, 57, 229);
                 top: 0;
                 bottom: 0;
                 border-right: 1px solid $slate;
-                padding-right: 1rem;
+                padding-right: 1.5rem;
                 width: 100%;
                 overflow: auto;
 
