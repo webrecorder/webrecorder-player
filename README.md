@@ -40,7 +40,7 @@ To view your web archives offline, you can download them from [https://webrecord
 
 - clone this repository
 
-		$ git clone https://github.com/webrecorder/webrecorderplayer-electron/tree/readme
+		$ git clone https://github.com/webrecorder/webrecorderplayer-electron.git
 		$ cd webrecorderplayer-electron
 
 - install required npm modules
