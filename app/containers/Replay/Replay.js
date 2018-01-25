@@ -6,7 +6,6 @@ import { asyncConnect } from 'redux-connect';
 import { isLoaded, load as loadColl } from 'redux/modules/collection';
 import { getArchives, updateUrlAndTimestamp } from 'redux/modules/controls';
 import { resetStats } from 'redux/modules/infoStats';
-import { getBookmarkTitle } from 'redux/selectors';
 
 import { Sidebar } from 'containers';
 import { Webview } from 'components/controls';

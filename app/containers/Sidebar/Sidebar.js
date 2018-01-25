@@ -2,9 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createSearchAction } from 'redux-search';
 
-import { getActiveBookmark } from 'redux/selectors';
-import { getOrderedBookmarks, timestampOrderedBookmarkSearchResults } from 'redux/selectors';
-
+import { getActiveBookmark, getOrderedBookmarks,
+         timestampOrderedBookmarkSearchResults } from 'redux/selectors';
 
 import { SidebarUI } from 'components/controls';
 

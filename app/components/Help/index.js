@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ipcRenderer } from 'electron';
+import classNames from 'classnames';
 
 import './style.scss';
 
@@ -10,7 +11,12 @@ class Help extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { version: null };
+    this.state = {
+      version: null,
+      stdout: null,
+      showDebug: true,
+      debugHeight: null,
+    };
   }
 
   componentWillMount() {
@@ -23,11 +29,23 @@ class Help extends Component {
   }
 
   handleVersionResponse = (evt, arg) => {
-    this.setState({ version: arg.version });
+    const { version } = arg.config;
+    const { stdout } = arg;
+    this.setState({ version, stdout });
+
+    setTimeout(this.update, 100);
+  }
+
+  toggleDebug = () => {
+    this.setState({ showDebug: !this.state.showDebug });
+  }
+
+  update = () => {
+    this.setState({ debugHeight: this.debugBin.getBoundingClientRect().height, showDebug: false });
   }
 
   render() {
-    const { version } = this.state;
+    const { debugHeight, showDebug, stdout, version } = this.state;
 
     return (
       <div className="help-container" key="help">
@@ -50,13 +68,22 @@ class Help extends Component {
           <h5>How is this better than “Save As” in my browser?</h5>
           <p>Most modern web sites (especially social media sites) use complicated scripting and load resources only when the user is triggering certain actions. This can not be represented as files, while web archives were designed to handle the task.</p>
 
-          <h5>How is this better than taking screen shots of my browser?</h5>
+          <h5>How is this better than taking screenshots of my browser?</h5>
           <p>Screenshots are great, yet a web archive can provide much more context that reveals itself in interaction only.</p>
 
           <h5>Contact</h5><p><a href="mailto:support@webrecorder.io">  support@webrecorder.io</a></p>
 
           <h5>Version Info</h5>
           <p id="stack-version" dangerouslySetInnerHTML={{ __html: version || 'Loading...' }} />
+
+          <h5 className="debug-heading">Additional Debug Info</h5>
+          <button className="debug-toggle" onClick={this.toggleDebug}>{ showDebug ? 'collapse' : 'expand' }</button>
+          <div
+            className={classNames('stdout-debug', { open: showDebug })}
+            ref={(obj) => { this.debugBin = obj; }}
+            style={isNaN(debugHeight) ? {} : { height: showDebug ? debugHeight : 0 }}>
+            <p dangerouslySetInnerHTML={{ __html: stdout || 'No additional info' }} />
+          </div>
 
           <div className="support">
             <hr />

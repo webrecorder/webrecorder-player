@@ -82,7 +82,7 @@ class Webview extends Component {
   }
 
   loadingTimeout = () => {
-        // set a timeout in case loading never finishes
+    // set a timeout in case loading never finishes
     clearTimeout(this.timeoutHandle);
     this.timeoutHandle = setTimeout(() => { this.props.dispatch(webviewLoading(false)); }, 15000);
   }

@@ -35,7 +35,7 @@ ul {
 }
 
 @font-face {
-    font-family: Inknut Antiqua;
+    font-family: "Inknut Antiqua";
     src: url("shared/fonts/InknutAntiqua-Regular.ttf");
     font-weight: normal;
 }
@@ -63,13 +63,13 @@ ul {
     font-family: "HKGrotesk";
     src: url("shared/fonts/HKGrotesk-LightItalic.ttf");
     font-weight: 300;
+    font-style: italic;
 }
 
 @font-face {
     font-family: "HKGrotesk";
     src: url("shared/fonts/HKGrotesk-Light.ttf");
     font-weight: 300;
-    font-style: italic;
 }
 
 @font-face {

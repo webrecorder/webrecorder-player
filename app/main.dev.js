@@ -22,13 +22,14 @@ import packageInfo from '../package';
 
 let mainWindow = null;
 let pluginName;
-const pluginDir = 'plugins';
 let spawnOptions;
 let webrecorderProcess;
+let stdoutDebug = [];
 
 const projectDir = path.join(__dirname, '../');
 const stdio = ['ignore', 'pipe', 'ignore'];
 const wrConfig = {};
+const pluginDir = 'plugins';
 
 
 switch (process.platform) {
@@ -70,6 +71,7 @@ const registerOpenWarc = function () {
 
   ipcMain.on('open-warc', (event, argument) => {
     const warc = argument;
+    stdoutDebug = [];
     console.log(`warc file: ${warc}`);
 
     // notify renderer that we are initializing webrecorder binary
@@ -94,18 +96,19 @@ const registerOpenWarc = function () {
 
     let port;
 
-    const findPort = function (buff) {
-      if (!buff) {
-        return;
+    const findPort = function (rawBuff) {
+      const buff = rawBuff.toString();
+
+      stdoutDebug.push(buff);
+      if (stdoutDebug.length > 500) {
+        stdoutDebug.shift();
       }
 
-      buff = buff.toString();
+      if (!buff || port) {
+        return;
+      }
 
       console.log(buff);
-
-      if (port) {
-        return;
-      }
 
       const parts = buff.split('APP_HOST=http://localhost:');
       if (parts.length !== 2) {
@@ -229,5 +232,7 @@ app.on('ready', async () => {
 
 // renderer process communication
 ipcMain.on('async-call', (evt, arg) => {
-  evt.sender.send('async-response', wrConfig);
+  evt.sender.send('async-response', {
+    config: wrConfig,
+    stdout: stdoutDebug.join('<BR>').replace(/\n/g, '<BR>') });
 });

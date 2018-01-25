@@ -25,12 +25,14 @@ import './style.scss';
 class CollectionDetailUI extends Component {
   static propTypes = {
     bookmarks: PropTypes.object,
-    collection: PropTypes.object,
     browsers: PropTypes.object,
+    collection: PropTypes.object,
+    dispatch: PropTypes.func,
     auth: PropTypes.object,
     params: PropTypes.object,
     recordings: PropTypes.object,
-    searchText: PropTypes.string
+    searchText: PropTypes.string,
+    searchBookmarks: PropTypes.func
   };
 
   static contextTypes = {
@@ -65,7 +67,7 @@ class CollectionDetailUI extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // detect whether this was a state change to expanded recording session view
+    // detect whether this was a state change to expand recording session view
     if(!prevState.gourpedDisplay && this.state.groupDisplay && this.state.scrollToRec) {
       this.openAndScroll(this.state.scrollToRec);
     }
