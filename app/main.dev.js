@@ -89,10 +89,15 @@ const registerOpenWarc = function () {
     }
 
     webrecorderProcess = child_process.spawn(
-        webrecorder,
-        ['--no-browser', '--loglevel', 'error', '--cache-dir', '_warc_cache', '--port', 0, warc],
-        spawnOptions
-      );
+      webrecorder,
+      ['--no-browser', '--loglevel', 'error', '--cache-dir', '_warc_cache', '--port', 0, warc],
+      spawnOptions
+    );
+
+    // catch any errors spawning webrecorder binary and add to debug info
+    webrecorderProcess.on('error', (err) => {
+      stdoutDebug.push(`Error spawning ${webrecorder} binary:\n ${err}\n\n`);
+    });
 
     let port;
 

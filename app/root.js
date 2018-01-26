@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { applyRouterMiddleware, Router } from 'react-router';
+import { Router } from 'react-router';
 import { ReduxAsyncConnect } from 'redux-connect';
-import { useScroll } from 'react-router-scroll';
 
 
 function Root(props) {
@@ -13,15 +12,12 @@ function Root(props) {
       key={module.hot && new Date()}
       history={history}
       routes={routes}
-      render={(renderProps) => {
-        applyRouterMiddleware(useScroll);
-        return (
-          <ReduxAsyncConnect
-            {...renderProps}
-            helpers={{ client }}
-            filter={item => !item.deferred} />
-        );
-      }} />
+      render={renderProps =>
+        (<ReduxAsyncConnect
+          {...renderProps}
+          helpers={{ client }}
+          filter={item => !item.deferred} />)
+      } />
   );
 }
 
