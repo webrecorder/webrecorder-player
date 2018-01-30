@@ -1,7 +1,7 @@
 {
   "name": "webrecorderplayer-electron",
   "productName": "Webrecorder Player",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Webrecorder Player -- Standalone Web Archive Browser App",
   "main": "main.js",
   "scripts": {
