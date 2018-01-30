@@ -18,7 +18,8 @@ class Indexing extends Component {
   static propTypes = {
     host: PropTypes.string,
     dispatch: PropTypes.func,
-    searchBookmarks: PropTypes.func
+    searchBookmarks: PropTypes.func,
+    searchText: PropTypes.string
   }
 
   constructor(props) {
@@ -31,11 +32,13 @@ class Indexing extends Component {
   }
 
   componentWillMount() {
-    const { dispatch, searchBookmarks } = this.props;
+    const { dispatch, searchBookmarks, searchText } = this.props;
     dispatch(clearColl());
 
     // clear search
-    dispatch(searchBookmarks(''));
+    if (searchText) {
+      dispatch(searchBookmarks(''));
+    }
   }
 
   componentDidMount() {
@@ -83,9 +86,10 @@ class Indexing extends Component {
   }
 }
 
-const mapStateToProps = ({ app }) => {
+const mapStateToProps = ({ search, app }) => {
   return {
-    host: app.getIn(['appSettings', 'host'])
+    host: app.getIn(['appSettings', 'host']),
+    searchText: search.bookmarks.text
   };
 };
 

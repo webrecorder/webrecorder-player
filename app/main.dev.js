@@ -24,10 +24,10 @@ let mainWindow = null;
 let pluginName;
 let spawnOptions;
 let webrecorderProcess;
-let stdoutDebug = [];
+let debugOutput = [];
 
 const projectDir = path.join(__dirname, '../');
-const stdio = ['ignore', 'pipe', 'ignore'];
+const stdio = ['ignore', 'pipe', 'pipe'];
 const wrConfig = {};
 const pluginDir = 'plugins';
 
@@ -71,7 +71,7 @@ const registerOpenWarc = function () {
 
   ipcMain.on('open-warc', (event, argument) => {
     const warc = argument;
-    stdoutDebug = [];
+    debugOutput = [];
     console.log(`warc file: ${warc}`);
 
     // notify renderer that we are initializing webrecorder binary
@@ -96,7 +96,17 @@ const registerOpenWarc = function () {
 
     // catch any errors spawning webrecorder binary and add to debug info
     webrecorderProcess.on('error', (err) => {
-      stdoutDebug.push(`Error spawning ${webrecorder} binary:\n ${err}\n\n`);
+      debugOutput.push(`Error spawning ${webrecorder} binary:\n ${err}\n\n`);
+    });
+
+    // log any stderr notices
+    webrecorderProcess.stderr.on('data', (buff) => {
+      debugOutput.push(`stderr: ${buff.toString()}`);
+
+      // clip line buffer
+      if (debugOutput.length > 500) {
+        debugOutput.shift();
+      }
     });
 
     let port;
@@ -104,9 +114,11 @@ const registerOpenWarc = function () {
     const findPort = function (rawBuff) {
       const buff = rawBuff.toString();
 
-      stdoutDebug.push(buff);
-      if (stdoutDebug.length > 500) {
-        stdoutDebug.shift();
+      debugOutput.push(buff);
+
+      // clip line buffer
+      if (debugOutput.length > 500) {
+        debugOutput.shift();
       }
 
       if (!buff || port) {
@@ -239,5 +251,5 @@ app.on('ready', async () => {
 ipcMain.on('async-call', (evt, arg) => {
   evt.sender.send('async-response', {
     config: wrConfig,
-    stdout: stdoutDebug.join('<BR>').replace(/\n/g, '<BR>') });
+    stdout: debugOutput.join('<BR>').replace(/\n/g, '<BR>') });
 });
