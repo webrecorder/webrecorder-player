@@ -4,7 +4,7 @@
 node_modules
 python-binaries/webrecorder
 dll
-app/dist/
+app/static/
 
 app/main.prod.js
 app/main.prod.js.map
