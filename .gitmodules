@@ -1,0 +1,3 @@
+[submodule "webrecorder"]
+	path = webrecorder
+	url = https://github.com/webrecorder/webrecorder
