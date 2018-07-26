@@ -9,6 +9,8 @@
  * `./app/main.prod.js` using webpack. This gives us some performance wins.
  *
  */
+require('babel-polyfill');
+
 
 import { app, BrowserWindow, ipcMain, session } from 'electron';
 import child_process from 'child_process';
@@ -208,6 +210,7 @@ if (process.env.NODE_ENV === 'production') {
 
 if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
   require('electron-debug')();
+
   const p = path.join(__dirname, '..', 'app', 'node_modules');
   require('module').globalPaths.push(p);
 }
