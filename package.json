@@ -69,6 +69,7 @@
     "babel-register": "^6.24.1",
     "concurrently": "^3.5.0",
     "cross-env": "^5.1.1",
+    "dat-node": "^3.5.11",
     "electron": "^1.6.11",
     "electron-builder": "^19.13.0",
     "electron-debug": "^1.4.0",

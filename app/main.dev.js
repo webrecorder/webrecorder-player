@@ -14,6 +14,7 @@ require('babel-polyfill');
 
 import { app, BrowserWindow, ipcMain, session } from 'electron';
 import child_process from 'child_process';
+import Dat from 'dat-node';
 import path from 'path';
 import url from 'url';
 import windowStateKeeper from 'electron-window-state';
@@ -22,13 +23,15 @@ import MenuBuilder from './menu';
 import packageInfo from '../package';
 
 
+let debugOutput = [];
 let mainWindow = null;
 let pluginName;
+let port;
 let spawnOptions;
 let webrecorderProcess;
-let debugOutput = [];
 
 const projectDir = path.join(__dirname, '../');
+const webrecorderDir = path.join(projectDir, 'python-binaries', 'webrecorder');
 const stdio = ['ignore', 'pipe', 'pipe'];
 const wrConfig = {};
 const pluginDir = 'plugins';
@@ -58,11 +61,66 @@ app.commandLine.appendSwitch(
   path.join(projectDir, pluginDir, pluginName)
 );
 
-const registerOpenWarc = function () {
-  const webrecorder = path.join(projectDir, 'python-binaries', 'webrecorder');
+const findPort = function (rawBuff, source) {
+  const buff = rawBuff.toString();
 
+  debugOutput.push(buff);
+
+  // clip line buffer
+  if (debugOutput.length > 500) {
+    debugOutput.shift();
+  }
+
+  if (!buff || port) {
+    return;
+  }
+
+  console.log(buff);
+
+  const parts = buff.split('APP_HOST=http://localhost:');
+  if (parts.length !== 2) {
+    return;
+  }
+
+  port = parts[1].trim();
+
+  if (process.platform !== 'win32') {
+    webrecorderProcess.unref();
+  }
+
+  const appUrl = `http://localhost:${port}/`;
+
+  console.log(
+    `webrecorder is listening on: ${appUrl} (pid ${webrecorderProcess.pid}) `
+  );
+  Object.assign(wrConfig, { host: appUrl });
+
+  const sesh = session.fromPartition('persist:wr', { cache: true });
+  const proxy = `localhost:${port}`;
+  sesh.setProxy({ proxyRules: proxy }, () => {
+    mainWindow.webContents.send('indexing', { host: appUrl, source });
+  });
+};
+
+
+function killProcess() {
+  console.log('killing webrecorder?', Boolean(webrecorderProcess));
+  // if a previous webrecorder player is running, kill it
+  if (webrecorderProcess) {
+    if (process.platform === 'win32') {
+      child_process.execSync(
+        `taskkill /F /PID ${webrecorderProcess.pid} /T`
+      );
+    } else {
+      webrecorderProcess.kill('SIGINT');
+    }
+  }
+}
+
+
+const registerOpenWarc = function () {
   // get versions for stack
-  child_process.execFile(webrecorder, ['--version'], (err, stdout, stderr) => {
+  child_process.execFile(webrecorderDir, ['--version'], (err, stdout, stderr) => {
     const electronVersion = `electron ${process.versions.electron}<BR>
                              chrome ${process.versions.chrome}`;
     Object.assign(wrConfig, {
@@ -79,26 +137,17 @@ const registerOpenWarc = function () {
     // notify renderer that we are initializing webrecorder binary
     mainWindow.webContents.send('initializing');
 
-    // if a previous webrecorder player is running, kill it
-    if (webrecorderProcess) {
-      if (process.platform === 'win32') {
-        child_process.execSync(
-          `taskkill /F /PID ${webrecorderProcess.pid} /T`
-        );
-      } else {
-        webrecorderProcess.kill('SIGINT');
-      }
-    }
+    killProcess();
 
     webrecorderProcess = child_process.spawn(
-      webrecorder,
+      webrecorderDir,
       ['--no-browser', '--loglevel', 'error', '--cache-dir', '_warc_cache', '--port', 0, warc],
       spawnOptions
     );
 
     // catch any errors spawning webrecorder binary and add to debug info
     webrecorderProcess.on('error', (err) => {
-      debugOutput.push(`Error spawning ${webrecorder} binary:\n ${err}\n\n`);
+      debugOutput.push(`Error spawning ${webrecorderDir} binary:\n ${err}\n\n`);
     });
 
     // log any stderr notices
@@ -111,50 +160,7 @@ const registerOpenWarc = function () {
       }
     });
 
-    let port;
-
-    const findPort = function (rawBuff) {
-      const buff = rawBuff.toString();
-
-      debugOutput.push(buff);
-
-      // clip line buffer
-      if (debugOutput.length > 500) {
-        debugOutput.shift();
-      }
-
-      if (!buff || port) {
-        return;
-      }
-
-      console.log(buff);
-
-      const parts = buff.split('APP_HOST=http://localhost:');
-      if (parts.length !== 2) {
-        return;
-      }
-
-      port = parts[1].trim();
-
-      if (process.platform !== 'win32') {
-        webrecorderProcess.unref();
-      }
-
-      const appUrl = `http://localhost:${port}/`;
-
-      console.log(
-        `webrecorder is listening on: ${appUrl} (pid ${webrecorderProcess.pid}) `
-      );
-      Object.assign(wrConfig, { host: appUrl });
-
-      const sesh = session.fromPartition('persist:wr', { cache: true });
-      const proxy = `localhost:${port}`;
-      sesh.setProxy({ proxyRules: proxy }, () => {
-        mainWindow.webContents.send('indexing', { host: appUrl });
-      });
-    };
-
-    webrecorderProcess.stdout.on('data', findPort);
+    webrecorderProcess.stdout.on('data', (buff) => findPort(buff, warc));
   });
 };
 
@@ -255,4 +261,65 @@ ipcMain.on('async-call', (evt, arg) => {
   evt.sender.send('async-response', {
     config: wrConfig,
     stdout: debugOutput.join('<BR>').replace(/\n/g, '<BR>') });
+});
+
+
+ipcMain.on('sync-dat', (evt, datKey) => {
+  console.log('launching dat with key:', datKey)
+  const dlDir = path.join(app.getPath('downloads'), 'webrecorder-dat', datKey.replace('dat://', ''));
+
+  const openWarcDir = () => {
+    killProcess();
+
+    webrecorderProcess = child_process.spawn(
+      webrecorderDir,
+      ['--no-browser', '--loglevel', 'error', '--cache-dir', '_warc_cache', '--port', 0, '--coll-dir', dlDir],
+      spawnOptions
+    );
+
+    // catch any errors spawning webrecorder binary and add to debug info
+    webrecorderProcess.on('error', (err) => {
+      debugOutput.push(`Error spawning ${webrecorderDir} binary:\n ${err}\n\n`);
+    });
+
+    // log any stderr notices
+    webrecorderProcess.stderr.on('data', (buff) => {
+      debugOutput.push(`stderr: ${buff.toString()}`);
+
+      // clip line buffer
+      if (debugOutput.length > 500) {
+        debugOutput.shift();
+      }
+    });
+
+    webrecorderProcess.stdout.on('data', (buff) => findPort(buff, datKey));
+  }
+
+  Dat(dlDir, {key: datKey}, (err, dat) => {
+    dat.joinNetwork((err) => {
+      if (err) {
+        throw err;
+      }
+
+      if (!dat.network.connected || !dat.network.connecting) {
+        console.log('dat key not found');
+      }
+    });
+
+    mainWindow.webContents.send('initializing');
+
+    const stats = dat.trackStats();
+    let handle = null;
+
+    const up = () => {
+      const s = stats.get();
+      console.log(s);
+      clearTimeout(handle);
+
+      if (s.length > 0 && s.downloaded === s.length) {
+        handle = setTimeout(openWarcDir, 300);
+      }
+    }
+    stats.on('update', up);
+  });
 });
