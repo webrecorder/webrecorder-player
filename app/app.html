@@ -3,34 +3,10 @@
   <head>
     <meta charset="utf-8">
     <title>Webrecorder Player</title>
-    <script>
-      (function () {
-        if (!process.env.HOT) {
-          const link = document.createElement('link');
-          link.rel = 'stylesheet';
-          link.href = 'static/main.css';
-          // HACK: Writing the script path should be done with webpack
-          document.getElementsByTagName('head')[0].appendChild(link);
-        }
-      }());
-    </script>
+    <link rel="stylesheet" type="text/css" href="static/main.css">
   </head>
   <body>
     <div id="app"></div>
-    <script>
-      {
-        const scripts = [];
-
-        // Dynamically insert the bundled app script in the renderer process
-        const port = process.env.PORT || 1212;
-        scripts.push('static/main.js');
-
-        document.write(
-          scripts
-            .map(script => '<script defer src="' + script + '"><\/script>')
-            .join('')
-        );
-      }
-    </script>
+    <script type="text/javascript" src="static/main.js"></script>
   </body>
 </html>
