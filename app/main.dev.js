@@ -107,12 +107,14 @@ function killProcess() {
   console.log('killing webrecorder?', Boolean(webrecorderProcess));
   // if a previous webrecorder player is running, kill it
   if (webrecorderProcess) {
+    port = 0;
+
     if (process.platform === 'win32') {
       child_process.execSync(
         `taskkill /F /PID ${webrecorderProcess.pid} /T`
       );
     } else {
-      webrecorderProcess.kill('SIGINT');
+      webrecorderProcess.kill('SIGTERM');
     }
   }
 }
