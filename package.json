@@ -1,10 +1,12 @@
 {
   "name": "webrecorderplayer",
   "productName": "Webrecorder Player",
-  "version": "1.1.2",
+  "version": "2.0.0",
   "description": "Webrecorder Player -- Standalone Web Archive Browser App",
   "scripts": {
-    "build": "cd webrecorder/frontend && yarn install; npm run build-player",
+    "build": "concurrently \"npm run build-main\" \"npm run build-frontend\"",
+    "build-frontend": "cd webrecorder/frontend && yarn install; npm run build-player",
+    "build-main": "cross-env NODE_ENV=production DEBUG_PROD=false node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack/webpack.config.js --display-error-details --colors",
     "start": "cross-env NODE_ENV=production electron ./app",
     "start-dev": "cross-env NODE_ENV=development electron -r babel-register ./app/main.dev",
     "pack": "build --dir",
@@ -35,10 +37,9 @@
     "artifactName": "${name}-${version}.${ext}",
     "files": [
       "dist/",
-      "node_modules/",
       "app.html",
+      "static/",
       "main.prod.js",
-      "main.prod.js.map",
       "package.json"
     ],
     "extraResources": [
@@ -63,10 +64,12 @@
   },
   "dependencies": {
     "babel-core": "^6.24.1",
+    "babel-loader": "^7.1.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "babel-register": "^6.24.1",
+    "babili-webpack-plugin": "^0.1.2",
     "concurrently": "^3.5.0",
     "cross-env": "^5.1.1",
     "dat-node": "^3.5.11",
@@ -75,7 +78,8 @@
     "electron-debug": "^1.4.0",
     "electron-devtools-installer": "^2.2.1",
     "electron-publisher-s3": "^19.15.0",
-    "electron-window-state": "^4.1.1"
+    "electron-window-state": "^4.1.1",
+    "webpack": "3.10.0"
   },
   "devEngines": {
     "node": ">=7.x",

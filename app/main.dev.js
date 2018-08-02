@@ -15,6 +15,7 @@ require('babel-polyfill');
 import { app, BrowserWindow, ipcMain, session } from 'electron';
 import child_process from 'child_process';
 import Dat from 'dat-node';
+import fs from 'fs';
 import path from 'path';
 import url from 'url';
 import windowStateKeeper from 'electron-window-state';
@@ -137,7 +138,7 @@ const registerOpenWarc = function () {
     console.log(`warc file: ${warc}`);
 
     // notify renderer that we are initializing webrecorder binary
-    mainWindow.webContents.send('initializing');
+    mainWindow.webContents.send('initializing', { src: 'warc' });
 
     killProcess();
 
@@ -268,60 +269,67 @@ ipcMain.on('async-call', (evt, arg) => {
 
 ipcMain.on('sync-dat', (evt, datKey) => {
   console.log('launching dat with key:', datKey)
-  const dlDir = path.join(app.getPath('downloads'), 'webrecorder-dat', datKey.replace('dat://', ''));
+  const baseFolder = path.join(app.getPath('downloads'), 'webrecorder-dat');
 
-  const openWarcDir = () => {
-    killProcess();
+  fs.mkdir(baseFolder, (err) => {
+    if (err === null || err.code === 'EEXIST') {
+      const dlDir = path.join(baseFolder, datKey.replace('dat://', ''));
+      const openWarcDir = () => {
+        killProcess();
 
-    webrecorderProcess = child_process.spawn(
-      webrecorderDir,
-      ['--no-browser', '--loglevel', 'error', '--cache-dir', '_warc_cache', '--port', 0, '--coll-dir', dlDir],
-      spawnOptions
-    );
+        webrecorderProcess = child_process.spawn(
+          webrecorderDir,
+          ['--no-browser', '--loglevel', 'error', '--cache-dir', '_warc_cache', '--port', 0, '--coll-dir', dlDir],
+          spawnOptions
+        );
 
-    // catch any errors spawning webrecorder binary and add to debug info
-    webrecorderProcess.on('error', (err) => {
-      debugOutput.push(`Error spawning ${webrecorderDir} binary:\n ${err}\n\n`);
-    });
+        // catch any errors spawning webrecorder binary and add to debug info
+        webrecorderProcess.on('error', (err) => {
+          debugOutput.push(`Error spawning ${webrecorderDir} binary:\n ${err}\n\n`);
+        });
 
-    // log any stderr notices
-    webrecorderProcess.stderr.on('data', (buff) => {
-      debugOutput.push(`stderr: ${buff.toString()}`);
+        // log any stderr notices
+        webrecorderProcess.stderr.on('data', (buff) => {
+          debugOutput.push(`stderr: ${buff.toString()}`);
 
-      // clip line buffer
-      if (debugOutput.length > 500) {
-        debugOutput.shift();
-      }
-    });
+          // clip line buffer
+          if (debugOutput.length > 500) {
+            debugOutput.shift();
+          }
+        });
 
-    webrecorderProcess.stdout.on('data', (buff) => findPort(buff, datKey));
-  }
-
-  Dat(dlDir, {key: datKey}, (err, dat) => {
-    dat.joinNetwork((err) => {
-      if (err) {
-        throw err;
+        webrecorderProcess.stdout.on('data', (buff) => findPort(buff, datKey));
       }
 
-      if (!dat.network.connected || !dat.network.connecting) {
-        console.log('dat key not found');
-      }
-    });
+      Dat(dlDir, {key: datKey}, (err, dat) => {
+        dat.joinNetwork((err) => {
+          if (err) {
+            throw err;
+          }
 
-    mainWindow.webContents.send('initializing');
+          if (!dat.network.connected || !dat.network.connecting) {
+            console.log('dat key not found');
+            //mainWindow.loadURL(`file://${__dirname}/app.html`);
+          }
+        });
 
-    const stats = dat.trackStats();
-    let handle = null;
+        mainWindow.webContents.send('initializing', { src: 'dat' });
 
-    const up = () => {
-      const s = stats.get();
-      console.log(s);
-      clearTimeout(handle);
+        const stats = dat.trackStats();
+        let handle = null;
 
-      if (s.length > 0 && s.downloaded === s.length) {
-        handle = setTimeout(openWarcDir, 300);
-      }
+        const up = () => {
+          const s = stats.get();
+          clearTimeout(handle);
+
+          mainWindow.webContents.send('indexProgress', { perct: Math.round((s.downloaded / s.length) * 100) });
+
+          if (s.length > 0 && s.downloaded === s.length) {
+            handle = setTimeout(openWarcDir, 750);
+          }
+        }
+        stats.on('update', up);
+      });
     }
-    stats.on('update', up);
   });
 });
