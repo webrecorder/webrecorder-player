@@ -101,6 +101,13 @@ const findPort = function (rawBuff, source) {
   sesh.setProxy({ proxyRules: proxy }, () => {
     mainWindow.webContents.send('indexing', { host: appUrl, source });
   });
+
+  // Ensure Brotli Support
+  sesh.webRequest.onBeforeSendHeaders({}, (details, callback) => {
+    details.requestHeaders['Accept-Encoding'] = 'gzip, deflate, br';
+    callback({cancel: false, requestHeaders: details.requestHeaders});
+  });
+
 };
 
 
