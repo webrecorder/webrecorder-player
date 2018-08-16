@@ -270,7 +270,7 @@ app.on('ready', async () => {
 ipcMain.on('async-call', (evt, arg) => {
   evt.sender.send('async-response', {
     config: wrConfig,
-    stdout: debugOutput.join('<BR>').replace(/\n/g, '<BR>') });
+    stdout: debugOutput.join('<BR>').replace(/\n/g, '<BR>')});
 });
 
 
