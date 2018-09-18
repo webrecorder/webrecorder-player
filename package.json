@@ -1,7 +1,7 @@
 {
   "name": "webrecorderplayer",
   "productName": "Webrecorder Player",
-  "version": "2.0.0",
+  "version": "1.5.0",
   "description": "Webrecorder Player -- Standalone Web Archive Browser App",
   "scripts": {
     "build": "concurrently \"npm run build-main\" \"npm run build-frontend\"",
@@ -79,6 +79,7 @@
     "electron-devtools-installer": "^2.2.1",
     "electron-publisher-s3": "^19.15.0",
     "electron-window-state": "^4.1.1",
+    "node-sass": "^4.9.3",
     "webpack": "3.10.0"
   },
   "devEngines": {

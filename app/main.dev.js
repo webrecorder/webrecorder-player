@@ -32,7 +32,7 @@ let spawnOptions;
 let webrecorderProcess;
 
 const projectDir = path.join(__dirname, '../');
-const webrecorderDir = path.join(projectDir, 'python-binaries', 'webrecorder');
+const webrecorderBin = path.join(projectDir, 'python-binaries', 'webrecorder_player');
 const stdio = ['ignore', 'pipe', 'pipe'];
 const wrConfig = {};
 const pluginDir = 'plugins';
@@ -130,7 +130,7 @@ function killProcess() {
 
 const registerOpenWarc = function () {
   // get versions for stack
-  child_process.execFile(webrecorderDir, ['--version'], (err, stdout, stderr) => {
+  child_process.execFile(webrecorderBin, ['--version'], (err, stdout, stderr) => {
     const electronVersion = `electron ${process.versions.electron}<BR>
                              chrome ${process.versions.chrome}`;
     Object.assign(wrConfig, {
@@ -150,14 +150,14 @@ const registerOpenWarc = function () {
     killProcess();
 
     webrecorderProcess = child_process.spawn(
-      webrecorderDir,
+      webrecorderBin,
       ['--no-browser', '--loglevel', 'error', '--cache-dir', '_warc_cache', '--port', 0, warc],
       spawnOptions
     );
 
     // catch any errors spawning webrecorder binary and add to debug info
     webrecorderProcess.on('error', (err) => {
-      debugOutput.push(`Error spawning ${webrecorderDir} binary:\n ${err}\n\n`);
+      debugOutput.push(`Error spawning ${webrecorderBin} binary:\n ${err}\n\n`);
     });
 
     // log any stderr notices
@@ -285,14 +285,14 @@ ipcMain.on('sync-dat', (evt, datKey) => {
         killProcess();
 
         webrecorderProcess = child_process.spawn(
-          webrecorderDir,
+          webrecorderBin,
           ['--no-browser', '--loglevel', 'error', '--cache-dir', '_warc_cache', '--port', 0, '--coll-dir', dlDir],
           spawnOptions
         );
 
         // catch any errors spawning webrecorder binary and add to debug info
         webrecorderProcess.on('error', (err) => {
-          debugOutput.push(`Error spawning ${webrecorderDir} binary:\n ${err}\n\n`);
+          debugOutput.push(`Error spawning ${webrecorderBin} binary:\n ${err}\n\n`);
         });
 
         // log any stderr notices
