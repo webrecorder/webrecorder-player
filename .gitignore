@@ -2,7 +2,7 @@
 *~
 
 node_modules
-python-binaries/webrecorder
+python-binaries/*
 dll
 app/static/
 
