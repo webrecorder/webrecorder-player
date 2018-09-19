@@ -1,5 +1,5 @@
 environment:
-  nodejs_version: "7"
+  nodejs_version: "10"
   matrix:
     - platform: x32
       ARCH_SUFFIX: '-x86'
@@ -10,6 +10,7 @@ environment:
       ARCH_ARG: '--x64'
 
 install:
+  - git submodule -q update --init
   - ps: Install-Product node $env:nodejs_version
   - yarn install
 
@@ -18,7 +19,7 @@ install:
         (Get-Content package.json) -replace '"name": "(.*)"', $replace_name | Set-Content package.json
         (Get-Content .\app\package.json) -replace '"name": "(.*)"', $replace_name | Set-Content .\app\package.json
         $bucket = "https://s3.amazonaws.com/webrecorder-builds/webrecorder-player"
-        $destination = "$env:APPVEYOR_BUILD_FOLDER\python-binaries\webrecorder.exe"
+        $destination = "$env:APPVEYOR_BUILD_FOLDER\python-binaries\webrecorder_player.exe"
         $current_branch = "$bucket/$env:APPVEYOR_REPO_BRANCH/webrecorder-player-win-$env:platform.exe"
         $develop_branch = "$bucket/develop/webrecorder-player-win-$env:platform.exe"
 
