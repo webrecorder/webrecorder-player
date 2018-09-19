@@ -13,7 +13,6 @@ install:
   - git submodule -q update --init
   - ps: Install-Product node $env:nodejs_version
   - yarn install
-  - yarn run build
 
   - ps: |
         $replace_name = '"name": "$1' + "-win$env:ARCH_SUFFIX" + '"'
@@ -45,7 +44,7 @@ install:
 build_script:
   - ps: |
         if ($env:APPVEYOR_REPO_BRANCH -eq "master" -or $env:APPVEYOR_REPO_BRANCH -eq "prerelease") {
-          yarn run release -- $env:ARCH_ARG
+          npm run release -- $env:ARCH_ARG
         }
         else {
           npm run dist -- $env:ARCH_ARG
