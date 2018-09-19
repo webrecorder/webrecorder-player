@@ -57,6 +57,9 @@ install:
   - yarn install
   - yarn run build
 
+after_failure:
+  - cat ~/.npm/_logs/*.log
+
 script:
   - |
     if [[ $TRAVIS_BRANCH == 'master' || $TRAVIS_BRANCH == 'prerelease' ]]; then
