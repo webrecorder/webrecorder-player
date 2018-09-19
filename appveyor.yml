@@ -48,7 +48,7 @@ build_script:
           yarn run release -- $env:ARCH_ARG
         }
         else {
-          yarn run dist $env:ARCH_ARG
+          npm run dist -- $env:ARCH_ARG
         }
   - ps: "move dist/webrecorder-player*.* $env:APPVEYOR_BUILD_FOLDER/"
 
