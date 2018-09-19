@@ -3,11 +3,11 @@ matrix:
     - os: linux
       language: node_js
       node_js:
-        - "7"
+        - "10"
     - os: osx
       language: node_js
       node_js:
-        - "7"
+        - "10"
 
 env:
   global:
