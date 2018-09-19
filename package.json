@@ -5,7 +5,7 @@
   "description": "Webrecorder Player -- Standalone Web Archive Browser App",
   "scripts": {
     "build": "concurrently \"npm run build-main\" \"npm run build-frontend\"",
-    "build-frontend": "cd webrecorder/frontend && yarn install; npm run build-player",
+    "build-frontend": "cd webrecorder/frontend; yarn install; npm run build-player",
     "build-main": "cross-env NODE_ENV=production DEBUG_PROD=false node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack/webpack.config.js --display-error-details --colors",
     "start": "cross-env NODE_ENV=production electron ./app",
     "start-dev": "cross-env NODE_ENV=development electron -r babel-register ./app/main.dev",
