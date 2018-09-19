@@ -13,7 +13,7 @@ install:
   - git submodule -q update --init
   - ps: Install-Product node $env:nodejs_version
   - yarn install
-  - yarn run build
+  - ps: yarn run build
 
   - ps: |
         $replace_name = '"name": "$1' + "-win$env:ARCH_SUFFIX" + '"'
