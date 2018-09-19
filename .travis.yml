@@ -47,21 +47,22 @@ install:
   - |
     if curl -o /dev/null -s -I -f "$CURRENT_BRANCH"; then
           echo "downloading webrecorder artifact: $CURRENT_BRANCH";
-          curl -o python-binaries/webrecorder $CURRENT_BRANCH;
+          curl -o python-binaries/webrecorder_player $CURRENT_BRANCH;
     else
           echo "downloading webrecorder artifact: $DEVELOP_BRANCH";
-          curl -o python-binaries/webrecorder $DEVELOP_BRANCH;
+          curl -o python-binaries/webrecorder_player $DEVELOP_BRANCH;
     fi
-  - chmod +x python-binaries/webrecorder
-  - python-binaries/webrecorder -v
+  - chmod +x python-binaries/webrecorder_player
+  - python-binaries/webrecorder_player -v
   - yarn install
+  - yarn run build
 
 script:
   - |
     if [[ $TRAVIS_BRANCH == 'master' || $TRAVIS_BRANCH == 'prerelease' ]]; then
-      npm run release
+      yarn run release
     else
-      npm run dist
+      yarn run dist
     fi
   - mv ./dist/webrecorder-player-* $TRAVIS_BUILD_DIR/
 

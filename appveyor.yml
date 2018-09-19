@@ -12,13 +12,14 @@ environment:
 install:
   - ps: Install-Product node $env:nodejs_version
   - yarn install
+  - yarn run build
 
   - ps: |
         $replace_name = '"name": "$1' + "-win$env:ARCH_SUFFIX" + '"'
         (Get-Content package.json) -replace '"name": "(.*)"', $replace_name | Set-Content package.json
         (Get-Content .\app\package.json) -replace '"name": "(.*)"', $replace_name | Set-Content .\app\package.json
         $bucket = "https://s3.amazonaws.com/webrecorder-builds/webrecorder-player"
-        $destination = "$env:APPVEYOR_BUILD_FOLDER\python-binaries\webrecorder.exe"
+        $destination = "$env:APPVEYOR_BUILD_FOLDER\python-binaries\webrecorder_player.exe"
         $current_branch = "$bucket/$env:APPVEYOR_REPO_BRANCH/webrecorder-player-win-$env:platform.exe"
         $develop_branch = "$bucket/develop/webrecorder-player-win-$env:platform.exe"
 
@@ -43,10 +44,10 @@ install:
 build_script:
   - ps: |
         if ($env:APPVEYOR_REPO_BRANCH -eq "master" -or $env:APPVEYOR_REPO_BRANCH -eq "prerelease") {
-          npm run release -- $env:ARCH_ARG
+          yarn run release -- $env:ARCH_ARG
         }
         else {
-          npm run dist -- $env:ARCH_ARG
+          yarn run dist -- $env:ARCH_ARG
         }
   - ps: "move dist/webrecorder-player*.* $env:APPVEYOR_BUILD_FOLDER/"
 
