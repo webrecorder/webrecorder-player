@@ -3,17 +3,13 @@ const path = require('path');
 
 const options = {cwd: path.join('webrecorder', 'frontend'), stdio: 'inherit', shell: true};
 
-spawn('yarn install', [], options, (err, stdout, stderr) => {
-   if (err) {
-       console.error(err);
-       return;
-   }
+spawn('yarn install', [], options).on('exit', (code) => {
+  if (code != 0) {
+    return process.exit(code);
+  }
 
-   spawn('yarn run build-player', [], options, (err, stdout, stderr) => {
-       if (err) {
-           console.error(err);
-           return;
-       }
-       console.log(stdout);
-   });
+  spawn('yarn run build-player', [], options).on('exit', (code2) => {
+    return process.exit(code2);
+  });
 });
+
