@@ -1,5 +1,5 @@
 environment:
-  nodejs_version: "7"
+  nodejs_version: "10"
   matrix:
     - platform: x32
       ARCH_SUFFIX: '-x86'
@@ -10,6 +10,7 @@ environment:
       ARCH_ARG: '--x64'
 
 install:
+  - git submodule -q update --init
   - ps: Install-Product node $env:nodejs_version
   - yarn install
   - yarn run build
