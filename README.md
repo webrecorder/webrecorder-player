@@ -32,38 +32,56 @@ You can use free service [https://webrecorder.io](https://webrecorder.io) to cre
 To view your web archives offline, you can download them from [https://webrecorder.io](https://webrecorder.io) and use this app to browse your archives.
 
 
-
-
 ------
 
 ## Build locally
 
-- clone this repository
+Most of the code for Webrecorder, both backend and frontend is found in our main [webrecorder/webrecorder](https://github.com/webrecorder/webrecorder) repository.
+
+This repository includes the Electron wrapper and includes `webrecorder/webrecorder` as a submodule.
+Building locally requires Node and Python.
+
+
+1) Clone this repository with submodules:
+
+		$ git clone --recurse-submodules https://github.com/webrecorder/webrecorderplayer-electron
+   or for older versions of git:
 
 		$ git clone https://github.com/webrecorder/webrecorderplayer-electron.git
-		$ cd webrecorderplayer-electron
+ 
+		$ git submodule update --init --recursive
+		
 
-- install required npm modules
+2) Switch to the directory and install node modules (`yarn` or `npm` should work):
 
-		$ npm install
+		$ cd webrecorderplayer-electron; yarn install
+		
+3) Build the Webrecorder python binary by running the build script. This requires Python 3.5+:
 
-- copy a release of python *webrecorder-player* into `./python-binaries`. You can obtain pre-built python binaries here:
-  - [OS X](https://s3.amazonaws.com/webrecorder-builds/webrecorder-player/develop/webrecorder-player-osx)
-  - [Windows 32-bit](https://s3.amazonaws.com/webrecorder-builds/webrecorder-player/develop/webrecorder-player-win-x32.exe)
-  - [Windows 64-bit](https://s3.amazonaws.com/webrecorder-builds/webrecorder-player/develop/webrecorder-player-win-x64.exe)
-  - [Linux](https://s3.amazonaws.com/webrecorder-builds/webrecorder-player/develop/webrecorder-player-linux)
+		$ bash ./build-wr.sh
+
+   Alternatively, you can manually download the latest python binary, placing it into ``python-binaries/webrecorder_player``. You can obtain pre-built python binaries here:
+     - [OS X](https://s3.amazonaws.com/webrecorder-builds/webrecorder-player/master/webrecorder-player-osx)
+     - [Windows 32-bit](https://s3.amazonaws.com/webrecorder-builds/webrecorder-player/master/webrecorder-player-win-x32.exe)
+     - [Windows 64-bit](https://s3.amazonaws.com/webrecorder-builds/webrecorder-player/master/webrecorder-player-win-x64.exe)
+     - [Linux](https://s3.amazonaws.com/webrecorder-builds/webrecorder-player/master/webrecorder-player-linux)
   
-  Or, you can compile the [Webrecorder](https://github.com/webrecorder/webrecorder) python binary following instructions found in the `build-macos.sh`.
+  
+4) (Optional) if you want to enable Flash you have to copy a flash plugin into `./plugins`.
 
-- if you want to enable Flash you have to copy a flash plugin into `./plugins`. Follow these [instructions](plugins/README.md) to find a local copy of PepperFlashPlugin in Chrome/Chromium
+   Follow these [instructions](plugins/README.md) to find a local copy of PepperFlashPlugin in Chrome/Chromium
 
-- start the player
+5) Build the electron and webrecorder packages:
 
-    	$ npm start
+		$ yarn run build
+	
+6) To start in Dev mode run:
 
-- package the player. a self-packaged version for you environment (linux, macos, windows) will be saved in `./dist`
+		$ yarn run start-dev
 
-        $ npm run dist
+7) A final packaged binary version of Webrecorder Player can be created for your environment (Linux, OSX, Windows) and placed in `./dist` by running:
+
+		$ yarn run dist
 
 ## Contact
 
