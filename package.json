@@ -1,7 +1,7 @@
 {
   "name": "webrecorderplayer",
   "productName": "Webrecorder Player",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Webrecorder Player -- Standalone Web Archive Browser App",
   "scripts": {
     "build": "concurrently \"npm run build-main\" \"npm run build-frontend\"",
@@ -61,7 +61,14 @@
     "directories": {
       "buildResources": "build",
       "output": "dist"
-    }
+    },
+    "fileAssociations": [
+      {"ext": ["warc", "arc", "har", "warc.gz", "arc.gz"],
+       "name": "Web Archives",
+       "description": "Web Archives",
+       "role": "Viewer"
+      }
+    ]
   },
   "dependencies": {
     "babel-core": "^6.24.1",

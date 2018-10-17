@@ -1,7 +1,7 @@
 {
   "name": "webrecorder-player",
   "productName": "Webrecorder Player",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Webrecorder Player -- Standalone Web Archive Browser App",
   "main": "./main.prod.js",
   "scripts": {
