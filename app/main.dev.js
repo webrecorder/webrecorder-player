@@ -152,6 +152,9 @@ const openWarc = (warc) => {
   openNextFile = null;
   console.log(`warc file: ${warc}`);
 
+  // move to homepage
+  mainWindow.webContents.send('change-location', '/');
+
   // notify renderer that we are initializing webrecorder binary
   mainWindow.webContents.send('initializing', { src: 'warc' });
 
