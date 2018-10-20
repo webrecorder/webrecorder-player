@@ -62,7 +62,7 @@ after_failure:
 
 script:
   - |
-    if [[ $TRAVIS_BRANCH == 'master' || $TRAVIS_BRANCH == 'prerelease' ]]; then
+    if [[ $TRAVIS_BRANCH == 'master' || $TRAVIS_BRANCH == 'prerelease' || $TRAVIS_BRANCH == 'player-refresh' ]]; then
       yarn run release
     else
       yarn run dist

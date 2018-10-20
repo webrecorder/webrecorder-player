@@ -43,7 +43,7 @@ install:
 
 build_script:
   - ps: |
-        if ($env:APPVEYOR_REPO_BRANCH -eq "master" -or $env:APPVEYOR_REPO_BRANCH -eq "prerelease") {
+        if ($env:APPVEYOR_REPO_BRANCH -eq "master" -or $env:APPVEYOR_REPO_BRANCH -eq "prerelease" -or $env:APPVEYOR_REPO_BRANCH -eq "player-refresh") {
           npm run release -- $env:ARCH_ARG
         }
         else {
