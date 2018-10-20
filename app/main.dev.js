@@ -138,7 +138,7 @@ const registerOpenWarc = function () {
                              chrome ${process.versions.chrome}`;
     Object.assign(wrConfig, {
       version: `webrecorder player ${packageInfo.version}<BR>
-                ${stdout.replace('\n', '<BR>').replace(EXE_NAME, 'webrecorder')}<BR>${electronVersion}`
+                ${stdout.replace(/\n/g, '<BR>').replace(EXE_NAME, 'webrecorder')}<BR>${electronVersion}`
     });
   });
 
@@ -216,7 +216,7 @@ const createWindow = function () {
 
     if (openNextFile) {
       openWarc(openNextFile);
-    } else if (process.argv.length > 1) {
+    } else if (process.argv.length > 1 && !process.argv[1].startsWith('-psn')) {
       openWarc(process.argv[1]);
     }
 
