@@ -1,11 +1,12 @@
 {
   "name": "webrecorderplayer",
   "productName": "Webrecorder Player",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Webrecorder Player -- Standalone Web Archive Browser App",
   "scripts": {
     "build": "concurrently \"npm run build-main\" \"npm run build-frontend\"",
     "build-frontend": "node build-frontend.js",
+    "build-frontend-dev": "cd webrecorder/frontend && yarn install; yarn run build-player-dev",
     "build-main": "cross-env NODE_ENV=production DEBUG_PROD=false node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack/webpack.config.js --display-error-details --colors",
     "start": "cross-env NODE_ENV=production electron ./app",
     "start-dev": "cross-env NODE_ENV=development electron -r babel-register ./app/main.dev",
@@ -60,7 +61,14 @@
     "directories": {
       "buildResources": "build",
       "output": "dist"
-    }
+    },
+    "fileAssociations": [
+      {"ext": ["warc", "arc", "har", "warc.gz", "arc.gz"],
+       "name": "Web Archives",
+       "description": "Web Archives",
+       "role": "Viewer"
+      }
+    ]
   },
   "dependencies": {
     "babel-core": "^6.24.1",

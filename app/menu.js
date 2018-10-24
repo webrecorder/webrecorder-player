@@ -93,7 +93,7 @@ export default class MenuBuilder {
       label: 'Window',
       submenu: [
         { label: 'Minimize', accelerator: 'Command+M', selector: 'performMiniaturize:' },
-        { label: 'Close', accelerator: 'Command+W', selector: 'performClose:' },
+        { label: 'Quit', accelerator: 'Command+Q', click: () => { app.quit(); } },
         { type: 'separator' },
         { label: 'Bring All to Front', selector: 'arrangeInFront:' }
       ]

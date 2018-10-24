@@ -30,9 +30,12 @@ let pluginName;
 let port;
 let spawnOptions;
 let webrecorderProcess;
+let openNextFile = null;
+
 
 const projectDir = path.join(__dirname, '../');
-const webrecorderBin = path.join(projectDir, 'python-binaries', 'webrecorder_player');
+const EXE_NAME = 'webrecorder_player';
+const webrecorderBin = path.join(projectDir, 'python-binaries', EXE_NAME);
 const stdio = ['ignore', 'pipe', 'pipe'];
 const wrConfig = {};
 const pluginDir = 'plugins';
@@ -135,43 +138,50 @@ const registerOpenWarc = function () {
                              chrome ${process.versions.chrome}`;
     Object.assign(wrConfig, {
       version: `webrecorder player ${packageInfo.version}<BR>
-                ${stdout.replace('\n', '<BR>')}<BR>${electronVersion}`
+                ${stdout.replace(/\n/g, '<BR>').replace(EXE_NAME, 'webrecorder')}<BR>${electronVersion}`
     });
   });
 
   ipcMain.on('open-warc', (event, argument) => {
-    const warc = argument;
-    debugOutput = [];
-    console.log(`warc file: ${warc}`);
-
-    // notify renderer that we are initializing webrecorder binary
-    mainWindow.webContents.send('initializing', { src: 'warc' });
-
-    killProcess();
-
-    webrecorderProcess = child_process.spawn(
-      webrecorderBin,
-      ['--no-browser', '--loglevel', 'error', '--cache-dir', '_warc_cache', '--port', 0, warc],
-      spawnOptions
-    );
-
-    // catch any errors spawning webrecorder binary and add to debug info
-    webrecorderProcess.on('error', (err) => {
-      debugOutput.push(`Error spawning ${webrecorderBin} binary:\n ${err}\n\n`);
-    });
-
-    // log any stderr notices
-    webrecorderProcess.stderr.on('data', (buff) => {
-      debugOutput.push(`stderr: ${buff.toString()}`);
-
-      // clip line buffer
-      if (debugOutput.length > 500) {
-        debugOutput.shift();
-      }
-    });
-
-    webrecorderProcess.stdout.on('data', (buff) => findPort(buff, warc));
+    openWarc(argument);
   });
+};
+
+const openWarc = (warc) => {
+  debugOutput = [];
+  openNextFile = null;
+  console.log(`warc file: ${warc}`);
+
+  // move to homepage
+  mainWindow.webContents.send('change-location', '/');
+
+  // notify renderer that we are initializing webrecorder binary
+  mainWindow.webContents.send('initializing', { src: 'warc' });
+
+  killProcess();
+
+  webrecorderProcess = child_process.spawn(
+    webrecorderBin,
+    ['--no-browser', '--loglevel', 'error', '--cache-dir', '_warc_cache', '--port', 0, warc],
+    spawnOptions
+  );
+
+  // catch any errors spawning webrecorder binary and add to debug info
+  webrecorderProcess.on('error', (err) => {
+    debugOutput.push(`Error spawning ${webrecorderBin} binary:\n ${err}\n\n`);
+  });
+
+  // log any stderr notices
+  webrecorderProcess.stderr.on('data', (buff) => {
+    debugOutput.push(`stderr: ${buff.toString()}`);
+
+    // clip line buffer
+    if (debugOutput.length > 500) {
+      debugOutput.shift();
+    }
+  });
+
+  webrecorderProcess.stdout.on('data', (buff) => findPort(buff, warc));
 };
 
 const createWindow = function () {
@@ -200,7 +210,19 @@ const createWindow = function () {
   mainWindowState.manage(mainWindow);
 
   // show the window once its content is ready to go
-  mainWindow.once('ready-to-show', () => mainWindow.show());
+  mainWindow.once('ready-to-show', () => {
+    // init session earlier
+    const sesh = session.fromPartition('persist:wr', { cache: true });
+
+    if (openNextFile) {
+      openWarc(openNextFile);
+    } else if (process.argv.length > 1 && !process.argv[1].startsWith('-psn')) {
+      openWarc(process.argv[1]);
+    }
+
+    mainWindow.show()
+
+  });
 
   // load the application into the main window
   mainWindow.loadURL(`file://${__dirname}/app.html`);
@@ -254,6 +276,17 @@ app.on('window-all-closed', () => {
 });
 
 
+app.on('will-finish-launching', function() {
+  app.on('open-file', function(event, filePath) {
+    event.preventDefault();
+    openNextFile = filePath;
+    if (mainWindow) {
+      openWarc(openNextFile);
+    }
+  });
+});
+
+
 app.on('ready', async () => {
   if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
     await installExtensions();
@@ -264,6 +297,7 @@ app.on('ready', async () => {
 
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
+
 });
 
 // renderer process communication
