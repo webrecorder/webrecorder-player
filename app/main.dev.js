@@ -216,7 +216,7 @@ const createWindow = function () {
 
     if (openNextFile) {
       openWarc(openNextFile);
-    } else if (process.argv.length > 1 && !process.argv[1].startsWith('-psn')) {
+    } else if (process.argv.length == 2 && !process.argv[1].startsWith('-psn')) {
       openWarc(process.argv[1]);
     }
 
@@ -274,6 +274,17 @@ const installExtensions = async () => {
 app.on('window-all-closed', () => {
   app.quit();
 });
+
+// Ensure new-window urls are just opened directly in the webview
+app.on('web-contents-created', (e, contents) => {
+  if (contents.getType() == 'webview') {
+    // Listen for any new window events on the webview
+    contents.on('new-window', (e, url) => {
+      e.preventDefault();
+      contents.loadURL(url);
+    })
+  }
+})
 
 
 app.on('will-finish-launching', function() {
