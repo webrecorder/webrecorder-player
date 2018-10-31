@@ -61,7 +61,7 @@ export default class MenuBuilder {
     const subMenuFile = {
       label: 'File',
       submenu: [
-        { label: 'Open', click: () => { this.mainWindow.webContents.send('open-warc-dialog'); }}
+        { label: 'Open...', accelerator: 'Command+O', click: () => { this.mainWindow.webContents.send('open-warc-dialog'); }}
       ]
     };
     const subMenuEdit = {
