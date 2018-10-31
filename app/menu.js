@@ -79,6 +79,7 @@ export default class MenuBuilder {
     const subMenuViewDev = {
       label: 'View',
       submenu: [
+        { label: 'Toggle Developer Tools', accelerator: 'Alt+Ctrl+I', click: () => { this.mainWindow.toggleDevTools(); }},
         { label: 'Reload', accelerator: 'Command+R', click: () => { this.mainWindow.webContents.reload(); } },
         { label: 'Toggle Full Screen', accelerator: 'Ctrl+Command+F', click: () => { this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen()); } }
       ]
@@ -86,6 +87,7 @@ export default class MenuBuilder {
     const subMenuViewProd = {
       label: 'View',
       submenu: [
+        { label: 'Toggle Developer Tools', accelerator: 'Alt+Ctrl+I', click: () => { this.mainWindow.toggleDevTools(); }},
         { label: 'Toggle Full Screen', accelerator: 'Ctrl+Command+F', click: () => { this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen()); } }
       ]
     };
@@ -127,7 +129,7 @@ export default class MenuBuilder {
         label: '&Open',
         click: () => { this.mainWindow.webContents.send('open-warc-dialog'); }
       }, {
-        label: '&Close',
+        label: '&Quit',
         accelerator: 'Ctrl+W',
         click: () => {
           this.mainWindow.close();
