@@ -79,8 +79,8 @@ export default class MenuBuilder {
     const subMenuViewDev = {
       label: 'View',
       submenu: [
-        { label: 'Toggle App Developer Tools', accelerator: 'Alt+Ctrl+I', click: () => { this.mainWindow.toggleDevTools(); }},
-        { label: 'Toggle Page Developer Tools', accelerator: 'Alt+Ctrl+J', click: () => { this.mainWindow.webContents.send('toggle-devtools'); }},
+        { label: 'Toggle App Developer Tools', accelerator: 'Alt+Ctrl+J', click: () => { this.mainWindow.toggleDevTools(); }},
+        { label: 'Toggle Page Developer Tools', accelerator: 'Alt+Ctrl+I', click: () => { this.mainWindow.webContents.send('toggle-devtools'); }},
         { label: 'Reload', accelerator: 'Command+R', click: () => { this.mainWindow.webContents.reload(); } },
         { label: 'Toggle Full Screen', accelerator: 'Ctrl+Command+F', click: () => { this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen()); } }
       ]
@@ -88,7 +88,7 @@ export default class MenuBuilder {
     const subMenuViewProd = {
       label: 'View',
       submenu: [
-        { label: 'Toggle Page Developer Tools', accelerator: 'Alt+Ctrl+J', click: () => { this.mainWindow.webContents.send('toggle-devtools'); }},
+        { label: 'Toggle Page Developer Tools', accelerator: 'Alt+Ctrl+I', click: () => { this.mainWindow.webContents.send('toggle-devtools'); }},
         { label: 'Toggle Full Screen', accelerator: 'Ctrl+Command+F', click: () => { this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen()); } }
       ]
     };
