@@ -79,9 +79,9 @@ export default class MenuBuilder {
     const subMenuViewDev = {
       label: 'View',
       submenu: [
+        { label: 'Reload', accelerator: 'Command+R', click: () => { this.mainWindow.webContents.reload(); } },
         { label: 'Toggle App Developer Tools', accelerator: 'Alt+Ctrl+J', click: () => { this.mainWindow.toggleDevTools(); }},
         { label: 'Toggle Page Developer Tools', accelerator: 'Alt+Ctrl+I', click: () => { this.mainWindow.webContents.send('toggle-devtools'); }},
-        { label: 'Reload', accelerator: 'Command+R', click: () => { this.mainWindow.webContents.reload(); } },
         { label: 'Toggle Full Screen', accelerator: 'Ctrl+Command+F', click: () => { this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen()); } }
       ]
     };
@@ -96,7 +96,6 @@ export default class MenuBuilder {
       label: 'Window',
       submenu: [
         { label: 'Minimize', accelerator: 'Command+M', selector: 'performMiniaturize:' },
-        { label: 'Quit', accelerator: 'Command+Q', click: () => { app.quit(); } },
         { type: 'separator' },
         { label: 'Bring All to Front', selector: 'arrangeInFront:' }
       ]
@@ -124,57 +123,35 @@ export default class MenuBuilder {
   }
 
   buildDefaultTemplate() {
-    const templateDefault = [{
-      label: '&File',
-      submenu: [{
-        label: '&Open',
-        click: () => { this.mainWindow.webContents.send('open-warc-dialog'); }
-      }, {
-        label: '&Quit',
-        accelerator: 'Ctrl+W',
-        click: () => {
-          this.mainWindow.close();
-        }
-      }]
-    }, {
-      label: '&View',
-      submenu: (process.env.NODE_ENV === 'development') ? [{
-        label: '&Reload',
-        accelerator: 'Ctrl+R',
-        click: () => {
-          this.mainWindow.webContents.reload();
-        }
-      }, {
-        label: 'Toggle &Full Screen',
-        accelerator: 'F11',
-        click: () => {
-          this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
-        }
-      }, {
-        label: 'Toggle &Developer Tools',
-        accelerator: 'Alt+Ctrl+I',
-        click: () => {
-          this.mainWindow.toggleDevTools();
-        }
-      }] : [{
-        label: 'Toggle &Full Screen',
-        accelerator: 'F11',
-        click: () => {
-          this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
-        }
-      }]
-    }, {
-      label: 'Help',
-      submenu: [{
-        label: 'Learn More',
-        click: () => { this.mainWindow.webContents.send('change-location', '/help'); }
-      }, {
-        label: 'Webrecorder.io',
-        click() {
-          shell.openExternal('https://webrecorder.io');
-        }
-      }]
-    }];
+    const templateDefault = [
+      {
+        label: '&File',
+        submenu: [
+          { label: 'Open', accelerator: 'Ctrl+O', click: () => { this.mainWindow.webContents.send('open-warc-dialog'); } }
+        ]
+      },
+      {
+        label: '&View',
+        submenu:
+          (process.env.NODE_ENV === 'development') ? [
+            { label: 'Reload', accelerator: 'Ctrl+R', click: () => { this.mainWindow.webContents.reload(); } },
+            { label: 'Toggle Page Developer Tools', accelerator: 'Alt+Ctrl+I', click: () => { this.mainWindow.webContents.send('toggle-devtools'); }},
+            { label: 'Toggle App Developer Tools', accelerator: 'Alt+Ctrl+J', click: () => { this.mainWindow.toggleDevTools(); } },
+            { label: 'Toggle Full Screen', accelerator: 'F11', click: () => { this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());} }
+          ] :
+          [
+            { label: 'Toggle Page Developer Tools', accelerator: 'Alt+Ctrl+I', click: () => { this.mainWindow.webContents.send('toggle-devtools'); } },
+            { label: 'Toggle Full Screen', accelerator: 'F11', click: () => { this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen()); } }
+          ]
+      },
+      {
+        label: '&Help',
+        submenu: [
+          { label: 'Learn More', click: () => { this.mainWindow.webContents.send('change-location', '/help'); } },
+          { label: 'Webrecorder.io', click() { shell.openExternal('https://webrecorder.io'); }
+        }]
+      }
+    ];
 
     return templateDefault;
   }
