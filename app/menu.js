@@ -61,7 +61,7 @@ export default class MenuBuilder {
     const subMenuFile = {
       label: 'File',
       submenu: [
-        { label: 'Open', click: () => { this.mainWindow.webContents.send('open-warc-dialog'); }}
+        { label: 'Open...', accelerator: 'Command+O', click: () => { this.mainWindow.webContents.send('open-warc-dialog'); }}
       ]
     };
     const subMenuEdit = {
@@ -79,6 +79,8 @@ export default class MenuBuilder {
     const subMenuViewDev = {
       label: 'View',
       submenu: [
+        { label: 'Toggle App Developer Tools', accelerator: 'Alt+Ctrl+J', click: () => { this.mainWindow.toggleDevTools(); }},
+        { label: 'Toggle Page Developer Tools', accelerator: 'Alt+Ctrl+I', click: () => { this.mainWindow.webContents.send('toggle-devtools'); }},
         { label: 'Reload', accelerator: 'Command+R', click: () => { this.mainWindow.webContents.reload(); } },
         { label: 'Toggle Full Screen', accelerator: 'Ctrl+Command+F', click: () => { this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen()); } }
       ]
@@ -86,6 +88,7 @@ export default class MenuBuilder {
     const subMenuViewProd = {
       label: 'View',
       submenu: [
+        { label: 'Toggle Page Developer Tools', accelerator: 'Alt+Ctrl+I', click: () => { this.mainWindow.webContents.send('toggle-devtools'); }},
         { label: 'Toggle Full Screen', accelerator: 'Ctrl+Command+F', click: () => { this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen()); } }
       ]
     };
@@ -127,7 +130,7 @@ export default class MenuBuilder {
         label: '&Open',
         click: () => { this.mainWindow.webContents.send('open-warc-dialog'); }
       }, {
-        label: '&Close',
+        label: '&Quit',
         accelerator: 'Ctrl+W',
         click: () => {
           this.mainWindow.close();
