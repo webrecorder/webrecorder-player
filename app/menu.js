@@ -46,7 +46,7 @@ export default class MenuBuilder {
     const subMenuAbout = {
       label: 'Webrecorder Player',
       submenu: [
-        { label: 'Webrecorder Player', click: () => { this.mainWindow.webContents.send('change-location', '/help'); } },
+        { label: 'About Webrecorder Player', click: () => { this.mainWindow.webContents.send('change-location', '/help'); } },
         { type: 'separator' },
         { label: 'Services', submenu: [] },
         { type: 'separator' },
