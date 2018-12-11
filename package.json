@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/webrecorder/webrecorderplayer-electron.git"
+    "url": "git+https://github.com/webrecorder/webrecorder-player.git"
   },
   "keywords": [
     "warc",
@@ -28,9 +28,9 @@
   "author": "webrecorder/rhizome",
   "license": "Apache",
   "bugs": {
-    "url": "https://github.com/webrecorder/webrecorderplayer-electron/issues"
+    "url": "https://github.com/webrecorder/webrecorder-player/issues"
   },
-  "homepage": "https://github.com/webrecorder/webrecorderplayer-electron#readme",
+  "homepage": "https://github.com/webrecorder/webrecorder-player#readme",
   "build": {
     "productName": "Webrecorder Player",
     "asar": true,
