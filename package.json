@@ -64,15 +64,37 @@
     },
     "fileAssociations": [
       {
-        "ext": [
-          "warc",
-          "arc",
-          "har",
-          "warc.gz",
-          "arc.gz"
-        ],
-        "name": "Web Archives",
-        "description": "Web Archives",
+        "ext": "warc",
+        "name": "WARC File",
+        "description": "WARC File",
+        "role": "Viewer"
+      },
+
+      {
+        "ext": "warc.gz",
+        "name": "WARC File",
+        "description": "WARC File",
+        "role": "Viewer"
+      },
+
+      {
+        "ext": "arc",
+        "name": "ARC File",
+        "description": "ARC File",
+        "role": "Viewer"
+      },
+
+      {
+        "ext": "arc.gz",
+        "name": "ARC File",
+        "description": "ARC File",
+        "role": "Viewer"
+      },
+
+      {
+        "ext": "har",
+        "name": "HAR File",
+        "description": "HAR File",
         "role": "Viewer"
       }
     ]
