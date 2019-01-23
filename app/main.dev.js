@@ -12,7 +12,7 @@
 require('babel-polyfill');
 
 
-import { app, BrowserWindow, ipcMain, session } from 'electron';
+import { app, BrowserWindow, ipcMain, session, remote } from 'electron';
 import child_process from 'child_process';
 import Dat from 'dat-node';
 import fs from 'fs';
@@ -22,7 +22,9 @@ import windowStateKeeper from 'electron-window-state';
 
 import MenuBuilder from './menu';
 import packageInfo from '../package';
+import os from 'os';
 
+let __DESKTOP__ = true;
 
 let debugOutput = [];
 let mainWindow = null;
@@ -34,7 +36,7 @@ let openNextFile = null;
 
 
 const projectDir = path.join(__dirname, '../');
-const EXE_NAME = 'webrecorder_player';
+const EXE_NAME = (__DESKTOP__ ? 'webrecorder' : 'webrecorder_player');
 const webrecorderBin = path.join(projectDir, 'python-binaries', EXE_NAME);
 const stdio = ['ignore', 'pipe', 'pipe'];
 const wrConfig = {};
@@ -65,8 +67,9 @@ app.commandLine.appendSwitch(
   path.join(projectDir, pluginDir, pluginName)
 );
 
-const findPort = function (rawBuff, source) {
+const findPort = function (rawBuff, source, onAppLoaded) {
   const buff = rawBuff.toString();
+  console.log(buff);
 
   debugOutput.push(buff);
 
@@ -78,8 +81,6 @@ const findPort = function (rawBuff, source) {
   if (!buff || port) {
     return;
   }
-
-  console.log(buff);
 
   const parts = buff.split('APP_HOST=http://localhost:');
   if (parts.length !== 2) {
@@ -97,13 +98,14 @@ const findPort = function (rawBuff, source) {
   console.log(
     `webrecorder is listening on: ${appUrl} (pid ${webrecorderProcess.pid}) `
   );
-  Object.assign(wrConfig, { host: appUrl });
 
   const sesh = session.fromPartition('persist:wr', { cache: true });
-  const proxy = `localhost:${port}`;
-  sesh.setProxy({ proxyRules: proxy }, () => {
-    mainWindow.webContents.send('indexing', { host: appUrl, source });
-  });
+
+  Object.assign(wrConfig, { host: appUrl });
+
+  if (onAppLoaded) {
+    onAppLoaded(port, appUrl, source);
+  }
 
   // Ensure Brotli Support
   sesh.webRequest.onBeforeSendHeaders({}, (details, callback) => {
@@ -148,6 +150,10 @@ const registerOpenWarc = function () {
 };
 
 const openWarc = (warc) => {
+  if (__DESKTOP__) {
+    return;
+  }
+
   debugOutput = [];
   openNextFile = null;
   console.log(`warc file: ${warc}`);
@@ -158,11 +164,28 @@ const openWarc = (warc) => {
   // notify renderer that we are initializing webrecorder binary
   mainWindow.webContents.send('initializing', { src: 'warc' });
 
+  launchPythonApp(warc, playerOnAppLoaded);
+};
+
+const launchPythonApp = (warc, onAppLoaded) => {
   killProcess();
+
+  const dataPath = path.join(app.getPath('downloads'), 'Webrecorder');
+  const username = os.userInfo().username;
+
+  let cmdline = null;
+
+  if (__DESKTOP__) {
+    cmdline = ['--no-browser', '--loglevel', 'info', '-d', dataPath, '-u', username, '--port', 0];
+  } else {
+    cmdline = ['--no-browser', '--loglevel', 'error', '--cache-dir', '_warc_cache', '--port', 0, warc];
+  }
+
+  console.log(cmdline.toString());
 
   webrecorderProcess = child_process.spawn(
     webrecorderBin,
-    ['--no-browser', '--loglevel', 'error', '--cache-dir', '_warc_cache', '--port', 0, warc],
+    cmdline,
     spawnOptions
   );
 
@@ -173,6 +196,8 @@ const openWarc = (warc) => {
 
   // log any stderr notices
   webrecorderProcess.stderr.on('data', (buff) => {
+    console.log(buff.toString());
+
     debugOutput.push(`stderr: ${buff.toString()}`);
 
     // clip line buffer
@@ -181,8 +206,17 @@ const openWarc = (warc) => {
     }
   });
 
-  webrecorderProcess.stdout.on('data', (buff) => findPort(buff, warc));
+  webrecorderProcess.stdout.on('data', (buff) => findPort(buff, warc, onAppLoaded));
 };
+
+const playerOnAppLoaded = (port, appUrl, source) => {
+  const proxy = `localhost:${port}`;
+  const sesh = session.fromPartition('persist:wr', { cache: true });
+  sesh.setProxy({ proxyRules: proxy }, () => {
+    mainWindow.webContents.send('indexing', { host: appUrl, source });
+  });
+};
+
 
 const createWindow = function () {
   // keep track of window state
@@ -239,6 +273,10 @@ const createWindow = function () {
       }
     }
   });
+
+  const menuBuilder = new MenuBuilder(mainWindow);
+  menuBuilder.buildMenu();
+
 };
 
 if (process.env.NODE_ENV === 'production') {
@@ -303,12 +341,23 @@ app.on('ready', async () => {
     await installExtensions();
   }
 
-  createWindow();
-  registerOpenWarc();
+  if (!__DESKTOP__) {
+    createWindow();
+    registerOpenWarc();
+  } else {
+    launchPythonApp(null, function(port, appUrl, source) {
+      console.log("Python App Started: " + port);
 
-  const menuBuilder = new MenuBuilder(mainWindow);
-  menuBuilder.buildMenu();
+      process.env.INTERNAL_HOST = "localhost";
+      process.env.INTERNAL_PORT = port;
 
+      const proxy = `localhost:${port}`;
+      const sesh = session.fromPartition('persist:wr', { cache: true });
+      sesh.setProxy({ proxyRules: proxy }, () => {
+        createWindow();
+      });
+    });
+  }
 });
 
 // renderer process communication
@@ -385,3 +434,57 @@ ipcMain.on('sync-dat', (evt, datKey) => {
     }
   });
 });
+
+app.on('window-all-closed', () => {
+  session.defaultSession.cookies.get({}, (e, cookies) => {
+    const set = new Set()
+    const map = new Map()
+    const newCookies = cookies;
+    newCookies
+      .forEach(cookie => {
+        set.add(`${cookie.name};${cookie.domain};${cookie.path}`)
+        map.set(cookie.name, cookie)
+      })
+    let storageCookies
+    try {
+      storageCookies = fs.readJSONSync(path.join(global.APPDATA_PATH, 'cookie-backup.json'))
+    } catch (e) {
+      storageCookies = []
+    }
+    storageCookies = storageCookies.filter(
+      cookie => !set.has(`${cookie.name};${cookie.domain};${cookie.path}`),
+    )
+    storageCookies.map(cookie => {
+      if (map.has(cookie.name)) {
+        return {
+          ...cookie,
+          expirationDate: map.get(cookie.name).expirationDate,
+          value: map.get(cookie.name).value,
+        }
+      } else {
+        return cookie
+      }
+    })
+    fs.writeJSONSync(path.join(global.APPDATA_PATH, 'cookie-backup.json'), [
+      ...newCookies,
+      ...storageCookies,
+    ])
+  })
+})
+
+app.on('ready', () => {
+  try {
+    const cookies = fs.readJSONSync(path.join(global.APPDATA_PATH, 'cookie-backup.json'))
+    cookies.forEach(cookie => {
+      session.defaultSession.cookies.set(
+        {
+          ...cookie,
+        },
+        e => null,
+      )
+    })
+    console.log('Cookie backup loaded.')
+  } catch (e) {
+    console.warn('No cookie backup found.')
+  }
+})

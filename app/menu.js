@@ -44,13 +44,13 @@ export default class MenuBuilder {
 
   buildDarwinTemplate() {
     const subMenuAbout = {
-      label: 'Webrecorder Player',
+      label: 'Webrecorder',
       submenu: [
-        { label: 'About Webrecorder Player', click: () => { this.mainWindow.webContents.send('change-location', '/help'); } },
+        { label: 'About Webrecorder', click: () => { this.mainWindow.webContents.send('change-location', '/help'); } },
         { type: 'separator' },
         { label: 'Services', submenu: [] },
         { type: 'separator' },
-        { label: 'Hide Webrecorder Player', accelerator: 'Command+H', selector: 'hide:' },
+        { label: 'Hide Webrecorder', accelerator: 'Command+H', selector: 'hide:' },
         { label: 'Hide Others', accelerator: 'Command+Shift+H', selector: 'hideOtherApplications:' },
         { label: 'Show All', selector: 'unhideAllApplications:' },
         { type: 'separator' },

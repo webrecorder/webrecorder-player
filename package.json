@@ -1,10 +1,10 @@
 {
   "name": "webrecorderplayer",
-  "productName": "Webrecorder Player",
   "version": "1.6.4",
-  "description": "Webrecorder Player -- Standalone Web Archive Browser App",
+  "description": "Webrecorder -- Standalone Web Archive Browser App",
   "scripts": {
     "build": "concurrently \"npm run build-main\" \"npm run build-frontend\"",
+    "build-desktop": "concurrently \"npm run build-main\" \"node build-desktop.js\"",
     "build-frontend": "node build-frontend.js",
     "build-frontend-dev": "cd webrecorder/frontend && yarn install; yarn run build-player-dev",
     "build-main": "cross-env NODE_ENV=production DEBUG_PROD=false node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack/webpack.config.js --display-error-details --colors",
@@ -12,7 +12,8 @@
     "start-dev": "cross-env NODE_ENV=development electron -r babel-register ./app/main.dev",
     "pack": "build --dir",
     "release": "npm run build && build",
-    "dist": "npm run build && build --publish never"
+    "dist": "npm run build && build --publish never",
+    "dist-desktop": "npm run build-desktop && build --publish never"
   },
   "repository": {
     "type": "git",
@@ -32,7 +33,7 @@
   },
   "homepage": "https://github.com/webrecorder/webrecorder-player#readme",
   "build": {
-    "productName": "Webrecorder Player",
+    "productName": "Webrecorder",
     "asar": true,
     "appId": "org.webrecorder.webrecorderplayer",
     "artifactName": "${name}-${version}.${ext}",
