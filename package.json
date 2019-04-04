@@ -12,6 +12,7 @@
     "start-dev": "cross-env NODE_ENV=development electron -r babel-register ./app/main.dev",
     "pack": "build --dir",
     "release": "npm run build && build",
+    "release-desktop": "npm run build-desktop && build",
     "dist": "npm run build && build --publish never",
     "dist-desktop": "npm run build-desktop && build --publish never"
   },
@@ -70,28 +71,24 @@
         "description": "WARC File",
         "role": "Viewer"
       },
-
       {
         "ext": "warc.gz",
         "name": "WARC File",
         "description": "WARC File",
         "role": "Viewer"
       },
-
       {
         "ext": "arc",
         "name": "ARC File",
         "description": "ARC File",
         "role": "Viewer"
       },
-
       {
         "ext": "arc.gz",
         "name": "ARC File",
         "description": "ARC File",
         "role": "Viewer"
       },
-
       {
         "ext": "har",
         "name": "HAR File",
@@ -111,7 +108,7 @@
     "concurrently": "^4.1.0",
     "cross-env": "^5.2.0",
     "dat-node": "^3.5.13",
-    "electron": "^3.0.10",
+    "electron": "^4.1.3",
     "electron-builder": "^20.38.1",
     "electron-debug": "^2.0.0",
     "electron-devtools-installer": "^2.2.4",

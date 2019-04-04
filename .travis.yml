@@ -25,32 +25,40 @@ before_install:
       apt-get -qq update; 
       sudo apt-get install -y icnsutils graphicsmagick;
       FLASH_PLUGIN="https://s3.amazonaws.com/webrecorder-builds/flashplugin/libpepflashplayer.so";
+      REDIS_SERVER="https://s3.amazonaws.com/webrecorder-builds/redis/linux/redis-server";
       cd plugins; 
       wget $FLASH_PLUGIN; 
+      cd -;
+      cd python-binaries;
+      wget $REDIS_SERVER;
       cd -;
     fi
   - |
     if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
       sed -i '' -E 's/"name": "(.*)"/"name": "\1-osx"/' ./package.json
       FLASH_PLUGIN="https://s3.amazonaws.com/webrecorder-builds/flashplugin/PepperFlashPlayer.plugin.zip";
+      REDIS_SERVER="https://s3.amazonaws.com/webrecorder-builds/redis/osx/redis-server";
       cd plugins; 
       wget $FLASH_PLUGIN; 
       unzip PepperFlashPlayer.plugin.zip; 
       rm PepperFlashPlayer.plugin.zip; 
       cd -;
-    fi
+      cd python-binaries;
+      wget $REDIS_SERVER;
+      cd -;
+     fi
   
 install:
   - BUCKET="https://s3.amazonaws.com/webrecorder-builds/webrecorder-player"
-  - CURRENT_BRANCH="$BUCKET/$TRAVIS_BRANCH/webrecorder-player-$TRAVIS_OS_NAME"
-  - DEVELOP_BRANCH="$BUCKET/develop/webrecorder-player-$TRAVIS_OS_NAME"
+  - CURRENT_BRANCH="$BUCKET/$TRAVIS_BRANCH/webrecorder-$TRAVIS_OS_NAME"
+  - DEVELOP_BRANCH="$BUCKET/develop/webrecorder-$TRAVIS_OS_NAME"
   - |
     if curl -o /dev/null -s -I -f "$CURRENT_BRANCH"; then
           echo "downloading webrecorder artifact: $CURRENT_BRANCH";
-          curl -o python-binaries/webrecorder_player $CURRENT_BRANCH;
+          curl -o python-binaries/webrecorder $CURRENT_BRANCH;
     else
           echo "downloading webrecorder artifact: $DEVELOP_BRANCH";
-          curl -o python-binaries/webrecorder_player $DEVELOP_BRANCH;
+          curl -o python-binaries/webrecorder $DEVELOP_BRANCH;
     fi
   - chmod +x python-binaries/webrecorder_player
   - python-binaries/webrecorder_player -v
@@ -62,10 +70,10 @@ after_failure:
 
 script:
   - |
-    if [[ $TRAVIS_BRANCH == 'master' || $TRAVIS_BRANCH == 'prerelease' ]]; then
-      yarn run release
+    if [[ $TRAVIS_BRANCH == 'master' || $TRAVIS_BRANCH == 'wr-desktop' ]]; then
+      yarn run release-desktop
     else
-      yarn run dist
+      yarn run dist-desktop
     fi
   - mv ./dist/webrecorder-player-* $TRAVIS_BUILD_DIR/
 

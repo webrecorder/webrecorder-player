@@ -72,6 +72,7 @@ const findPort = function (rawBuff, source, onAppLoaded) {
   console.log(buff);
 
   debugOutput.push(buff);
+  //fs.appendFileSync('/tmp/out.log', buff);
 
   // clip line buffer
   if (debugOutput.length > 500) {
@@ -168,9 +169,9 @@ const openWarc = (warc) => {
 };
 
 const launchPythonApp = (warc, onAppLoaded) => {
-  killProcess();
+  //killProcess();
 
-  const dataPath = path.join(app.getPath('downloads'), 'Webrecorder');
+  const dataPath = path.join(app.getPath('downloads'), 'Webrecorder-Data');
   const username = os.userInfo().username;
 
   let cmdline = null;
@@ -197,6 +198,8 @@ const launchPythonApp = (warc, onAppLoaded) => {
   // log any stderr notices
   webrecorderProcess.stderr.on('data', (buff) => {
     console.log(buff.toString());
+
+    //fs.appendFileSync('/tmp/err.log', buff.toString());
 
     debugOutput.push(`stderr: ${buff.toString()}`);
 
@@ -435,56 +438,4 @@ ipcMain.on('sync-dat', (evt, datKey) => {
   });
 });
 
-app.on('window-all-closed', () => {
-  session.defaultSession.cookies.get({}, (e, cookies) => {
-    const set = new Set()
-    const map = new Map()
-    const newCookies = cookies;
-    newCookies
-      .forEach(cookie => {
-        set.add(`${cookie.name};${cookie.domain};${cookie.path}`)
-        map.set(cookie.name, cookie)
-      })
-    let storageCookies
-    try {
-      storageCookies = fs.readJSONSync(path.join(global.APPDATA_PATH, 'cookie-backup.json'))
-    } catch (e) {
-      storageCookies = []
-    }
-    storageCookies = storageCookies.filter(
-      cookie => !set.has(`${cookie.name};${cookie.domain};${cookie.path}`),
-    )
-    storageCookies.map(cookie => {
-      if (map.has(cookie.name)) {
-        return {
-          ...cookie,
-          expirationDate: map.get(cookie.name).expirationDate,
-          value: map.get(cookie.name).value,
-        }
-      } else {
-        return cookie
-      }
-    })
-    fs.writeJSONSync(path.join(global.APPDATA_PATH, 'cookie-backup.json'), [
-      ...newCookies,
-      ...storageCookies,
-    ])
-  })
-})
 
-app.on('ready', () => {
-  try {
-    const cookies = fs.readJSONSync(path.join(global.APPDATA_PATH, 'cookie-backup.json'))
-    cookies.forEach(cookie => {
-      session.defaultSession.cookies.set(
-        {
-          ...cookie,
-        },
-        e => null,
-      )
-    })
-    console.log('Cookie backup loaded.')
-  } catch (e) {
-    console.warn('No cookie backup found.')
-  }
-})

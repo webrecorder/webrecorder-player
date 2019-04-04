@@ -39,23 +39,25 @@ install:
   - ps: |
         $flash_plugin = "https://s3.amazonaws.com/webrecorder-builds/flashplugin/pepflashplayer$env:ARCH_SUFFIX.dll"
         Invoke-WebRequest -Uri $flash_plugin -OutFile "$env:APPVEYOR_BUILD_FOLDER\plugins\pepflashplayer.dll"
-  - ps: "& $destination '-v'"
+        $redis_server = "https://s3.amazonaws.com/webrecorder-builds/redis/win-$env:platform/redis-server.exe"
+        Invoke-WebRequest -Uri $redis_server -OutFile "$env:APPVEYOR_BUILD_FOLDER\python-binaries\\redis-server.exe"
+   - ps: "& $destination '-v'"
 
 build_script:
   - ps: |
-        if ($env:APPVEYOR_REPO_BRANCH -eq "master" -or $env:APPVEYOR_REPO_BRANCH -eq "prerelease") {
-          npm run release -- $env:ARCH_ARG
+        if ($env:APPVEYOR_REPO_BRANCH -eq "master" -or $env:APPVEYOR_REPO_BRANCH -eq "wr-desktop") {
+          npm run release-desktop -- $env:ARCH_ARG
         }
         else {
-          npm run dist -- $env:ARCH_ARG
+          npm run dist-desktop -- $env:ARCH_ARG
         }
   - ps: "move dist/webrecorder-player*.* $env:APPVEYOR_BUILD_FOLDER/"
 
 test: off
 
 artifacts:
-  - path: "webrecorder-player*.*"
-    name: webrecorder-player
+  - path: "webrecorder-*.*"
+    name: webrecorder
     
 deploy:
   provider: S3
@@ -64,4 +66,4 @@ deploy:
   access_key_id: $(aws_access_key_id)
   secret_access_key: $(aws_secret_access_key)
   folder: electron-player/$(APPVEYOR_REPO_BRANCH)
-  artifact: webrecorder-player
+  artifact: webrecorder
