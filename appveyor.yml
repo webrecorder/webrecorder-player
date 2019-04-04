@@ -19,9 +19,9 @@ install:
         (Get-Content package.json) -replace '"name": "(.*)"', $replace_name | Set-Content package.json
         (Get-Content .\app\package.json) -replace '"name": "(.*)"', $replace_name | Set-Content .\app\package.json
         $bucket = "https://s3.amazonaws.com/webrecorder-builds/webrecorder-player"
-        $destination = "$env:APPVEYOR_BUILD_FOLDER\python-binaries\webrecorder_player.exe"
-        $current_branch = "$bucket/$env:APPVEYOR_REPO_BRANCH/webrecorder-player-win-$env:platform.exe"
-        $develop_branch = "$bucket/develop/webrecorder-player-win-$env:platform.exe"
+        $destination = "$env:APPVEYOR_BUILD_FOLDER\python-binaries\webrecorder.exe"
+        $current_branch = "$bucket/$env:APPVEYOR_REPO_BRANCH/webrecorder-win-$env:platform.exe"
+        $develop_branch = "$bucket/develop/webrecorder-win-$env:platform.exe"
 
         $status = try { (invoke-webrequest -Uri $current_branch -Method Head).statuscode } catch {
         $_.Exception.Response.StatusCode.Value__
