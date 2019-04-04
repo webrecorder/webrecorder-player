@@ -1,6 +1,6 @@
 {
   "name": "webrecorderplayer",
-  "version": "1.6.4",
+  "version": "1.7.0",
   "description": "Webrecorder -- Standalone Web Archive Browser App",
   "scripts": {
     "build": "concurrently \"npm run build-main\" \"npm run build-frontend\"",
@@ -12,7 +12,7 @@
     "start-dev": "cross-env NODE_ENV=development electron -r babel-register ./app/main.dev",
     "pack": "build --dir",
     "release": "npm run build && build",
-    "release-desktop": "npm run build-desktop && build",
+    "release-desktop": "npm run build-desktop && build --publish always",
     "dist": "npm run build && build --publish never",
     "dist-desktop": "npm run build-desktop && build --publish never"
   },
@@ -36,7 +36,7 @@
   "build": {
     "productName": "Webrecorder",
     "asar": true,
-    "appId": "org.webrecorder.webrecorderplayer",
+    "appId": "org.webrecorder.webrecorder",
     "artifactName": "${name}-${version}.${ext}",
     "files": [
       "dist/",

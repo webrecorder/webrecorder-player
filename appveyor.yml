@@ -52,7 +52,7 @@ build_script:
         else {
           npm run dist-desktop -- $env:ARCH_ARG
         }
-  - ps: "move dist/webrecorder-player*.* $env:APPVEYOR_BUILD_FOLDER/"
+  - ps: "move dist/webrecorder-*.* $env:APPVEYOR_BUILD_FOLDER/"
 
 test: off
 

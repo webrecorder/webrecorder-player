@@ -75,5 +75,5 @@ script:
     else
       yarn run dist-desktop
     fi
-  - mv ./dist/webrecorder-player-* $TRAVIS_BUILD_DIR/
+  - mv ./dist/webrecorder-* $TRAVIS_BUILD_DIR/
 
