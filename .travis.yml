@@ -60,8 +60,8 @@ install:
           echo "downloading webrecorder artifact: $DEVELOP_BRANCH";
           curl -o python-binaries/webrecorder $DEVELOP_BRANCH;
     fi
-  - chmod +x python-binaries/webrecorder_player
-  - python-binaries/webrecorder_player -v
+  - chmod +x python-binaries/webrecorder
+  - python-binaries/webrecorder -v
   - yarn install
   - yarn run build
 
