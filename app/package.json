@@ -1,8 +1,8 @@
 {
-  "name": "webrecorder-player",
-  "productName": "Webrecorder Player",
+  "name": "webrecorder",
+  "productName": "Webrecorder",
   "version": "1.7.0",
-  "description": "Webrecorder Player -- Standalone Web Archive Browser App",
+  "description": "Webrecorder Desktop -- Standalone Web Archive System",
   "main": "./main.prod.js",
   "scripts": {
     "postinstall": "npm rebuild --runtime=electron --target=1.6.6 --disturl=https://atom.io/download/atom-shell --build-from-source"
