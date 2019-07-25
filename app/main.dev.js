@@ -192,7 +192,9 @@ const createWindow = function () {
   });
 
   mainWindow = new BrowserWindow({
-    webPreferences: { plugins: true },
+    webPreferences: { plugins: true,
+                      webviewTag: true,
+                      nodeIntegration: true },
 
     // start with state from windowStateKeeper
     x: mainWindowState.x,
