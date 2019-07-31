@@ -64,6 +64,7 @@ app.commandLine.appendSwitch(
   'ppapi-flash-path',
   path.join(projectDir, pluginDir, pluginName)
 );
+app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
 
 const findPort = function (rawBuff, source) {
   const buff = rawBuff.toString();
@@ -99,7 +100,7 @@ const findPort = function (rawBuff, source) {
   );
   Object.assign(wrConfig, { host: appUrl });
 
-  const sesh = session.fromPartition('persist:wr', { cache: true });
+  const sesh = session.fromPartition('persist:local-replay', { cache: true });
   const proxy = `localhost:${port}`;
   sesh.setProxy({ proxyRules: proxy }, () => {
     mainWindow.webContents.send('indexing', { host: appUrl, source });
