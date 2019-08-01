@@ -5,6 +5,7 @@ matrix:
       node_js:
         - "10"
     - os: osx
+      osx_image: xcode10.2
       language: node_js
       node_js:
         - "10"

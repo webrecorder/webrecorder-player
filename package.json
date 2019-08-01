@@ -54,7 +54,10 @@
       "target": "dmg"
     },
     "linux": {
-      "category": "Archiving;Utility;"
+      "category": "Archiving;Utility;",
+      "target": [
+        "AppImage"
+      ]
     },
     "win": {
       "target": "portable"
