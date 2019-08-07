@@ -1,7 +1,7 @@
 {
   "name": "webrecorderplayer",
   "productName": "Webrecorder Player",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "Webrecorder Player -- Standalone Web Archive Browser App",
   "scripts": {
     "build": "concurrently \"npm run build-main\" \"npm run build-frontend\"",
@@ -42,12 +42,12 @@
       "app.html",
       "static/",
       "main.prod.js",
-      "package.json"
+      "package.json",
+      "preload.js"
     ],
     "extraResources": [
       "python-binaries/",
-      "plugins",
-      "preload.js"
+      "plugins"
     ],
     "mac": {
       "category": "public.app-category.utilities",
