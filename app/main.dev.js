@@ -107,7 +107,7 @@ const findPort = function (rawBuff, source) {
   });
 
   // Ensure Brotli Support
-  sesh.webRequest.onBeforeSendHeaders({}, (details, callback) => {
+  sesh.webRequest.onBeforeSendHeaders((details, callback) => {
     details.requestHeaders['Accept-Encoding'] = 'gzip, deflate, br';
     callback({cancel: false, requestHeaders: details.requestHeaders});
   });
