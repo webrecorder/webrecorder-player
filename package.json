@@ -1,7 +1,7 @@
 {
   "name": "webrecorderplayer",
   "productName": "Webrecorder Player",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "Webrecorder Player -- Standalone Web Archive Browser App",
   "scripts": {
     "build": "concurrently \"npm run build-main\" \"npm run build-frontend\"",
@@ -42,12 +42,12 @@
       "app.html",
       "static/",
       "main.prod.js",
-      "package.json"
+      "package.json",
+      "preload.js"
     ],
     "extraResources": [
       "python-binaries/",
-      "plugins",
-      "preload.js"
+      "plugins"
     ],
     "mac": {
       "category": "public.app-category.utilities",
@@ -110,7 +110,7 @@
     "concurrently": "^4.1.0",
     "cross-env": "^5.2.0",
     "dat-node": "^3.5.13",
-    "electron": "6.0.0",
+    "electron": "6.1.4",
     "electron-builder": "21.2.0",
     "electron-debug": "^2.0.0",
     "electron-devtools-installer": "^2.2.4",
