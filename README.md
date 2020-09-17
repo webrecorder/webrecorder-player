@@ -1,3 +1,9 @@
+*NOTE: Webrecorder Player has been superceded by [ReplayWeb.page](https://github.com/webrecorder/replayweb.page).*
+
+*Users of Webrecorder Player are encouraged to switch to [the latest ReplayWeb.page App](https://github.com/webrecorder/replayweb.page/releases/latest).*
+
+<hr>
+
 # Webrecorder Player
 
 Webrecorder Player is a desktop application for viewing high-fidelity web archives on your local machine, no internet connection required. Webrecorder Player is available for download for OSX, Windows and Linux (experimental).
